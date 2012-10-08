@@ -26,11 +26,11 @@
     _dropped_before: false,
     widgetName: '',
 
-    onDrop: function(event, ui){
+    onDrop: function(event, param){
       if (self._dropped_before)
         return false;
       console.log('callback triggered');
-      this.element[this.widgetName]("onDrop");
+      this.element[this.widgetName]("onDrop" , event, param);
       self._dropped_before = true;
 
     },

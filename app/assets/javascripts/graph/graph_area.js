@@ -11,7 +11,10 @@
         scope: 'element',
         drop: function(event, ui){
           console.log('dropped');
-          ui.draggable.element("onDrop");
+          console.log(ui.helper);
+          ui.draggable.element("onDrop", event, this);
+          //This should add a clone to droppable . Move it to each resource if need be
+          //$(this).append(ui.draggable.clone());
         }
       });
       self._trigger('onCreate');

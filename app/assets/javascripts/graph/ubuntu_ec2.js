@@ -7,14 +7,16 @@
       options = self.options;
       element = self.element;
       element.draggable({
-        revert: 'invalid',
+        helper: 'clone',
+        appendTo: 'body',
         //Scope indicates where it should be dropped
         scope: 'element'
       });
       element.addClass("ubuntu-ec2-element");
       self._trigger('onCreate');
     },
-    onDrop: function(event, ui){
+    onDrop: function(event, droppable){
+      console.log(arguments);
       console.log('onDrop called in ubuntu instance');
       $('#ubuntuec2-configuration').modal('show');
     },
