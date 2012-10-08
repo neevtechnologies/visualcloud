@@ -1,0 +1,53 @@
+(function($) {
+  $.widget("graph.element", {
+    options: {
+      x_pos: null,
+      y_pos: null,
+      onCreate: function(){
+        //console.log("Add any onCreate events here");
+      }
+    },
+    _create: function() {
+      var self = this;
+      options = self.options;
+      element = self.element;
+      /*
+      $(window).resize(function(){
+        //should there be any event on window resize?
+      });
+      */
+      this.createInstance(element);
+      self._trigger('onCreate');
+    },
+    destroy: function() {
+      this.element.remove();
+    },
+
+    _dropped_before: false,
+    widgetName: '',
+
+    onDrop: function(event, ui){
+      if (self._dropped_before)
+        return false;
+      console.log('callback triggered');
+      this.element[this.widgetName]("onDrop");
+      self._dropped_before = true;
+
+    },
+
+    createInstance: function(element){
+      switch(element.data('elementType')){
+        case 'ubuntu-ec2':
+          this.widgetName = 'ubuntuec2';
+          element.ubuntuec2();
+          break;
+        case 's3':
+          this.widgetName = 's3';
+          break;
+        case 'elb':
+          break;
+      }
+    }
+
+  });
+})(jQuery);

@@ -1,6 +1,8 @@
 VisualCloud::Application.routes.draw do
+  resources :graphs
+
   authenticated :user do
-    root :to => 'home#index'
+    root :to => 'home#dashboard'
   end
   root :to => "home#index"
   devise_for :users

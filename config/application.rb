@@ -12,6 +12,11 @@ end
 module VisualCloud
   class Application < Rails::Application
 
+    #Rspec is the default testing framework
+    config.generators do |g|
+        g.test_framework :rspec
+    end
+
     # don't generate RSpec tests for views and helpers
     config.generators do |g|
       g.view_specs false
