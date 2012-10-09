@@ -11,9 +11,10 @@
       var options = self.options;
       var element = self.element;
       console.log('Draggable reveived element drop');
+      console.log('Resource specification = ' + options.name + 'Resource' );
       //Triggering the onElementDrop listener of any specification widgets if any
-      if(element['' + options.name + 'Resource'] != undefined)
-        element['' + options.name + 'Resource']("onElementDrop");
+      if(element[options.name + 'Resource'] != undefined)
+        element[options.name + 'Resource']("onElementDrop");
     },
     _create: function() {
       var self = this;
@@ -21,8 +22,8 @@
       var element = self.element;
 
       //Binding a more specific resource type widget to element
-      if(element['' + options.name + 'Resource'] != "undefined")
-        element['' + options.name + 'Resource']();
+      if(element[options.name + 'Resource'] != undefined)
+        element[options.name + 'Resource']();
 
       element.draggable({
         helper: 'clone',

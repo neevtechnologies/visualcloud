@@ -7,11 +7,12 @@
         <!-- To add resource specific CSS -->
         <%= render 'resource_style_tag', resource_type: resource_type %>
 
-        <!-- This is the resouce element to which resourceElement widget is bound -->
+        <!-- This is the resouce element to which resourceElement widget is bound and added to the resource dock-->
         <div id="resource-type-<%= resource_type.id %>" data-element-type="resource"> 
           <%= image_tag "icons/#{resource_type.small_icon}" %>
           <%= resource_type.name %> 
         </div>
+        </br>
 
         <!-- To add resource specific JS. This is where the element is bound to the widget -->
         <%= render 'resource_script_tag', resource_type: resource_type %>

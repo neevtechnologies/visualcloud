@@ -5,7 +5,11 @@
     options: {
       onElementDrop: function(event, params){
         //Triggers global event for any subscribers listening to this event globally
-        $.event.trigger('onElementDrop', params);
+        //$.event.trigger('onElementDrop', params);
+
+        //Triggers onElementDrop event on draggable that was dropped on this droppable
+        params.args.draggable.trigger('onElementDrop', params);
+
       }
     },
     _create: function() {
