@@ -1,0 +1,25 @@
+<div class="well span2 graph-draggables-dock">
+  <div id="accordion">
+    <h3><a href="#">Recources</a></h3>
+    <div>
+      <% resource_types.each do |resource_type| %>
+
+        <!-- To add resource specific CSS -->
+        <%= render 'resource_style_tag', resource_type: resource_type %>
+
+        <!-- This is the resouce element to which resourceElement widget is bound -->
+        <div id="resource-type-<%= resource_type.id %>" data-element-type="resource"> 
+          <%= image_tag "icons/#{resource_type.small_icon}" %>
+          <%= resource_type.name %> 
+        </div>
+
+        <!-- To add resource specific JS. This is where the element is bound to the widget -->
+        <%= render 'resource_script_tag', resource_type: resource_type %>
+      <% end %>
+    </div>
+    <h3><a href="#">Components</a></h3>
+    <div>
+      <div id="component-1">Rails</div>
+    </div>
+  </div>
+</div>

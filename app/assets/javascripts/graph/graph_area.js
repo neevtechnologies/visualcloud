@@ -1,20 +1,22 @@
+//Graph area
+
 (function($) {
-  $.widget("canvas.graphArea", {
+  $.widget("graph.graphArea", {
     options: {
+      onElementDrop: function(event, params){
+        //Triggers global event for any subscribers listening to this event globally
+        $.event.trigger('onElementDrop', params);
+      }
     },
     _create: function() {
       var self = this;
-      options = self.options;
-      element = self.element;
+      var element = self.element;
       element.droppable({
-        //Scope indicates where it should be dropped
-        scope: 'element',
+        //The classes of draggables to be accepted
+        accept: '.resourceDraggable',
         drop: function(event, ui){
-          console.log('dropped');
-          console.log(ui.helper);
-          ui.draggable.element("onDrop", event, this);
-          //This should add a clone to droppable . Move it to each resource if need be
-          //$(this).append(ui.draggable.clone());
+          console.log('Element dropped. Triggering event');
+          self._trigger('onElementDrop', event , { args: ui, droppable: $(this)} );
         }
       });
       self._trigger('onCreate');

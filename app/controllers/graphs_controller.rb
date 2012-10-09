@@ -25,6 +25,7 @@ class GraphsController < ApplicationController
   # GET /graphs/new.json
   def new
     @graph = Graph.new
+    @resource_types = ResourceType.all
 
     respond_to do |format|
       format.html # new.html.erb
