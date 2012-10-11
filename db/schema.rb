@@ -21,18 +21,18 @@ ActiveRecord::Schema.define(:version => 20121008114638) do
 
   create_table "instances", :force => true do |t|
     t.string   "label"
-    t.string   "aws_instance_id"
-    t.integer  "size"
-    t.string   "url"
     t.integer  "xpos"
     t.integer  "ypos"
+    t.integer  "size"
+    t.string   "ami_id"
+    t.string   "url"
+    t.string   "aws_instance_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
 
   create_table "resource_types", :force => true do |t|
     t.string   "name"
-    t.string   "ami_id"
     t.string   "small_icon"
     t.string   "large_icon"
     t.datetime "created_at", :null => false

@@ -2,3 +2,70 @@ function prepare_stage(){
   $( "#accordion" ).accordion({ fillSpace: true, collapsible: true });
   $('.graph-area').graphArea();
 };
+
+function addInstanceCloneToGraph(self, params){
+  var graphArea = params.droppable ;
+  var draggedItem = params.args ;
+  var topOffset = draggedItem.position.top - graphArea.position().top ;
+  var leftOffset = draggedItem.position.left - graphArea.position().left ;
+  self.instanceCount ++ ;
+  var newElement = $('<div id="ec2-instance-'+ self.instanceCount + '" class="instance" ></div>');
+  newElement.appendTo(graphArea);
+
+  newElement.html(self.options.instanceHtml);
+  newElement.position({
+    my: 'left top',
+    at: 'left top',
+    of: graphArea,
+    collision: 'none',
+    offset: leftOffset + ' ' + topOffset 
+  });
+  return newElement ;
+};
+
+//Refactoring above function
+function addInstanceCloneToGraphRefactored(position, divId){
+  var graphArea = $('.graph-area') ;
+  var topOffset = position.top - graphArea.position().top ;
+  var leftOffset = position.left - graphArea.position().left ;
+  var newElement = $('<div id="'+ divId + '" class="instance" ></div>');
+  newElement.appendTo(graphArea);
+
+  newElement.position({
+    my: 'left top',
+    at: 'left top',
+    of: graphArea,
+    collision: 'none',
+    offset: leftOffset + ' ' + topOffset 
+  });
+  return newElement ;
+};
+
+function showConfigurationForm(dialogId, instanceElement){
+  var dialog = $('#'+dialogId);
+  dialog.data('instanceId', instanceElement[0].id);
+  dialog.modal('show');
+};
+
+function showConfigurationFormRefactored(dialogId, droppedPosition){
+  var dialog = $('#'+dialogId);
+  dialog.data('xpos', droppedPosition.left);
+  dialog.data('ypos', droppedPosition.top);
+  dialog.modal('show');
+};
+
+function addMessagesToDiv(jDiv, content){
+  jDiv.append(content);
+  $(".messages").delay(2000).fadeOut("slow", function () { $(this).remove(); });
+};
+
+/*
+// For debugging mouse movement inside graph area
+$(document).ready(function(){
+  $('.graph-area').mousemove(function(e){
+  var x = e.pageX - this.offsetLeft;
+  var y = e.pageY - this.offsetTop;
+  $('.graph-area').html("X: " + x + " Y: " + y); 
+  });
+});
+*/

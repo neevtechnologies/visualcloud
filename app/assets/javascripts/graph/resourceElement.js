@@ -3,7 +3,7 @@
     options: {
       name: 'EC2',
       resourceTypeId: null,
-      smallIcon: null,
+      instanceHtml: '',
       largeIcon: null
     },
     onElementDrop: function(event, params){
@@ -14,7 +14,7 @@
       console.log('Resource specification = ' + options.name + 'Resource' );
       //Triggering the onElementDrop listener of any specification widgets if any
       if(element[options.name + 'Resource'] != undefined)
-        element[options.name + 'Resource']("onElementDrop");
+        element[options.name + 'Resource']("onElementDrop", params);
     },
     _create: function() {
       var self = this;
@@ -23,7 +23,7 @@
 
       //Binding a more specific resource type widget to element
       if(element[options.name + 'Resource'] != undefined)
-        element[options.name + 'Resource']();
+        element[options.name + 'Resource']({instanceHtml: options.instanceHtml});
 
       element.draggable({
         helper: 'clone',

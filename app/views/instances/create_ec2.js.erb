@@ -1,0 +1,9 @@
+<% if @instance.valid? %>
+  var newInstance = addInstanceCloneToGraphRefactored({ left: <%= @instance.xpos %>, top: <%= @instance.ypos %> }, 'instance-<%=@instance.id%>');
+  newInstance.html('<%= escape_javascript(render 'ec2_template' , resource_type: @resource_type, instance: @instance)%>')
+  newInstance.draggable({containment: 'parent' });
+  $('#ec2-configuration').modal('hide');
+  addMessagesToDiv($('#global-messages'), '<%= escape_javascript flash_messages %>');
+<% else %>
+  addMessagesToDiv($('#ec2-config-error-messages'), '<%= escape_javascript flash_messages %>');
+<% end %>

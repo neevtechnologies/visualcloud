@@ -1,8 +1,12 @@
 VisualCloud::Application.routes.draw do
-  resources :graphs
 
   authenticated :user do
     root :to => 'home#dashboard'
+    #Graph resource
+    resources :graphs
+    #Instance resource
+    resources :instances
+    post 'create_ec2' => 'instances#create_ec2'
   end
   root :to => "home#index"
   devise_for :users

@@ -17,6 +17,7 @@ gem "simple_form", ">= 2.0.3"
 gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
 
 group :development, :test do
+  gem "awesome_print"
   gem "spork"
 end
 
