@@ -10,11 +10,8 @@
       //or to add a dialog for a new resource type
       //
       //
-      //var newInstance = addInstanceCloneToGraph(this,params);
-      //showConfigurationForm('ec2-configuration', newInstance);
       var droppedPosition = params.args.position
-      showConfigurationFormRefactored('ec2-configuration', droppedPosition);
-      //newInstance.draggable({containment: 'parent'});
+      showConfigurationForm('ec2-configuration', droppedPosition);
     }
   });
 })(jQuery);

@@ -8,12 +8,12 @@
     <div id="ec2-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: create_ec2_path  , remote: true, html: { id: 'ec2-config-frm'} do |f|%>
       <%= f.input :label %>
+      <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection %>
       <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
       <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
   </div>  
   <div class="modal-footer">  
     <%= f.button :submit, 'Add instance', class: "btn btn-success instance-config-submit" %>
-    <!-- <a href="#" class="btn btn-success instance-config-submit">Create</a>  -->
     <a href="#" class="btn" data-dismiss="modal">Close</a>  
   </div>  
     <% end %>

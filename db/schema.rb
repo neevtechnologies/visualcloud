@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121008114638) do
+ActiveRecord::Schema.define(:version => 20121012050154) do
+
+  create_table "amis", :force => true do |t|
+    t.string   "image_id"
+    t.string   "description"
+    t.string   "architecture"
+    t.string   "name"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "graphs", :force => true do |t|
     t.string   "name"

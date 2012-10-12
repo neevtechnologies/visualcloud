@@ -9,10 +9,8 @@ class InstancesController < ApplicationController
     else
       flash.now[:success] = "Instance saved successfully"
     end
-    respond_to do |format|
-      format.js
-    end
   rescue Exception => e
+    logger.error("Error occured while saving EC2 instance : #{e.inspect}")
     flash.now[:error] = "An error occured while creating instance"
   end
 
