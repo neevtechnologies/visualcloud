@@ -1,6 +1,5 @@
 (function($) {
   $.widget("graph.EC2Resource", {
-    instanceCount: 0,
     onElementDrop: function(params){
       console.log('EC2 received element drop');
       //Look in app/views/graphs/_dialogs.html.erb to see all dialogs 
