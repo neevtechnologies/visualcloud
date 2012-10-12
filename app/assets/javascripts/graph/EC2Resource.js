@@ -4,14 +4,11 @@
       console.log('EC2 received element drop');
       //Look in app/views/graphs/_dialogs.html.erb to see all dialogs 
       //or to add a dialog for a new resource type
-      //
-      //
       var droppedPosition = params.args.position
       showConfigurationForm('ec2-configuration', droppedPosition);
     }
   });
 })(jQuery);
-
 
 //configuration request and response handling
 $(document).ready(function(){

@@ -20,17 +20,21 @@
 </div>  
 
 <!-- RDS resource added Needs to be changed-->
-<div id="rds-configuration" class="modal hide fade in" style="display: none; ">  
+<div id="rds-configuration" class="modal hide fade in" style="display: none; ">
   <div class="modal-header">  
     <a class="close" data-dismiss="modal">×</a>  
-    <h3>You have added an RDS resource</h3>  
+    <h3>RDS instance configuration</h3>
   </div>  
   <div class="modal-body">  
-    <h4>Text in a modal</h4>  
-    <p>You can add some text here.</p>                
-  </div>  
-  <div class="modal-footer">  
-    <a href="#" class="btn btn-success instance-config-submit">Create</a>  
+    <div id="rds-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: create_rds_path  , remote: true, html: { id: 'rds-config-frm'} do |f|%>
+      <%= f.input :label %>
+      <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
+      <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Add instance', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn" data-dismiss="modal">Close</a>  
-  </div>  
+  </div>
+  <% end %>
 </div>  

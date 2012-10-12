@@ -1,0 +1,9 @@
+<% if @instance.valid? %>
+  var newInstance = addInstanceCloneToGraph({ left: <%= @instance.xpos %>, top: <%= @instance.ypos %> }, 'instance-<%=@instance.id%>');
+  newInstance.html('<%= escape_javascript(render 'ec2_template' , resource_type: @resource_type, instance: @instance)%>')
+  newInstance.draggable({containment: 'parent' });
+  $('#rds-configuration').modal('hide');
+  addMessagesToDiv($('#global-messages'), '<%= escape_javascript flash_messages %>');
+<% else %>
+  addMessagesToDiv($('#rds-config-error-messages'), '<%= escape_javascript flash_messages %>');
+<% end %>

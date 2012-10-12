@@ -7,6 +7,7 @@ VisualCloud::Application.routes.draw do
     #Instance resource
     resources :instances
     post 'create_ec2' => 'instances#create_ec2'
+    post 'create_rds' => 'instances#create_rds'
   end
   root :to => "home#index"
   devise_for :users
