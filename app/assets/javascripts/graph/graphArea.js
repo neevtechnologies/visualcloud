@@ -12,6 +12,7 @@
 
       }
     },
+    elements: [],
     _create: function() {
       var self = this;
       var element = self.element;
@@ -24,6 +25,17 @@
         }
       });
       self._trigger('onCreate');
+    },
+    addInstanceToStage: function(instanceElement){
+      instanceElement.appendTo(this.element);
+      this.elements.push(instanceElement);
+    },
+    save: function(){
+      elements = this.elements;
+      for(var i = 0; i < elements.length; i++)
+      {
+        console.log(elements[i]);
+      }
     },
     destroy: function() {
       this.element.remove();

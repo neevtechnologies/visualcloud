@@ -8,7 +8,7 @@ function addInstanceCloneToGraph(position, divId){
   var topOffset = position.top - graphArea.position().top ;
   var leftOffset = position.left - graphArea.position().left ;
   var newElement = $('<div id="'+ divId + '" class="instance" ></div>');
-  newElement.appendTo(graphArea);
+  graphArea.graphArea("addInstanceToStage", newElement);
 
   newElement.position({
     my: 'left top',
