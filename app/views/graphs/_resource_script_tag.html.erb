@@ -1,7 +1,6 @@
 <script type="text/javascript">
   $('#resource-type-<%= resource_type.id %>').resourceElement({
     name: '<%= resource_type.name %>' ,
-    instanceHtml: "<%= escape_javascript get_instance_template_for_stage(resource_type) %>" ,
     resourceTypeId: '<%= resource_type.id %>'
   });
 </script>

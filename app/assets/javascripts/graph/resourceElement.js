@@ -3,7 +3,6 @@
     options: {
       name: 'EC2',
       resourceTypeId: null,
-      instanceHtml: '',
       largeIcon: null
     },
     onElementDrop: function(event, params){
@@ -23,7 +22,7 @@
 
       //Binding a more specific resource type widget to element
       if(element[options.name + 'Resource'] != undefined)
-        element[options.name + 'Resource']({instanceHtml: options.instanceHtml});
+        element[options.name + 'Resource']();
 
       element.draggable({
         helper: 'clone',

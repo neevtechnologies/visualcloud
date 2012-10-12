@@ -1,8 +1,5 @@
 (function($) {
   $.widget("graph.EC2Resource", {
-    options: {
-      instanceHtml: ''
-    },
     instanceCount: 0,
     onElementDrop: function(params){
       console.log('EC2 received element drop');
