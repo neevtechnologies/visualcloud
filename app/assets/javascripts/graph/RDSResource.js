@@ -21,11 +21,17 @@ $(document).ready(function(){
   $('div#rds-configuration .instance-config-submit').click(function(){
     var xpos = $('#rds-configuration').data('xpos');
     var ypos = $('#rds-configuration').data('ypos');
+    var editElement = $('#rds-configuration').data('editElement');
     var label = $('input#rds_label').val().trim();
-    if ( validateRDSConfig(label) )
-    {
-      var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-      newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS'});
+    if ( validateRDSConfig(label) ) {
+      if (editElement == null) {
+        var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
+        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS'});
+      }
+      else {
+        var existingInstance = $('#'+editElement);
+        existingInstance.instance("option", {label: label});
+      }
       $('#rds-configuration').modal('hide');
     }
     return false;

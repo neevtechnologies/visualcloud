@@ -25,7 +25,7 @@
   <div class="modal-body">  
     <div id="ec2-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: 'ec2-config-frm'} do |f|%>
-      <%= f.input :label, input_html: { id: 'ec2_label'} %>
+      <%= f.input :label, input_html: { id: 'ec2_label', class: 'instance_label'} %>
       <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'ec2_ami_id'} %>
       <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
       <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
@@ -46,7 +46,7 @@
   <div class="modal-body">  
     <div id="rds-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
-      <%= f.input :label, input_html: { id: 'rds_label'} %>
+      <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
       <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
   </div>
