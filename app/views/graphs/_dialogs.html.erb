@@ -45,7 +45,7 @@
   </div>  
   <div class="modal-body">  
     <div id="rds-config-error-messages"></div>
-    <%= simple_form_for Instance.new, url: create_rds_path  , remote: true, html: { id: 'rds-config-frm'} do |f|%>
+    <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'rds_label'} %>
       <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rds_ypos')%>

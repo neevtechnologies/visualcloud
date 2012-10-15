@@ -4,7 +4,12 @@
       console.log('RDS received element drop');
       //Look in app/views/graphs/_dialogs.html.erb to see all dialogs
       //or to add a dialog for a new resource type
-      var droppedPosition = params.args.position
+      //var droppedPosition = params.args.position
+      var droppedElement = params.args.helper ;
+      var stage = params.droppable;
+      var droppedPosition = {} ;
+      droppedPosition.top = droppedElement.position().top - stage.position().top ;
+      droppedPosition.left = droppedElement.position().left - stage.position().left ;
       showConfigurationForm('rds-configuration', droppedPosition);
     }
   });
@@ -16,9 +21,24 @@ $(document).ready(function(){
   $('div#rds-configuration .instance-config-submit').click(function(){
     var xpos = $('#rds-configuration').data('xpos');
     var ypos = $('#rds-configuration').data('ypos');
-    $('input#rds_xpos').val(xpos);
-    $('input#rds_ypos').val(ypos);
-    return true;
+    var label = $('input#rds_label').val().trim();
+    if ( validateRDSConfig(label) )
+    {
+      var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
+      newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS'});
+      $('#rds-configuration').modal('hide');
+    }
+    return false;
   });
 
 });
+
+function validateRDSConfig(label){
+    if(label == "")
+    {
+      addMessagesToDiv($('#rds-config-error-messages'), getErrorMessage('Label cannot be empty'));
+      return false;
+    }
+    else
+     return true;
+}
