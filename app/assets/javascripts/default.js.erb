@@ -27,6 +27,12 @@ function showConfigurationForm(dialogId, droppedPosition){
   dialog.modal('show');
 };
 
+function showInstanceEditForm(dialogId, editElement){
+  var dialog = $('#'+dialogId);
+  dialog.data('editElement', editElement);
+  dialog.modal('show');
+};
+
 function addMessagesToDiv(jDiv, content){
   jDiv.append(content);
   $(".messages").delay(10000).fadeOut("slow", function () { $(this).remove(); });

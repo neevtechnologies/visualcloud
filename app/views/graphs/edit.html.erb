@@ -1,6 +1,10 @@
-<h1>Editing graph</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @graph %> |
-<%= link_to 'Back', graphs_path %>
+<%= render 'edit_toolbar' %>
+<div class="row">
+  <%= render 'graph_draggables', resource_types: @resource_types %>
+  <%= render 'graph_area' %>
+  <%= render 'dialogs' %>
+  <%= render 'instance_templates', resource_types: @resource_types %>
+</div>
+<script type="text/javascript">
+  prepare_stage();
+</script>

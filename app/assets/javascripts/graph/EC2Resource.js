@@ -20,12 +20,19 @@ $(document).ready(function(){
   $('div#ec2-configuration .instance-config-submit').click(function(){
     var xpos = $('#ec2-configuration').data('xpos'); 
     var ypos = $('#ec2-configuration').data('ypos'); 
+    var editElement = $('#ec2-configuration').data('editElement');
+    $('#ec2-configuration').removeData(['xpos','ypos','editElement']);
     var label = $('input#ec2_label').val().trim();
     var amiId = parseInt($('select#ec2_ami_id').val());
-    if ( validateEC2Config(label) )
-    {
-      var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-      newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'EC2', amiId: amiId});
+    if ( validateEC2Config(label) ){
+      if (editElement == null) {
+        var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
+        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'EC2', amiId: amiId});
+      }
+      else {
+        var existingInstance = $('#'+editElement);
+        existingInstance.instance("option", {label: label, amiId: amiId});
+      }
       $('#ec2-configuration').modal('hide');
     }
     return false;

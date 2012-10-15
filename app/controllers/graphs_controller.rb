@@ -26,7 +26,7 @@ class GraphsController < ApplicationController
   # GET /graphs/new.json
   def new
     @graph = Graph.new
-    @resource_types = ResourceType.all
+    @resource_types = RESOURCE_TYPES
 
     respond_to do |format|
       format.html # new.html.erb
@@ -37,11 +37,13 @@ class GraphsController < ApplicationController
   # GET /graphs/1/edit
   def edit
     @graph = Graph.find(params[:id])
+    @resource_types = RESOURCE_TYPES
   end
 
   # POST /graphs
   # POST /graphs.json
   def create
+    puts params.inspect
     errors = []
     graph = Graph.new(params[:graph])
     if !graph.save
@@ -50,7 +52,11 @@ class GraphsController < ApplicationController
     end
 
     params[:instances].to_a.each do |instance|
+      resouce_type_name = instance.delete(:resource_type)
+      resource_type = ResourceType.where(name: resouce_type_name).first
       instance = Instance.new(instance)
+      instance.graph = graph
+      instance.resource_type = resource_type
       if !instance.save
         errors << "#{instance.label} has the following error(s) :"
         errors += instance.errors.full_messages 

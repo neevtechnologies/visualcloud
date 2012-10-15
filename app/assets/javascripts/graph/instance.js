@@ -7,6 +7,12 @@
       resourceType: '',
       label: ''
     },
+    _setOption: function(key, value){
+      if(key == 'label')
+        this.element.find($('.instance-label')).html(value);
+      //Sets the new options
+      $.Widget.prototype._setOption.apply(this, arguments);
+    },
     _create: function() {
       var self = this;
       var options = self.options;
@@ -15,6 +21,11 @@
       //Make the dropped element draggable
       element.draggable({
         containment: 'parent'
+      });
+
+      //Show edit config modal on click
+      element.click(function(){
+        showInstanceEditForm('ec2-configuration', element.attr('id'));
       });
 
       //Add the inner HTML template
@@ -28,7 +39,11 @@
     },
     getAttributes: function(){
       var options = this.options;
-      return {xpos: options.xpos, ypos: options.ypos, label: options.label, ami_id: options.amiId};
+      var element = this.element;
+      var stage = element.parent();
+      var ypos = element.position().top - stage.position().top ;
+      var xpos = element.position().left - stage.position().left ;
+      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, resource_type: options.resourceType };
     },
     destroy: function() {
       this.element.remove();

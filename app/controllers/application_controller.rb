@@ -5,4 +5,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, :alert => exception.message
   end
 
+  RESOURCE_TYPES = ResourceType.all
+
 end

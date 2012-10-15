@@ -13,6 +13,7 @@
       }
     },
     instances: [],
+    instanceCount: 0,
     _create: function() {
       var self = this;
       var element = self.element;
@@ -28,6 +29,9 @@
     },
     addInstanceToStage: function(instanceElement){
       instanceElement.appendTo(this.element);
+      //Give ID to the new element
+      this.instanceCount++ ;
+      instanceElement.attr('id', 'instance-' + this.instanceCount );
       this.instances.push(instanceElement);
     },
     save: function(graphName){
@@ -42,9 +46,9 @@
       $.ajax({
         url: '/graphs',
         type: 'POST',
-        data: JSON.stringify({graph: {name: graphName}, instances: instanceAttributes}),
         dataType: "script",
         contentType: 'application/json',
+        data: JSON.stringify({graph: {name: graphName}, instances: instanceAttributes}),
         complete: function(){
           hideLoading();
         }
