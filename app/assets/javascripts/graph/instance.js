@@ -25,7 +25,7 @@
 
       //Show edit config modal on click
       element.click(function(){
-        showInstanceEditForm('ec2-configuration', element.attr('id'));
+        showInstanceEditForm(element.attr('id'));
       });
 
       //Add the inner HTML template

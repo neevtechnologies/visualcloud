@@ -22,14 +22,28 @@ function addInstanceCloneToGraph(position){
 
 function showConfigurationForm(dialogId, droppedPosition){
   var dialog = $('#'+dialogId);
+  dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('xpos', droppedPosition.left);
   dialog.data('ypos', droppedPosition.top);
   dialog.modal('show');
 };
 
-function showInstanceEditForm(dialogId, editElement){
+function showInstanceEditForm(editElement){
+  var instanceOptions = $('#'+editElement).instance("option") ;
+  var dialogId = '' ;
+  switch(instanceOptions.resourceType){
+  case 'EC2':
+    dialogId = 'ec2-configuration';	
+    break;
+  case 'RDS':
+    dialogId = 'rds-configuration';	
+    break;
+  }
   var dialog = $('#'+dialogId);
+  dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
+  dialog.find('.instance_label').val(instanceOptions.label); 
+  dialog.find('#ec2_ami_id').val(instanceOptions.amiId); 
   dialog.modal('show');
 };
 
