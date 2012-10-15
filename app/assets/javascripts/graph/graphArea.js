@@ -12,7 +12,7 @@
 
       }
     },
-    elements: [],
+    instances: [],
     _create: function() {
       var self = this;
       var element = self.element;
@@ -28,14 +28,27 @@
     },
     addInstanceToStage: function(instanceElement){
       instanceElement.appendTo(this.element);
-      this.elements.push(instanceElement);
+      this.instances.push(instanceElement);
     },
-    save: function(){
-      elements = this.elements;
-      for(var i = 0; i < elements.length; i++)
+    save: function(graphName){
+      var instances = this.instances;
+      var instanceAttributes = [];
+      for(var i = 0; i < instances.length; i++)
       {
-        console.log(elements[i]);
+        console.log(instances[i].instance("getAttributes"));
+        instanceAttributes.push(instances[i].instance("getAttributes"));
       }
+      showLoading();
+      $.ajax({
+        url: '/graphs',
+        type: 'POST',
+        data: JSON.stringify({graph: {name: graphName}, instances: instanceAttributes}),
+        dataType: "script",
+        contentType: 'application/json',
+        complete: function(){
+          hideLoading();
+        }
+      });
     },
     destroy: function() {
       this.element.remove();

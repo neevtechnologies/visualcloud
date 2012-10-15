@@ -3,11 +3,11 @@ function prepare_stage(){
   $('.graph-area').graphArea();
 };
 
-function addInstanceCloneToGraph(position, divId){
+function addInstanceCloneToGraph(position){
   var graphArea = $('.graph-area') ;
-  var topOffset = position.top - graphArea.position().top ;
-  var leftOffset = position.left - graphArea.position().left ;
-  var newElement = $('<div id="'+ divId + '" class="instance" ></div>');
+  var topOffset = position.top ;
+  var leftOffset = position.left ;
+  var newElement = $('<div class="instance" ></div>');
   graphArea.graphArea("addInstanceToStage", newElement);
 
   newElement.position({
@@ -30,6 +30,30 @@ function showConfigurationForm(dialogId, droppedPosition){
 function addMessagesToDiv(jDiv, content){
   jDiv.append(content);
   $(".messages").delay(2000).fadeOut("slow", function () { $(this).remove(); });
+};
+
+function getErrorMessage(message){
+  var errorMessage = '<div class="alert alert-error messages"><button type="button" class="close" data-dismiss="alert">x</button>' + message + '</div>' ;
+  return errorMessage ;
+};
+
+function showLoading(message){
+  if(message == "undefined")
+    message = "Please Wait..." ;
+  $('#loading-text').html(message);
+  $('#loading').modal('show').css({
+    width: 'auto',
+    'margin-top': function () {
+      return -($(this).height() / 2);
+    },
+    'margin-left': function () {
+      return -($(this).width() / 2);
+    }
+  });
+};
+
+function hideLoading(){
+  $('#loading').modal('hide');
 };
 
 /*

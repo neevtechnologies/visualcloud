@@ -42,8 +42,28 @@ class GraphsController < ApplicationController
   # POST /graphs
   # POST /graphs.json
   def create
-    @graph = Graph.new(params[:graph])
+    errors = []
+    graph = Graph.new(params[:graph])
+    if !graph.save
+      errors << "Graph has the following errors :"
+      errors += graph.errors.full_messages
+    end
 
+    params[:instances].to_a.each do |instance|
+      instance = Instance.new(instance)
+      if !instance.save
+        errors << "#{instance.label} has the following error(s) :"
+        errors += instance.errors.full_messages 
+      end
+    end
+
+    if errors.blank?
+      flash.now[:success] = "Graph saved successfully"
+    else
+      flash.now[:error] = errors
+    end
+
+=begin
     respond_to do |format|
       if @graph.save
         format.html { redirect_to @graph, notice: 'Graph was successfully created.' }
@@ -52,6 +72,15 @@ class GraphsController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @graph.errors, status: :unprocessable_entity }
       end
+    end
+=end
+  rescue Exception => e
+    puts e.inspect
+    logger.error("Error occured while saving the graph : #{e.inspect}")
+    flash.now[:error] = "Error occured while saving the Graph"
+  ensure
+    respond_to do |format|
+      format.js
     end
   end
 

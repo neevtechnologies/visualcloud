@@ -5,7 +5,7 @@ class CreateInstances < ActiveRecord::Migration
       t.integer :xpos
       t.integer :ypos
       t.integer :size
-      t.string :ami_id
+      t.integer :ami_id
       t.string :url
       t.string :aws_instance_id
 

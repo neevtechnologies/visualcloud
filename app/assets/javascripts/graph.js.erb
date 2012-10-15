@@ -1,0 +1,24 @@
+$(document).ready(function(){
+  //On click event for "Save" button on graph toolbar
+  $('#graph-save').click(function(){
+    $('#graph-save-modal').modal('show');
+    console.log('clicked!');
+    //$('.graph-area').graphArea("save");
+    //showLoading();
+  });
+
+  //On click event for "Save graph" in Save Graph modal
+  $('.graph-save-submit').click(function(){
+    var graphName = $('input#graph-name').val().trim();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-save-error-messages'), getErrorMessage('Graph name cannot be empty'));
+    else
+    {
+      $('#graph-save-modal').modal('hide');
+      $('.graph-area').graphArea("save", graphName);
+    }
+    //Do not submit form
+    return false;
+  });
+
+});
