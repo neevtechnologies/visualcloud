@@ -4,7 +4,7 @@ class Instance < ActiveRecord::Base
   belongs_to :graph
   belongs_to :resource_type
 
-  validates :label , presence: true, uniqueness: true
+  validates :label , presence: true
   validates :xpos , numericality: true
   validates :ypos , numericality: true
 end

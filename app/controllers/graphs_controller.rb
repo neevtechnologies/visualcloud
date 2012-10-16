@@ -43,7 +43,6 @@ class GraphsController < ApplicationController
   # POST /graphs
   # POST /graphs.json
   def create
-    puts params.inspect
     errors = []
     graph = Graph.new(params[:graph])
     if !graph.save
@@ -94,15 +93,29 @@ class GraphsController < ApplicationController
   # PUT /graphs/1.json
   def update
     @graph = Graph.find(params[:id])
+    @graph.instances.destroy_all
+    errors = []
+
+    params[:instances].to_a.each do |instance|
+      resouce_type_name = instance.delete(:resource_type)
+      resource_type = ResourceType.where(name: resouce_type_name).first
+      instance = Instance.new(instance)
+      instance.graph = @graph
+      instance.resource_type = resource_type
+      if !instance.save
+        errors << "#{instance.label} has the following error(s) :"
+        errors += instance.errors.full_messages 
+      end
+    end
+
+    if errors.blank?
+      flash.now[:success] = "Graph updated successfully"
+    else
+      flash.now[:error] = errors
+    end
 
     respond_to do |format|
-      if @graph.update_attributes(params[:graph])
-        format.html { redirect_to @graph, notice: 'Graph was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @graph.errors, status: :unprocessable_entity }
-      end
+      format.js
     end
   end
 

@@ -38,10 +38,7 @@
       var instances = this.instances;
       var instanceAttributes = [];
       for(var i = 0; i < instances.length; i++)
-      {
-        console.log(instances[i].instance("getAttributes"));
         instanceAttributes.push(instances[i].instance("getAttributes"));
-      }
       showLoading();
       $.ajax({
         url: '/graphs',
@@ -49,6 +46,23 @@
         dataType: "script",
         contentType: 'application/json',
         data: JSON.stringify({graph: {name: graphName}, instances: instanceAttributes}),
+        complete: function(){
+          hideLoading();
+        }
+      });
+    },
+    update: function(graphId){
+      var instances = this.instances;
+      var instanceAttributes = [];
+      for(var i = 0; i < instances.length; i++)
+        instanceAttributes.push(instances[i].instance("getAttributes"));
+      showLoading();
+      $.ajax({
+        url: '/graphs/'+graphId,
+        type: 'PUT',
+        dataType: "script",
+        contentType: 'application/json',
+        data: JSON.stringify({instances: instanceAttributes}),
         complete: function(){
           hideLoading();
         }

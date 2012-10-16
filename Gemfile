@@ -18,6 +18,7 @@ gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
 
 group :development, :test do
   gem "awesome_print"
+  gem "debugger"
   gem "spork"
 end
 

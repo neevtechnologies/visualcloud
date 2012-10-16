@@ -6,6 +6,8 @@ $(document).ready(function(){
 
   //On click event for "Save" button on graph toolbar during edit
   $('#graph-update').click(function(){
+    var graphId = $(this).data("graphId");
+    $('.graph-area').graphArea("update", graphId);
   });
 
   //On click event for "Save graph" in Save Graph modal
