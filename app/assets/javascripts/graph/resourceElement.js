@@ -9,8 +9,6 @@
       var self = this;
       var options = self.options;
       var element = self.element;
-      console.log('Draggable reveived element drop');
-      console.log('Resource specification = ' + options.name + 'Resource' );
       //Triggering the onElementDrop listener of any specification widgets if any
       if(element[options.name + 'Resource'] != undefined)
         element[options.name + 'Resource']("onElementDrop", params);

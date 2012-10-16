@@ -1,7 +1,6 @@
 (function($) {
   $.widget("graph.EC2Resource", {
     onElementDrop: function(params){
-      console.log('EC2 received element drop');
       //Look in app/views/graphs/_dialogs.html.erb to see all dialogs 
       //or to add a dialog for a new resource type
       var droppedElement = params.args.helper ;
@@ -26,7 +25,7 @@ $(document).ready(function(){
     var InstanceTypeId = parseInt($('select#ec2_instance_type_id').val());
     if ( validateEC2Config(label) ){
       if (editElement == null) {
-        var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
+        var newInstance = addInstanceCloneToGraph();
         newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'EC2', amiId: amiId, InstanceType: InstanceTypeId});
       }
       else {        

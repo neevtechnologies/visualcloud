@@ -1,7 +1,6 @@
 (function($) {
   $.widget("graph.RDSResource", {
     onElementDrop: function(params){
-      console.log('RDS received element drop');
       //Look in app/views/graphs/_dialogs.html.erb to see all dialogs
       //or to add a dialog for a new resource type
       //var droppedPosition = params.args.position
@@ -25,7 +24,7 @@ $(document).ready(function(){
     var label = $('input#rds_label').val().trim();
     if ( validateRDSConfig(label) ) {
       if (editElement == null) {
-        var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
+        var newInstance = addInstanceCloneToGraph();
         newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS'});
       }
       else {

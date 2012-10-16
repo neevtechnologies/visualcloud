@@ -3,20 +3,11 @@ function prepareStage(){
   $('.graph-area').graphArea();
 };
 
-function addInstanceCloneToGraph(position){
+function addInstanceCloneToGraph(){
   var graphArea = $('.graph-area') ;
-  var topOffset = position.top ;
-  var leftOffset = position.left ;
   var newElement = $('<div class="instance" ></div>');
   graphArea.graphArea("addInstanceToStage", newElement);
 
-  newElement.position({
-    my: 'left top',
-    at: 'left top',
-    of: graphArea,
-    collision: 'none',
-    offset: leftOffset + ' ' + topOffset 
-  });
   return newElement ;
 };
 

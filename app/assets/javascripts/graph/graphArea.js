@@ -21,7 +21,6 @@
         //The classes of draggables to be accepted
         accept: '.resourceDraggable',
         drop: function(event, ui){
-          console.log('Element dropped. Triggering event');
           self._trigger('onElementDrop', event , { args: ui, droppable: $(this)} );
         }
       });

@@ -1,7 +1,6 @@
 <% if flash.now[:error].nil? %>
-  var newInstance = addInstanceCloneToGraph({ left: <%= @instance.xpos %>, top: <%= @instance.ypos %> }, 'instance-<%=@instance.id%>');
-  newInstance.html('<%= escape_javascript(render 'instance_template' , resource_type: @resource_type, instance: @instance)%>')
-  newInstance.draggable({containment: 'parent' });
+  var newInstance = addInstanceCloneToGraph();
+  newInstance.instance({xpos: <%= @instance.xpos %>, ypos:  <%= @instance.ypos %>, label: label, resourceType: 'EC2'});
   $('#ec2-configuration').modal('hide');
   addMessagesToDiv($('#global-messages'), '<%= escape_javascript flash_messages %>');
 <% else %>
