@@ -43,7 +43,8 @@ function showInstanceEditForm(editElement){
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label); 
-  dialog.find('#ec2_ami_id').val(instanceOptions.amiId); 
+  dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
+  dialog.find('#ec2_instance_type_id').val(instanceOptions.InstanceType);
   dialog.modal('show');
 };
 

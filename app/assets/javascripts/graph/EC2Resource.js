@@ -23,14 +23,15 @@ $(document).ready(function(){
     var editElement = $('#ec2-configuration').data('editElement');    
     var label = $('input#ec2_label').val().trim();
     var amiId = parseInt($('select#ec2_ami_id').val());
+    var InstanceTypeId = parseInt($('select#ec2_instance_type_id').val());
     if ( validateEC2Config(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'EC2', amiId: amiId});
+        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'EC2', amiId: amiId, InstanceType: InstanceTypeId});
       }
       else {        
         var existingInstance = $('#'+editElement);
-        existingInstance.instance("option", {label: label, amiId: amiId});
+        existingInstance.instance("option", {label: label, amiId: amiId, InstanceType: InstanceTypeId});
       }
       $('#ec2-configuration').modal('hide');
     }

@@ -4,6 +4,7 @@
       xpos: null,
       ypos: null,
       amiId: null,
+      InstanceType: null,
       resourceType: '',
       label: ''
     },
@@ -43,7 +44,7 @@
       var stage = element.parent();
       var ypos = element.position().top - stage.position().top ;
       var xpos = element.position().left - stage.position().left ;
-      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, resource_type: options.resourceType };
+      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType };
     },
     destroy: function() {
       this.element.remove();

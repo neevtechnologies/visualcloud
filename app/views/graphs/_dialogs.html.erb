@@ -27,6 +27,7 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'ec2-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'ec2_label', class: 'instance_label'} %>
       <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'ec2_ami_id'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection, input_html: {id: 'ec2_instance_type_id'} %>
       <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
       <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
   </div>  

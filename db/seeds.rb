@@ -17,3 +17,19 @@ ResourceType.create(name: 'RDS', small_icon: "amazon/AWS_Simple_Icons_Database_A
 
 #Ami'S
 Ami.create(image_id:'ami-0a79db63', architecture:'x86_64', name:'EA-AppServer', description:'Ubuntu 12.04 + Ruby 1.9.3 p194')
+
+#Instance Types
+InstanceType.create(name:'Small', size:'1.7 GB')
+InstanceType.create(name:'Medium', size:'3.75 GB')
+InstanceType.create(name:'Large', size:'7.5 GB')
+InstanceType.create(name:'Extra Large', size:'15 GB')
+InstanceType.create(name:'Micro', size:'613 MB')
+InstanceType.create(name:'High-Memory Extra Large', size:'17.1 GB')
+InstanceType.create(name:'High-Memory Double Extra Large', size:'34.2 GB')
+InstanceType.create(name:'High-Memory Quadruple Extra Large', size:'68.4 GB')
+InstanceType.create(name:'High-CPU Medium', size:'1.7 GB')
+InstanceType.create(name:'High-CPU Extra Large', size:'7 GB')
+InstanceType.create(name:'Cluster Compute Quadruple Extra Large', size:'23 GB')
+InstanceType.create(name:'Cluster Compute Eight Extra Large', size:'60.5 GB')
+InstanceType.create(name:'Cluster GPU Quadruple Extra Large', size:'22 GB')
+InstanceType.create(name:'High I/O Quadruple Extra Large', size:'60.5 GB')

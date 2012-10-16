@@ -58,7 +58,7 @@ class GraphsController < ApplicationController
       instance.resource_type = resource_type
       if !instance.save
         errors << "#{instance.label} has the following error(s) :"
-        errors += instance.errors.full_messages 
+        errors += instance.errors.full_messages
       end
     end
 
