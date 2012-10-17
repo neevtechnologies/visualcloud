@@ -1,5 +1,5 @@
 class InstancesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate
 
   def create_ec2
     @resource_type = ResourceType.where(name: 'EC2').first

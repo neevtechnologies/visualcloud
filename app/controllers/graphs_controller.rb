@@ -1,5 +1,5 @@
 class GraphsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate
   # GET /graphs
   # GET /graphs.json
   def index

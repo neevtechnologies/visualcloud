@@ -12,4 +12,8 @@ VisualCloud::Application.routes.draw do
   root :to => "home#index"
   devise_for :users
   resources :users, :only => [:show, :index]
+
+  # Workaround to solve the following problem :
+  # https://github.com/rails/rails/issues/671
+  match '*a', to: 'application#authenticate'
 end
