@@ -1,9 +1,8 @@
 <h1>Listing graphs</h1>
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Name</th>
-    <th></th>
     <th></th>
     <th></th>
   </tr>
@@ -11,7 +10,6 @@
 <% @graphs.each do |graph| %>
   <tr>
     <td><%= graph.name %></td>
-    <td><%= link_to 'Show', graph %></td>
     <td><%= link_to 'Edit', edit_graph_path(graph) %></td>
     <td><%= link_to 'Destroy', graph, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
