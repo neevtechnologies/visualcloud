@@ -27,6 +27,11 @@ div.graph-draggables-dock {
   display: inline-block;
 }
 
+.dockIcon {
+  max-height: 30px;
+  max-width: 30px;
+}
+
 /*
 .ubuntu-ec2-element {
   background-image:image-url('icons/ubuntu.png');

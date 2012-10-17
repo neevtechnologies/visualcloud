@@ -57,3 +57,21 @@
   </div>
   <% end %>
 </div>  
+
+<!-- ELB resource added -->
+<div id="elb-configuration" class="modal hide fade in" style="display: none; ">
+  <div class="modal-header">  
+    <a class="close" data-dismiss="modal">×</a>  
+    <h3>ELB instance configuration</h3>
+  </div>  
+  <div class="modal-body">  
+    <div id="elb-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: '' , html: { id: 'elb-config-frm'} do |f|%>
+      <%= f.input :label, input_html: { id: 'elb_label', class: 'instance_label'} %>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <a href="#" class="btn" data-dismiss="modal">Close</a>  
+  </div>
+  <% end %>
+</div>  

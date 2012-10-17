@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016055149) do
+ActiveRecord::Schema.define(:version => 20121017053251) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(:version => 20121016055149) do
     t.string   "name"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "components", :force => true do |t|
+    t.string   "name"
+    t.string   "small_icon"
+    t.string   "large_icon"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "graphs", :force => true do |t|
