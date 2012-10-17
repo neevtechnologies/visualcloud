@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(user)
     puts "after sign in path called by devise"
     unless session[:return_to]
-      home_page(user)
+      root_path
     else
       return_to_path = return_to
       clear_return_to
