@@ -41,20 +41,19 @@ class GraphsController < ApplicationController
   end
 
   # POST /graphs
-  # POST /graphs.json
   def create
     errors = []
-    graph = Graph.new(params[:graph])
-    if !graph.save
+    @graph = Graph.new(params[:graph])
+    if !@graph.save
       errors << "Graph has the following errors :"
-      errors += graph.errors.full_messages
+      errors += @graph.errors.full_messages
     end
 
     params[:instances].to_a.each do |instance|
       resouce_type_name = instance.delete(:resource_type)
       resource_type = ResourceType.where(name: resouce_type_name).first
       instance = Instance.new(instance)
-      instance.graph = graph
+      instance.graph = @graph
       instance.resource_type = resource_type
       if !instance.save
         errors << "#{instance.label} has the following error(s) :"
@@ -63,22 +62,11 @@ class GraphsController < ApplicationController
     end
 
     if errors.blank?
-      flash.now[:success] = "Graph saved successfully"
+      flash[:success] = "Graph saved successfully"
     else
       flash.now[:error] = errors
     end
 
-=begin
-    respond_to do |format|
-      if @graph.save
-        format.html { redirect_to @graph, notice: 'Graph was successfully created.' }
-        format.json { render json: @graph, status: :created, location: @graph }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @graph.errors, status: :unprocessable_entity }
-      end
-    end
-=end
   rescue Exception => e
     puts e.inspect
     logger.error("Error occured while saving the graph : #{e.inspect}")
@@ -86,12 +74,11 @@ class GraphsController < ApplicationController
     errors << "Error occured while saving the Graph"
   ensure
     respond_to do |format|
-      format.js {@graph = graph;@errors = errors}
+      format.js
     end
   end
 
   # PUT /graphs/1
-  # PUT /graphs/1.json
   def update
     @graph = Graph.find(params[:id])
     @graph.instances.destroy_all

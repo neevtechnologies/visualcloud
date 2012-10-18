@@ -1,4 +1,4 @@
 addMessagesToDiv($('#global-messages'), '<%= escape_javascript flash_messages %>');
-<%if @errors.empty? %>
-window.location = '<%= edit_graph_path(@graph.id)%>';
+<%if flash.now[:error].blank? %>
+  window.location = '<%= edit_graph_path(@graph.id)%>';
 <%end%>
