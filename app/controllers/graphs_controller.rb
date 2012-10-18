@@ -83,9 +83,10 @@ class GraphsController < ApplicationController
     puts e.inspect
     logger.error("Error occured while saving the graph : #{e.inspect}")
     flash.now[:error] = "Error occured while saving the Graph"
+    errors << "Error occured while saving the Graph"
   ensure
     respond_to do |format|
-      format.js
+      format.js {@graph = graph;@errors = errors}
     end
   end
 

@@ -7,26 +7,22 @@ class ApplicationController < ActionController::Base
 
   #returns false if current_user is nil
   def signed_in?
-    puts current_user.inspect
     !current_user.nil?
   end
 
   #denies access if current_user is nil
   def authenticate
-    puts "Authenticate called"
     deny_access unless signed_in?
   end
 
   # Store the current location and redirect to sign in.
   def deny_access
-    puts "denying access"
     store_location
     redirect_to(new_user_session_url)
   end
 
   #after_sign_in_path_for is called by devise
   def after_sign_in_path_for(user)
-    puts "after sign in path called by devise"
     unless session[:return_to]
       root_path
     else
