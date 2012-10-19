@@ -13,7 +13,8 @@
     var xpos = <%= instance.xpos %> ;
     var ypos = <%= instance.ypos %> ;
     var amiId = <%= instance.ami_id.nil? ? 'null' : instance.ami_id %>;
+    var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
     var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId});
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType});
   <% end %>
 </script>

@@ -15,6 +15,7 @@ user.add_role :admin
 ResourceType.create(name: 'ELB', small_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", large_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg")
 ResourceType.create(name: 'EC2', small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg")
 ResourceType.create(name: 'RDS', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg")
+ResourceType.create(name: 'EC', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg")
 
 #Components
 Component.create(name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg")
