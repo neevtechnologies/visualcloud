@@ -28,7 +28,7 @@ $(document).ready(function(){
       }
       else {        
         var existingInstance = $('#'+editElement);
-        existingInstance.instance("option", {label: label, amiId: amiId, InstanceType: InstanceTypeId});
+        existingInstance.instance("option", {label: label});
       }
       $('#elb-configuration').modal('hide');
     }

@@ -54,6 +54,9 @@
       var xpos = element.offset().left - stage.offset().left ;
       return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType };
     },
+    getConfigurationDialogId: function(){
+      return this.options.resourceType.toLowerCase() + '-configuration' ;
+    },
     destroy: function() {
       this.element.remove();
     }

@@ -21,15 +21,7 @@ function showConfigurationForm(dialogId, droppedPosition){
 
 function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
-  var dialogId = '' ;
-  switch(instanceOptions.resourceType){
-  case 'EC2':
-    dialogId = 'ec2-configuration';	
-    break;
-  case 'RDS':
-    dialogId = 'rds-configuration';	
-    break;
-  }
+  var dialogId = $('#'+editElement).instance('getConfigurationDialogId') ;
   var dialog = $('#'+dialogId);
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
