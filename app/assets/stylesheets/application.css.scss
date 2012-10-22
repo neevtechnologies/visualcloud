@@ -32,6 +32,9 @@ div.graph-draggables-dock {
   max-width: 30px;
 }
 
+._jsPlumb_connector { z-index:4; }
+._jsPlumb_endpoint { z-index:5; }
+
 /*
 .ubuntu-ec2-element {
   background-image:image-url('icons/ubuntu.png');

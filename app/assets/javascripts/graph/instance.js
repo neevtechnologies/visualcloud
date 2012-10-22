@@ -23,10 +23,6 @@
       element.html($('.' + options.resourceType + '-instance').html());
       element.find($('.instance-label')).html(options.label);
 
-      //Make the dropped element draggable
-      element.draggable({
-        containment: element.parent()
-      });
 
       //Align the element on the stage
       element.position({
@@ -35,6 +31,13 @@
         of: element.parent(),
         offset: (options.xpos).toString() + ' ' + (options.ypos).toString() 
       });
+
+
+      //Make the dropped element draggable - Using JS plumb draggable
+      jsPlumb.draggable(element, {containment: element.parent()})
+
+      //Add connection endpoint to element
+      makeSourceAndTarget(element);
 
       //Show edit config modal on click
       element.click(function(){
