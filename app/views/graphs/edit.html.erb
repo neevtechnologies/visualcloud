@@ -7,14 +7,24 @@
 </div>
 <script type="text/javascript">
   prepareStage();
+  var instances = {};
   <% @graph.instances.each do |instance| %>
     var label = '<%= instance.label %>';
     var resourceType = '<%= instance.resource_type.name %>';
     var xpos = <%= instance.xpos %> ;
     var ypos = <%= instance.ypos %> ;
+    var parents = <%= instance.parents.collect(&:id) %> ;
+    var instanceId= <%= instance.id %>
     var amiId = <%= instance.ami_id.nil? ? 'null' : instance.ami_id %>;
     var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
     var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType});
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId});
+    //instances[instanceId] = { instance: newInstance, parents: parents };
   <% end %>
+  /*
+  //Loads saved connections
+  jsPlumb.ready(function(){
+    makeConnections(instances);
+  });
+  */
 </script>

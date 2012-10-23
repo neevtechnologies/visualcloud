@@ -49,8 +49,11 @@ class GraphsController < ApplicationController
       errors += @graph.errors.full_messages
     end
 
+    saved_doms = {}
     params[:instances].to_a.each do |instance|
       resouce_type_name = instance.delete(:resource_type)
+      dom_id = instance.delete(:dom_id)
+      parent_dom_ids = instance.delete(:parent_dom_ids)
       resource_type = ResourceType.where(name: resouce_type_name).first
       instance = Instance.new(instance)
       instance.graph = @graph
@@ -58,8 +61,12 @@ class GraphsController < ApplicationController
       if !instance.save
         errors << "#{instance.label} has the following error(s) :"
         errors += instance.errors.full_messages
+      else
+        saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
       end
     end
+
+    save_connections(saved_doms)
 
     if errors.blank?
       flash[:success] = "Graph saved successfully"
@@ -84,8 +91,11 @@ class GraphsController < ApplicationController
     @graph.instances.destroy_all
     errors = []
 
+    saved_doms = {}
     params[:instances].to_a.each do |instance|
       resouce_type_name = instance.delete(:resource_type)
+      dom_id = instance.delete(:dom_id)
+      parent_dom_ids = instance.delete(:parent_dom_ids)
       resource_type = ResourceType.where(name: resouce_type_name).first
       instance = Instance.new(instance)
       instance.graph = @graph
@@ -93,8 +103,12 @@ class GraphsController < ApplicationController
       if !instance.save
         errors << "#{instance.label} has the following error(s) :"
         errors += instance.errors.full_messages 
+      else
+        saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
       end
     end
+
+    save_connections(saved_doms)
 
     if errors.blank?
       flash.now[:success] = "Graph updated successfully"
@@ -118,4 +132,20 @@ class GraphsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+    
+    def save_connections(saved_doms)
+      return if saved_doms.empty?
+      saved_doms.each do |dom_id , instance|
+        record = instance[:instance]
+        parents = []
+        instance[:parent_dom_ids].to_a.each do |parent_dom_id|
+          parents << saved_doms[parent_dom_id][:instance]
+        end
+        record.parents = parents
+        record.save
+      end
+    end
+
 end

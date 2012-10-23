@@ -5,6 +5,7 @@
       ypos: null,
       amiId: null,
       InstanceType: null,
+      instanceId: null,
       resourceType: '',
       label: ''
     },
@@ -32,12 +33,18 @@
         offset: (options.xpos).toString() + ' ' + (options.ypos).toString() 
       });
 
-
-      //Make the dropped element draggable - Using JS plumb draggable
       jsPlumb.draggable(element, {containment: element.parent()})
+      if(options.instanceId != null)
+        element.attr('id', 'instance-' + options.instanceId );
+      else{
+      //jsPlumb.ready(function(){
+        //Make the dropped element draggable - Using JS plumb draggable
 
-      //Add connection endpoint to element
-      makeSourceAndTarget(element);
+        //Add connection endpoint to element
+        makeSourceAndTarget(element);
+      //});
+      }
+
 
       //Show edit config modal on click
       element.click(function(){
@@ -55,7 +62,9 @@
       var stage = element.parent();
       var ypos = element.offset().top - stage.offset().top ;
       var xpos = element.offset().left - stage.offset().left ;
-      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType };
+      var dom_id = element.attr('id');
+      var parent_dom_ids = getParentDomIds(element);
+      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType, parent_dom_ids: parent_dom_ids, dom_id: dom_id };
     },
     getConfigurationDialogId: function(){
       return this.options.resourceType.toLowerCase() + '-configuration' ;

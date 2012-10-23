@@ -4,6 +4,22 @@ class Instance < ActiveRecord::Base
   belongs_to :graph
   belongs_to :resource_type
   belongs_to :instance_type
+
+  has_many     :parent_child_relationships,
+               :class_name            => "InstanceRelationship",
+               :foreign_key           => :child_id,
+               :dependent             => :destroy
+  has_many     :parents,
+               :through               => :parent_child_relationships,
+               :source                => :parent
+
+  has_many     :child_parent_relationships,
+               :class_name            => "InstanceRelationship",
+               :foreign_key           => :parent_id,
+               :dependent             => :destroy
+  has_many     :children,
+               :through               => :child_parent_relationships,
+               :source                => :child
   
   validates :label , presence: true
   validates :xpos , numericality: true
