@@ -16,6 +16,8 @@ gem 'bootstrap-sass'
 gem "simple_form", ">= 2.0.3"
 gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
 
+gem 'cloudster'
+
 group :development, :test do
   gem "awesome_print"
   gem "debugger"

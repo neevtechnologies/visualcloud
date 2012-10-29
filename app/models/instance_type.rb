@@ -1,6 +1,6 @@
 class InstanceType < ActiveRecord::Base
   # attr_accessible :title, :body
-  attr_accessible :name, :size
+  attr_accessible :name, :size, :api_name
 
   has_many :instances
   belongs_to :resource_type

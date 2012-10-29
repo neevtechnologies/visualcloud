@@ -10,6 +10,21 @@ $(document).ready(function(){
     $('.graph-area').graphArea("update", graphId);
   });
 
+  //On click event for "Provision" button on graph toolbar during edit
+  $('#graph-provision').click(function(){
+    var graphId = $(this).data("graphId");
+    showLoading();
+    $.ajax({
+      url: '/provision_graph?id='+graphId,
+      type: 'POST',
+      dataType: "script",
+      contentType: 'application/json',
+      complete: function(){
+        hideLoading();
+      }
+    });
+  });
+
   //On click event for "Save graph" in Save Graph modal
   $('.graph-save-submit').click(function(){
     var graphName = $('input#graph-name').val().trim();

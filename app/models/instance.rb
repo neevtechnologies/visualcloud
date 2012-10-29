@@ -4,6 +4,7 @@ class Instance < ActiveRecord::Base
   belongs_to :graph
   belongs_to :resource_type
   belongs_to :instance_type
+  belongs_to :ami
 
   has_many     :parent_child_relationships,
                :class_name            => "InstanceRelationship",

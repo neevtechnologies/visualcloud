@@ -79,3 +79,5 @@ diff
 diff_file
 tags
 zeus.json
+*.template
+*.tmp

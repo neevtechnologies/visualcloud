@@ -133,6 +133,20 @@ class GraphsController < ApplicationController
     end
   end
 
+  # Provisions the stack
+  def provision
+    graph = Graph.find(params[:id])
+    if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+      flash.now[:error] = "You have not added your AWS access key"
+    else
+      if graph.provision(current_user.aws_access_key, current_user.aws_secret_key)
+        flash.now[:success] = "Provision request initiated"
+      else
+        flash.now[:error] = "This graph cannot be provisioned"
+      end
+    end
+  end
+
   private
     
     def save_connections(saved_doms)

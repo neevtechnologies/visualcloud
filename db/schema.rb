@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121022095101) do
+ActiveRecord::Schema.define(:version => 20121029112051) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -32,8 +32,9 @@ ActiveRecord::Schema.define(:version => 20121022095101) do
 
   create_table "graphs", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.boolean  "provisioned"
   end
 
   create_table "instance_relationships", :force => true do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20121022095101) do
     t.integer  "resource_type_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.string   "api_name"
   end
 
   create_table "instances", :force => true do |t|
@@ -96,6 +98,8 @@ ActiveRecord::Schema.define(:version => 20121022095101) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.string   "name"
+    t.string   "aws_secret_key"
+    t.string   "aws_access_key"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
