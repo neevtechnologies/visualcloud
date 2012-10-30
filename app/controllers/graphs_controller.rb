@@ -76,6 +76,7 @@ class GraphsController < ApplicationController
 
   rescue Exception => e
     puts e.inspect
+    puts e.backtrace
     logger.error("Error occured while saving the graph : #{e.inspect}")
     flash.now[:error] = "Error occured while saving the Graph"
     errors << "Error occured while saving the Graph"
