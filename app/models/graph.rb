@@ -1,9 +1,9 @@
 require 'cloudster'
 class Graph < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :project_id
 
   has_many :instances
-
+  belongs_to :project
   validates :name, presence: true
 
   def provision(access_key_id, secret_access_key)

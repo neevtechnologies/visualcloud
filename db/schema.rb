@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029112051) do
+ActiveRecord::Schema.define(:version => 20121030090853) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20121029112051) do
 
   create_table "graphs", :force => true do |t|
     t.string   "name"
+    t.integer  "project_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.boolean  "provisioned"
@@ -64,6 +65,24 @@ ActiveRecord::Schema.define(:version => 20121029112051) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end
+
+  create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "repo_type"
+    t.string   "repo_url"
+    t.string   "repo_auth"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "projects_users", :id => false, :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+  end
+
+  add_index "projects_users", ["project_id", "user_id"], :name => "index_projects_users_on_project_id_and_user_id"
 
   create_table "resource_types", :force => true do |t|
     t.string   "name"

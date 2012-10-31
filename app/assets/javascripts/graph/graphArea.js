@@ -40,7 +40,7 @@
         instanceAttributes.push(instances[i].instance("getAttributes"));
       showLoading();
       $.ajax({
-        url: '/graphs',
+        url: $('#graph-save-frm').attr('action'),
         type: 'POST',
         dataType: "script",
         contentType: 'application/json',
@@ -57,7 +57,7 @@
         instanceAttributes.push(instances[i].instance("getAttributes"));
       showLoading();
       $.ajax({
-        url: '/graphs/'+graphId,
+        url: $('#graph-save-frm').attr('action')+'/'+graphId,
         type: 'PUT',
         dataType: "script",
         contentType: 'application/json',

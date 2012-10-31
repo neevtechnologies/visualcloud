@@ -25,11 +25,11 @@ $(document).ready(function(){
     });
   });
 
-  //On click event for "Save graph" in Save Graph modal
+  //On click event for "Save environment" in Save Environment modal
   $('.graph-save-submit').click(function(){
     var graphName = $('input#graph-name').val().trim();
     if(graphName == "")
-      addMessagesToDiv($('#graph-save-error-messages'), getErrorMessage('Graph name cannot be empty'));
+      addMessagesToDiv($('#graph-save-error-messages'), getErrorMessage('Environment name cannot be empty'));
     else
     {
       $('#graph-save-modal').modal('hide');

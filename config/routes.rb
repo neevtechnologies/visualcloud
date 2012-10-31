@@ -1,9 +1,11 @@
 VisualCloud::Application.routes.draw do
 
   authenticated :user do
-    root :to => 'home#dashboard'
+    root :to => 'projects#index'
     #Graph resource
-    resources :graphs
+    resources :projects do
+      resources :graphs
+    end
     #Instance resource
     resources :instances
     post 'create_ec2' => 'instances#create_ec2'

@@ -25,6 +25,7 @@ class GraphsController < ApplicationController
   # GET /graphs/new
   # GET /graphs/new.json
   def new
+    @project = Project.find(params[:project_id])
     @graph = Graph.new
     @resource_types = RESOURCE_TYPES
 
@@ -36,6 +37,7 @@ class GraphsController < ApplicationController
 
   # GET /graphs/1/edit
   def edit
+    @project = Project.find(params[:project_id])
     @graph = Graph.find(params[:id])
     @resource_types = RESOURCE_TYPES
   end
@@ -43,9 +45,11 @@ class GraphsController < ApplicationController
   # POST /graphs
   def create
     errors = []
+    @project = Project.find(params[:project_id])
     @graph = Graph.new(params[:graph])
+    @graph.project = @project
     if !@graph.save
-      errors << "Graph has the following errors :"
+      errors << "Environment has the following errors :"
       errors += @graph.errors.full_messages
     end
 
@@ -69,7 +73,7 @@ class GraphsController < ApplicationController
     save_connections(saved_doms)
 
     if errors.blank?
-      flash[:success] = "Graph saved successfully"
+      flash[:success] = "Environment saved successfully"
     else
       flash.now[:error] = errors
     end
@@ -77,9 +81,9 @@ class GraphsController < ApplicationController
   rescue Exception => e
     puts e.inspect
     puts e.backtrace
-    logger.error("Error occured while saving the graph : #{e.inspect}")
-    flash.now[:error] = "Error occured while saving the Graph"
-    errors << "Error occured while saving the Graph"
+    logger.error("Error occured while saving the environment : #{e.inspect}")
+    flash.now[:error] = "Error occured while saving the Environment"
+    errors << "Error occured while saving the Environment"
   ensure
     respond_to do |format|
       format.js
@@ -88,6 +92,7 @@ class GraphsController < ApplicationController
 
   # PUT /graphs/1
   def update
+    @project = Project.find(params[:project_id])
     @graph = Graph.find(params[:id])
     @graph.instances.destroy_all
     errors = []
@@ -112,7 +117,7 @@ class GraphsController < ApplicationController
     save_connections(saved_doms)
 
     if errors.blank?
-      flash.now[:success] = "Graph updated successfully"
+      flash.now[:success] = "Environment updated successfully"
     else
       flash.now[:error] = errors
     end
@@ -125,11 +130,12 @@ class GraphsController < ApplicationController
   # DELETE /graphs/1
   # DELETE /graphs/1.json
   def destroy
+    @project = Project.find(params[:project_id])
     @graph = Graph.find(params[:id])
     @graph.destroy
 
     respond_to do |format|
-      format.html { redirect_to graphs_url }
+      format.html { redirect_to project_url(@project) }
       format.json { head :no_content }
     end
   end
@@ -143,7 +149,7 @@ class GraphsController < ApplicationController
       if graph.provision(current_user.aws_access_key, current_user.aws_secret_key)
         flash.now[:success] = "Provision request initiated"
       else
-        flash.now[:error] = "This graph cannot be provisioned"
+        flash.now[:error] = "This environment cannot be provisioned"
       end
     end
   end

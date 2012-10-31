@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+<h3><u><b><%= @project.name %></b></u></h3>
+<table>
+  <tr>
+    <td>Description :</td>
+    <td><%= @project.description %></td>
+  </tr>
+  <tr>
+    <td>Repository Type :</td>
+    <td><%= @project.repo_type %></td>
+  </tr><tr>
+    <td>Repository Path :</td>
+    <td><%= @project.repo_url %></td>
+  </tr><tr>
+    <td>Repository Auth :</td>
+    <td><%= @project.repo_auth %></td>
+  </tr>
+</table>
+
+<br/>
+<h4>Environments</h4>
+
+<%= render 'project_environments' %>
