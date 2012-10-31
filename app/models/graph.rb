@@ -15,8 +15,6 @@ class Graph < ActiveRecord::Base
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
 
     if self.provisioned
-      #temporarily returning true
-      return true
       provision_request = cloud.update(resources: stack_resources, stack_name: name, description: 'Provisioned by VisualCloud')
     else
       provision_request = cloud.provision(resources: stack_resources, stack_name: name, description: 'Provisioned by VisualCloud')
