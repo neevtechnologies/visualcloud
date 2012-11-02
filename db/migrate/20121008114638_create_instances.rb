@@ -10,6 +10,7 @@ class CreateInstances < ActiveRecord::Migration
       t.references :resource_type
       t.string :url
       t.string :aws_instance_id
+      t.text :config_attributes
 
       t.timestamps
     end

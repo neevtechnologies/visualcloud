@@ -1,5 +1,6 @@
 class Instance < ActiveRecord::Base
-  attr_accessible :aws_instance_id, :label, :size, :url, :xpos, :ypos, :ami_id, :instance_type_id
+  attr_accessible :aws_instance_id, :label, :size, :url, :xpos, :ypos, :ami_id,
+                  :instance_type_id, :config_attributes
 
   belongs_to :graph
   belongs_to :resource_type

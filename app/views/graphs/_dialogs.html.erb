@@ -27,7 +27,7 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'ec2-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'ec2_label', class: 'instance_label'} %>
       <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'ec2_ami_id'} %>
-      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection, input_html: {id: 'ec2_instance_type_id'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'ec2_instance_type_id'} %>
       <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
       <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
   </div>  
@@ -48,6 +48,13 @@
     <div id="rds-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('RDS'), input_html: {id: 'rds_instance_type_id'} %>
+      <p>Size</p>
+      <%= text_field_tag 'rds_size' %>
+      <p>Master User Name</p>
+      <%= text_field_tag 'rds_master_user_name' %>
+      <p>Master Password</p>
+      <%= password_field_tag 'rds_master_password' %>
       <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
   </div>

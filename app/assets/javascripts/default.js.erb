@@ -28,6 +28,11 @@ function showInstanceEditForm(editElement){
   dialog.find('.instance_label').val(instanceOptions.label); 
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
   dialog.find('#ec2_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#rds_instance_type_id').val(instanceOptions.InstanceType);
+  var value = JSON.parse(instanceOptions.configAttributes);
+  dialog.find('#rds_size').val(value.size);
+  dialog.find('#rds_master_user_name').val(value.master_user_name);
+  dialog.find('#rds_master_password').val(value.master_password);
   dialog.modal('show');
 };
 

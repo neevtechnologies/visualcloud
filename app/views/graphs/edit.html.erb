@@ -17,8 +17,9 @@
     var instanceId= <%= instance.id %>
     var amiId = <%= instance.ami_id.nil? ? 'null' : instance.ami_id %>;
     var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
+    var configAttributes = '<%= instance.config_attributes.html_safe %>';
     var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId});
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
     //instances[instanceId] = { instance: newInstance, parents: parents };
   <% end %>
   /*

@@ -7,6 +7,7 @@
       InstanceType: null,
       instanceId: null,
       resourceType: '',
+      configAttributes:'',
       label: ''
     },
     _setOption: function(key, value){
@@ -64,7 +65,7 @@
       var xpos = element.offset().left - stage.offset().left ;
       var dom_id = element.attr('id');
       var parent_dom_ids = getParentDomIds(element);
-      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType, parent_dom_ids: parent_dom_ids, dom_id: dom_id };
+      return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType, config_attributes: options.configAttributes, parent_dom_ids: parent_dom_ids, dom_id: dom_id };
     },
     getConfigurationDialogId: function(){
       return this.options.resourceType.toLowerCase() + '-configuration' ;

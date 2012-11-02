@@ -24,7 +24,7 @@ Component.create(name: 'PHP', small_icon: "components/php.svg", large_icon: "com
 #Ami'S
 Ami.create(image_id:'ami-0a79db63', architecture:'x86_64', name:'EA-AppServer', description:'Ubuntu 12.04 + Ruby 1.9.3 p194')
 
-#Instance Types
+#Instance Types for ec2
 InstanceType.create(api_name: 'm1.small', name:'Small', size:'1.7 GB')
 InstanceType.create(api_name: 'm1.medium', name:'Medium', size:'3.75 GB')
 InstanceType.create(api_name: 'm1.large', name:'Large', size:'7.5 GB')
@@ -39,3 +39,25 @@ InstanceType.create(api_name: 'cc1.4xlarge', name:'Cluster Compute Quadruple Ext
 InstanceType.create(api_name: 'cc2.8xlarge', name:'Cluster Compute Eight Extra Large', size:'60.5 GB')
 InstanceType.create(api_name: 'cg1.4xlarge', name:'Cluster GPU Quadruple Extra Large', size:'22 GB')
 InstanceType.create(api_name: 'hi1.4xlarge', name:'High I/O Quadruple Extra Large', size:'60.5 GB')
+
+ec2 = ResourceType.find_by_name('EC2')
+InstanceType.all.each do |p|
+  p.update_attribute(:resource_type_id,ec2.id)
+end
+
+#Instance Types for rds
+rds = ResourceType.find_by_name('RDS')
+instance = InstanceType.create(api_name: 'db.t1.micro', name:'Micro', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m1.small', name:'Small', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m1.large', name:'Large', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m1.xlarge', name:'Extra Large', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m2.xlarge', name:'High-Memory Extra Large', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m2.2xlarge', name:'High-Memory Double Extra Large', size:'')
+instance.update_attribute(:resource_type_id,rds.id)
+instance = InstanceType.create(api_name: 'db.m2.4xlarge', name:'High-Memory Quadruple Extra Large', size:'')
+instance.update_attribute(:resource_type_id,rds.id)

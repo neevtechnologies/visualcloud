@@ -5,7 +5,8 @@ class InstanceType < ActiveRecord::Base
   has_many :instances
   belongs_to :resource_type
   #Returns an array of arrays containing ec2 instance name and id
-  def self.get_select_collection
-    all.collect{|ec_ins| [ec_ins.name, ec_ins.id]}
+  def self.get_select_collection(type)
+    @instances = ResourceType.find_by_name(type).instance_types
+    @instances.collect{|ec_ins| [ec_ins.name, ec_ins.id]}
   end
 end

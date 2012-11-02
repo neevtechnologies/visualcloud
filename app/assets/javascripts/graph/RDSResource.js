@@ -22,14 +22,19 @@ $(document).ready(function(){
     var ypos = $('#rds-configuration').data('ypos');
     var editElement = $('#rds-configuration').data('editElement');
     var label = $('input#rds_label').val().trim();
+    var InstanceTypeId = parseInt($('select#rds_instance_type_id').val());
+    var size = $('input#rds_size').val().trim();
+    var username = $('input#rds_master_user_name').val().trim();
+    var password = $('input#rds_master_password').val().trim();
+    var config_attributes = '{"size":\"'+size+'\",'+'"master_user_name":\"'+username+'\",'+'"master_password":\"'+password+'\"}';
     if ( validateRDSConfig(label) ) {
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
-        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS'});
+        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS', InstanceType: InstanceTypeId, configAttributes: config_attributes});
       }
       else {
         var existingInstance = $('#'+editElement);
-        existingInstance.instance("option", {label: label});
+        existingInstance.instance("option", {label: label, InstanceType: InstanceTypeId, configAttributes: config_attributes});
       }
       $('#rds-configuration').modal('hide');
     }
