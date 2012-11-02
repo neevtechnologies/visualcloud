@@ -19,11 +19,8 @@
     var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
     var configAttributes = '<%= instance.config_attributes.html_safe %>';
     var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
-    if(configAttributes != '')
-      newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
-    else
-      newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId});    
-      //instances[instanceId] = { instance: newInstance, parents: parents };
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
+    //instances[instanceId] = { instance: newInstance, parents: parents };
   <% end %>
   /*
   //Loads saved connections
