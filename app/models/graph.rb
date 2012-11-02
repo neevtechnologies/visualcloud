@@ -11,6 +11,7 @@ class Graph < ActiveRecord::Base
 
     instance_names = add_ec2_resources(stack_resources)
     add_elb_resource(stack_resources, instance_names)
+    add_rds_resources(stack_resources)
 
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
 
@@ -52,6 +53,21 @@ class Graph < ActiveRecord::Base
     instances.each do |instance|
       if instance.resource_type.name == 'ELB'
         stack_resources << Cloudster::Elb.new(name: instance.label, instance_names: instance_names )
+      end
+    end
+  end
+
+  def add_rds_resources(stack_resources)
+    instances.each do |instance|
+      if instance.resource_type.name == 'RDS'
+        config_attributes = JSON.parse(instance.config_attributes)
+        puts config_attributes.inspect
+        stack_resources << Cloudster::Rds.new(name: instance.label, 
+                                              instance_class: instance.instance_type.api_name, 
+                                              storage_size: config_attributes['size'],
+                                              username: config_attributes['master_user_name'],
+                                              password: config_attributes['master_password']
+                                             )
       end
     end
   end
