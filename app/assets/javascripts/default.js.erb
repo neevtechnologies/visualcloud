@@ -5,7 +5,7 @@ function prepareStage(){
 
 function addInstanceCloneToGraph(){
   var graphArea = $('.graph-area') ;
-  var newElement = $('<div class="instance" ></div>');
+  var newElement = $('<div class="instance"></div>');
   graphArea.graphArea("addInstanceToStage", newElement);
 
   return newElement ;
@@ -29,15 +29,22 @@ function showInstanceEditForm(editElement){
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
   dialog.find('#ec2_instance_type_id').val(instanceOptions.InstanceType);
   dialog.find('#rds_instance_type_id').val(instanceOptions.InstanceType);
-  if(instanceOptions.configAttributes != '')
+  if(!isEmpty(instanceOptions.configAttributes))
   {
-     var value = JSON.parse(instanceOptions.configAttributes);
-     dialog.find('#rds_size').val(value.size);
-     dialog.find('#rds_master_user_name').val(value.master_user_name);
-     dialog.find('#rds_master_password').val(value.master_password);
+     dialog.find('#rds_size').val(instanceOptions.configAttributes.size);
+     dialog.find('#rds_master_user_name').val(instanceOptions.configAttributes.master_user_name);
+     dialog.find('#rds_master_password').val(instanceOptions.configAttributes.master_password);
   }
   dialog.modal('show');
 };
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+    return true;
+}
 
 function addMessagesToDiv(jDiv, content){
   jDiv.append(content);

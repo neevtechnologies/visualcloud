@@ -7,7 +7,7 @@
       InstanceType: null,
       instanceId: null,
       resourceType: '',
-      configAttributes:'',
+      configAttributes:{},
       label: ''
     },
     _setOption: function(key, value){

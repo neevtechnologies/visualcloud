@@ -26,7 +26,8 @@ $(document).ready(function(){
     var size = $('input#rds_size').val().trim();
     var username = $('input#rds_master_user_name').val().trim();
     var password = $('input#rds_master_password').val().trim();
-    var config_attributes = '{"size":\"'+size+'\",'+'"master_user_name":\"'+username+'\",'+'"master_password":\"'+password+'\"}';
+    var config_attributes = {size:size,master_user_name:username,master_password:password};
+    //var config_attributes = '{"size":\"'+size+'\",'+'"master_user_name":\"'+username+'\",'+'"master_password":\"'+password+'\"}';
     if ( validateRDSConfig(label) ) {
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
