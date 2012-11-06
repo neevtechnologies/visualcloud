@@ -67,6 +67,13 @@
         }
       });
     },
+    getInstances: function(){
+      var instances = this.instances;
+      var instanceAttributes = [];
+      for(var i = 0; i < instances.length; i++)
+        instanceAttributes.push(instances[i].instance("getAttributes"));
+      return(JSON.stringify({instances: instanceAttributes}));
+    },
     destroy: function() {
       this.element.remove();
     }
