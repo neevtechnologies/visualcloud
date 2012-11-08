@@ -19,7 +19,7 @@
       var element = self.element;
       element.droppable({
         //The classes of draggables to be accepted
-        accept: '.resourceDraggable',
+        accept: '.resourceDraggable,.componentDraggable',
         drop: function(event, ui){
           self._trigger('onElementDrop', event , { args: ui, droppable: $(this)} );
         }

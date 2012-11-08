@@ -34,10 +34,9 @@ function makeSourceAndTarget(element){
     return jsPlumb.addEndpoint(element, sourceAndTargetEndPointAttributes);
 };
 
-/*
+
 //Makes connections between instances
 function makeConnections(instances){
-  jsPlumb.ready(function(){
     var instanceEndpoints = {} ;
     for(var key in instances){
         var element = $('#instance-'+key);
@@ -50,13 +49,12 @@ function makeConnections(instances){
         var parents = instance.parents ;
         for(var i=0; i < parents.length; i++)
         {
-          if(sourceEndPoint && targetEndPoint)
+          //if(sourceEndPoint && targetEndPoint)
             jsPlumb.connect({source: instanceEndpoints[parents[i]], target: instanceEndpoints[key] });
         }
     }
-  });
-};
-*/
+}
+
 
 function getParentDomIds(element){
   connections = jsPlumb.getConnections({target: element});

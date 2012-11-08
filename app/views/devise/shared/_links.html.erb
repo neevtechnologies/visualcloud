@@ -23,3 +23,13 @@
     <%= link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(resource_name, provider) %><br />
   <% end -%>
 <% end -%>
+
+<script type="text/javascript">
+$(document).ready(function(){
+var flash = '<%=flash[:notice].present? ? "notice" : "error"%>';
+var content = 'Entered Email or password are wrong.';
+<% if flash.present? %>
+addMessagesToDivNew($('#container'), flash, content)
+<%end%>
+});
+</script>

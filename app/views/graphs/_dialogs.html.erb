@@ -100,3 +100,21 @@
   </div>
   <% end %>
 </div>
+
+<!-- Rails component added -->
+<div id="rails-configuration" class="modal hide fade in" style="display: none; ">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Rails Component configuration</h3>
+  </div>
+  <div class="modal-body">
+    <div id="rails-config-error-messages"></div>
+    <%= simple_form_for Component.new, url: '' , html: { id: 'rails-config-frm'} do |f|%>
+      <%= f.input :name, input_html: { id: 'rails_name', class: 'instance_label'} %>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+  </div>
+  <% end %>
+</div>

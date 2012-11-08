@@ -47,9 +47,17 @@ function isEmpty(obj) {
 }
 
 function addMessagesToDiv(jDiv, content){
-  jDiv.append(content);
-  $(".messages").delay(10000).fadeOut("slow", function () { $(this).remove(); });
+  jDiv.notify("create","ajax-template",{text: content},{expires: 5000,speed: 1000,custom: true});
 };
+
+function addMessagesToDivNew(jDiv, type, content){
+var id = "";
+if(type == "notice")
+id = "basic-template";
+else
+id = "themeroller";
+jDiv.notify("create",id,{text: content},{expires: 5000,speed: 1000,custom: true});
+}
 
 function getErrorMessage(message){
   var errorMessage = '<div class="alert alert-error messages"><button type="button" class="close" data-dismiss="alert">x</button>' + message + '</div>' ;
@@ -74,6 +82,10 @@ function showLoading(message){
 function hideLoading(){
   $('#loading').modal('hide');
 };
+
+$(document).ready(function(){
+   $("#container").notify({expires: false,speed: 1000});
+});
 
 /*
 // For debugging mouse movement inside graph area

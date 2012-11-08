@@ -5,6 +5,7 @@
   <%= render 'dialogs' ,project: @project%>
   <%= render 'instance_templates', resource_types: @resource_types %>
 </div>
+
 <script type="text/javascript">
   prepareStage();
   var instances = {};
@@ -20,12 +21,10 @@
     var configAttributes = JSON.parse('<%= instance.config_attributes.html_safe %>');
     var newInstance = addInstanceCloneToGraph({ left: xpos, top: ypos });
     newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, amiId: amiId, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
-    //instances[instanceId] = { instance: newInstance, parents: parents };
+    instances[instanceId] = { instance: newInstance, parents: parents };
   <% end %>
-  /*
   //Loads saved connections
   jsPlumb.ready(function(){
     makeConnections(instances);
   });
-  */
 </script>

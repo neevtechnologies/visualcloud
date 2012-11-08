@@ -1,8 +1,18 @@
-<div id="global-messages">
-  <% flash.each do |name, msg| %>
-    <div class="alert alert-<%= (name == :notice || name == :success) ? "success" : "error" %>">
-      <a class="close" data-dismiss="alert">&#215;</a>
-      <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
-    </div>
-  <% end %>
+<div id="container" style="display:none;z-index: 999;">
+  <div id="ajax-template" style="padding:0px;">
+    <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+    <h1>#{title}</h1>
+    <p>#{text}</p>
+  </div>
+  <div id="basic-template" class="ui-state-success alert-success">
+    <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+    <h1>#{title}</h1>
+    <p>#{text}</p>
+  </div>
+  <div id="themeroller" class="ui-state-error" style="padding:10px; -moz-box-shadow:0 0 6px #980000; -webkit-box-shadow:0 0 6px #980000; box-shadow:0 0 6px #980000;">
+    <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+    <span style="float:left; margin:0 5px 0 0;" class="ui-icon ui-icon-alert"></span>
+    <h1>#{title}</h1>
+    <p>#{text}</p>
+  </div>
 </div>
