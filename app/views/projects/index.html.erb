@@ -22,17 +22,5 @@
   <tr><td colspan="3" style="color: blue;">No Projects Present.</td></tr>
   <%end%>
 </table>
-
-
 <br />
-
 <%= link_to 'New Project', new_project_path  ,:class=>'btn' %>
-<script type="text/javascript">
-$(document).ready(function(){
-var flash = '<%=flash[:notice].present? ? "notice" : "error"%>';
-var content = '<%=flash[:notice].present? ? flash[:notice] : flash[:error]%>';
-<% if flash.present? %>
-addMessagesToDivNew($('#container'), flash, content)
-<%end%>
-});
-</script>

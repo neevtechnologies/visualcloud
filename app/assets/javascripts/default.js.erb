@@ -47,16 +47,17 @@ function isEmpty(obj) {
 }
 
 function addMessagesToDiv(jDiv, content){
-  jDiv.notify("create","ajax-template",{text: content},{expires: 5000,speed: 1000,custom: true});
-};
+   jDiv.append(content);
+   $(".messages").delay(10000).fadeOut("slow", function () { $(this).remove(); });
+}
 
-function addMessagesToDivNew(jDiv, type, content){
-var id = "";
-if(type == "notice")
-id = "basic-template";
-else
-id = "themeroller";
-jDiv.notify("create",id,{text: content},{expires: 5000,speed: 1000,custom: true});
+function showFlashMessages(jDiv, type, content){
+   var id = "ajax-template";
+   if(type == "notice")
+     id = "basic-template";
+   if(type == "error")
+     id = "themeroller";
+   jDiv.notify("create",id,{text: content},{expires: 5000,speed: 1000,custom: true});
 }
 
 function getErrorMessage(message){

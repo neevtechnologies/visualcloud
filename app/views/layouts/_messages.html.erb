@@ -16,3 +16,14 @@
     <p>#{text}</p>
   </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+   var flash = '<%=(flash[:notice].present? || flash[:success].present?) ? "notice" : "error"%>';
+   var content = '<%=(flash[:notice].present? || flash[:success].present?) ? (flash[:notice] || flash[:success]) : flash[:error]%>';
+   if(flash == "error" && content=="")
+     content = "Entered email or password are wrong."
+   <% if flash.present? %>
+      showFlashMessages($('#container'), flash, content)
+   <%end%>
+});
+</script>

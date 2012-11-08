@@ -75,7 +75,7 @@ class GraphsController < ApplicationController
     save_connections(saved_doms)
 
     if errors.blank?
-      flash[:success] = "Environment saved successfully"
+      flash[:success] = "Environment saved successfully."
     else
       flash.now[:error] = errors
     end
@@ -84,7 +84,7 @@ class GraphsController < ApplicationController
     puts e.inspect
     puts e.backtrace
     logger.error("Error occured while saving the environment : #{e.inspect}")
-    flash.now[:error] = "Error occured while saving the Environment"
+    flash.now[:error] = "Error occured while saving the Environment."
     errors << "Error occured while saving the Environment"
   ensure
     respond_to do |format|
@@ -100,7 +100,7 @@ class GraphsController < ApplicationController
     update_instances
 
     if @errors.blank?
-      flash.now[:success] = "Environment updated successfully"
+      flash.now[:success] = "Environment updated successfully."
     else
       flash.now[:error] = @errors
     end
@@ -116,7 +116,11 @@ class GraphsController < ApplicationController
     @project = Project.find(params[:project_id])
     @graph = Graph.find(params[:id])
     @graph.destroy
-
+    if @graph.destroy
+      flash[:success] = "Environment deleted successfully."
+    else
+      flash[:error] = "Environment cannot be deleted successfully."
+    end
     respond_to do |format|
       format.html { redirect_to project_url(@project) }
       format.json { head :no_content }

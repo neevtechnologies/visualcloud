@@ -78,7 +78,11 @@ class ProjectsController < ApplicationController
   def destroy
     @project = Project.find(params[:id])
     @project.destroy
-
+    if @project.destroy
+      flash[:success] = "Project deleted successfully."
+    else
+      flash[:error] = "Project cannot be deleted successfully."
+    end
     respond_to do |format|
       format.html { redirect_to projects_url }
       format.json { head :no_content }
