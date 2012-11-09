@@ -115,12 +115,20 @@ class GraphsController < ApplicationController
   def destroy
     @project = Project.find(params[:project_id])
     @graph = Graph.find(params[:id])
-    @graph.destroy
-    if @graph.destroy
-      flash[:success] = "Environment deleted successfully."
+    if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+      flash[:error] = "You have not added your AWS access key"
     else
-      flash[:error] = "Environment cannot be deleted successfully."
+      if @graph.delete_stack(current_user.aws_access_key, current_user.aws_secret_key)
+        if @graph.destroy
+          flash[:success] = "Environment deleted successfully."
+        else
+          flash[:error] = "An error occured while trying to delete environment."
+        end
+      else
+        flash[:error] = "An error occured while trying to delete environment."
+      end
     end
+
     respond_to do |format|
       format.html { redirect_to project_url(@project) }
       format.json { head :no_content }

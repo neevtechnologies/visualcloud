@@ -72,4 +72,14 @@ class Graph < ActiveRecord::Base
     end
   end
 
+  def delete_stack(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    cloud.delete(stack_name: name)
+    return true
+  rescue => e
+    puts e.inspect
+    puts e.backtrace
+    return false
+  end
+
 end
