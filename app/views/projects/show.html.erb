@@ -23,8 +23,18 @@
   </div>
   <br/>
   <div>
-    <span style="display: inline-block;width: 115px;">Repository Auth</span>:
+    <span style="display: inline-block;width: 115px;">Deploy Key</span>:
     &nbsp;&nbsp;<span><%= @project.repo_auth %></span>
+  </div>
+   <br/>
+   <div>
+    <span style="display: inline-block;width: 115px;">Frame Work</span>:
+    &nbsp;&nbsp;<span><%= @project.frame_work %></span>
+  </div>
+   <br />
+  <div>
+    <span style="display: inline-block;width: 115px;">Managed</span>:
+    &nbsp;&nbsp;<span><%= check_box_tag 'managed', 'yes', @project.managed,:disabled => true %></span>
   </div>
   </div>
   <br />

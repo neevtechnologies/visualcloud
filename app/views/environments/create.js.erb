@@ -1,0 +1,5 @@
+<%if flash.now[:error].blank? %>
+  window.location = '<%= edit_project_environment_path(@project,@environment.id)%>';
+<%else%>
+  showFlashMessages($('#container'), '','<%= escape_javascript flash_messages %>');
+<%end%>

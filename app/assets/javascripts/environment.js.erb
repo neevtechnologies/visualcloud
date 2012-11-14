@@ -1,0 +1,63 @@
+$(document).ready(function(){
+  //On click event for "Save" button on graph toolbar
+  $('#graph-save').click(function(){
+    $('#graph-save-modal').modal('show');
+  });
+
+  //On click event for "Save" button on graph toolbar during edit
+  $('#graph-update').click(function(){
+    var graphId = $(this).data("graphId");
+    $('.graph-area').graphArea("update", graphId);
+  });
+
+  //On click event for "Provision" button on graph toolbar during edit
+  $('#graph-provision').click(function(){
+    var graphId = $(this).data("graphId");
+    showLoading();
+    $.ajax({
+      url: '/provision_environment?id='+graphId,
+      type: 'POST',
+      dataType: "script",
+      contentType: 'application/json',
+      data : $('.graph-area').graphArea("getInstances"),
+      complete: function(){
+        hideLoading();
+      }
+    });
+  });
+
+  //On click event for "Save environment" in Save Environment modal
+  $('.graph-save-submit').click(function(){
+    var graphName = $('input#graph-name').val().trim();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-save-error-messages'), getErrorMessage('Environment name cannot be empty'));
+    else
+    {
+      $('#graph-save-modal').modal('hide');
+      $('.graph-area').graphArea("save", graphName);
+    }
+    //Do not submit form
+    return false;
+  });
+
+  //On click of save environment, it should save respective environment
+  $(".save_env").live('click', function() {
+    var id = $(this).attr('id').split('_')[2];
+    var branch = $('#branch_'+id).val();    
+    var db_migrate = '0';
+    if($('#db_migrate_'+id).is(':checked'))
+       db_migrate = '1';    
+    showLoading();
+      $.ajax({
+        url: '/update_environment?id='+id,
+        type: 'PUT',
+        dataType: "script",
+        contentType: 'application/json',
+        data: JSON.stringify({environment: {branch: branch ,db_migrate: db_migrate}}),
+        complete: function(){
+          hideLoading();
+        }
+      });
+  });
+
+});

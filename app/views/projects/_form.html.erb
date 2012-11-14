@@ -6,9 +6,53 @@
     <%= f.input :name, input_html: { id: 'name'} %>
     <%= f.label :description %>
     <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
-    <%= f.input :repo_type, input_html: { id: 'repo_type'},:collection => ['Svn','Git'], :prompt => "Select repository" %>    
+    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Svn','Git'], :prompt => "Select repository" %>
     <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
-    <%= f.input :repo_auth, input_html: { id: 'repo_auth'} %>
+    <%= f.input :repo_auth, label: 'Deploy Key', input_html: { id: 'repo_auth'} %>
+    <% if @project.id.present? %>
+      <%= f.input :frame_work, input_html: { id: 'frame_work', :disabled=>"disabled"}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
+    <%else%>
+      <%= f.input :frame_work, input_html: { id: 'frame_work'}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
+    <%end%>
+    <%= f.input :managed, :input_html => { :checked => true , id: 'managed',:disabled=>"disabled",:title=>'checked to manage the process in the project.',rel: 'tooltip'} %>
+    <label>Environments:</label>
+    <div class="accordion">
+      <%= f.fields_for :environments do |env| %>
+      <div style="border: 1px solid; padding:5px;margin:0px 0px 5px 10px;width:550px;">
+        <table>
+          <tr>
+            <td>
+              <label> Name </label>
+            </td>
+            <td>
+              <%=  env.input :name , :label => false ,:disabled=> true%>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label> Branch </label>
+            </td>
+            <td>
+              <%=env.input :branch , :label => false%>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label> DB migrate </label>
+            </td>
+            <td>
+              <%=env.input :db_migrate , :label => false%>
+            </td>
+          </tr>
+        </table>
+        <div style="margin-left: 370px;margin-top:-70px;">
+          <label>Priority</label>
+          <%=env.input :deploy_order , :label => false, collection: Environment.get_select_collection(@project.id) , :input_html => {:style=> 'width: 80px;'}%>
+        </div>
+
+      </div>
+      <% end %>
+    </div>
   </div>
 
   <div>

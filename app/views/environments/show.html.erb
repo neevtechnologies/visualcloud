@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="span10">
+<p>
+  <b>Name:</b>
+  <%= @environment.name %>
+</p>
+
+</div>
+
+<%= link_to 'Edit', edit_environment_path(@environment) %> |
+<%= link_to 'Back', environments_path %>
+<div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121030090853) do
+ActiveRecord::Schema.define(:version => 20121113095410) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -30,11 +30,22 @@ ActiveRecord::Schema.define(:version => 20121030090853) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "graphs", :force => true do |t|
+  create_table "deploys", :force => true do |t|
+    t.string   "revision"
+    t.string   "status"
+    t.integer  "environment_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "environments", :force => true do |t|
     t.string   "name"
+    t.string   "branch",       :default => "Master"
+    t.boolean  "db_migrate",   :default => true
+    t.integer  "deploy_order"
     t.integer  "project_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.boolean  "provisioned"
   end
 
@@ -58,7 +69,7 @@ ActiveRecord::Schema.define(:version => 20121030090853) do
     t.integer  "ypos"
     t.integer  "ami_id"
     t.integer  "instance_type_id"
-    t.integer  "graph_id"
+    t.integer  "environment_id"
     t.integer  "resource_type_id"
     t.string   "url"
     t.string   "aws_instance_id"
@@ -73,9 +84,11 @@ ActiveRecord::Schema.define(:version => 20121030090853) do
     t.string   "repo_type"
     t.string   "repo_url"
     t.string   "repo_auth"
+    t.string   "frame_work"
+    t.boolean  "managed",     :default => true
     t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "projects_users", :id => false, :force => true do |t|

@@ -6,7 +6,7 @@ class CreateInstances < ActiveRecord::Migration
       t.integer :ypos
       t.integer :ami_id
       t.references :instance_type
-      t.references :graph
+      t.references :environment
       t.references :resource_type
       t.string :url
       t.string :aws_instance_id

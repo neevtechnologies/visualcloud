@@ -6,6 +6,8 @@ class CreateProjects < ActiveRecord::Migration
       t.string :repo_type
       t.string :repo_url
       t.string :repo_auth
+      t.string :frame_work
+      t.boolean :managed, :default=>true
       t.references :user
       t.timestamps
     end

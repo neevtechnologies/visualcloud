@@ -1,0 +1,10 @@
+<%= render 'toolbar' %>
+<div class="row">
+  <%= render 'graph_draggables', resource_types: @resource_types %>
+  <%= render 'graph_area' %>
+  <%= render 'dialogs' , project: @project %>
+  <%= render 'instance_templates', resource_types: @resource_types %>
+</div>
+<script type="text/javascript">
+  prepareStage();
+</script>

@@ -34,6 +34,9 @@ function showInstanceEditForm(editElement){
      dialog.find('#rds_size').val(instanceOptions.configAttributes.size);
      dialog.find('#rds_master_user_name').val(instanceOptions.configAttributes.master_user_name);
      dialog.find('#rds_master_password').val(instanceOptions.configAttributes.master_password);
+     dialog.find('#ec2_web').prop("checked",parseInt(instanceOptions.configAttributes.web_server));
+     dialog.find('#ec2_app').prop("checked",parseInt(instanceOptions.configAttributes.app_server));
+     dialog.find('#ec2_db').prop("checked",parseInt(instanceOptions.configAttributes.db_server));
   }
   dialog.modal('show');
 };

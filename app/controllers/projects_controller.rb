@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find(params[:id])    
-    @graphs = @project.graphs
+    @environments = Environment.where(:project_id=>@project.id).order('deploy_order')
      respond_to do |format|
        format.html # show.html.erb
        format.json { render json: @project }
@@ -68,7 +68,7 @@ class ProjectsController < ApplicationController
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        format.js { render js: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -81,7 +81,7 @@ class ProjectsController < ApplicationController
     if @project.destroy
       flash[:success] = "Project deleted successfully."
     else
-      flash[:error] = "Project cannot be deleted successfully."
+      flash[:error] = "An error occured while trying to delete project."
     end
     respond_to do |format|
       format.html { redirect_to projects_url }

@@ -14,7 +14,7 @@
     <td  style="text-align: center;"><%= i %></td>
     <td><%= link_to project.name , project_path(project) ,:class=>'btn-link' ,:style=>"text-decoration:none;",:title=>"Show details of the project" %></td>
     <td  style="text-align: center;"><%= link_to 'Edit', edit_project_path(project) ,:class=>'btn'%>&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= link_to 'Destroy', project ,:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <%= link_to 'Delete', project ,:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
   <% i += 1 %>
 <% end %>

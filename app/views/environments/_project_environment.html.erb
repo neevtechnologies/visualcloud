@@ -1,0 +1,6 @@
+<div class = "pull-right">
+  <ul class="nav nav-pills">
+    <li><a id="projects_list" href="<%= projects_path %>"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
+    <li><a id="project_details"  href="<%=project_path(@project)%>"><%= @environment.name.present? ? @environment.name : ''%></a></li>
+  </ul> 
+</div>
