@@ -45,9 +45,9 @@ class Environment < ActiveRecord::Base
     instances.each do |instance|
       if instance.resource_type.name == 'EC2'
         stack_resources << Cloudster::Ec2.new(name: instance.label, 
-                                              key_name: 'default', 
-                                              image_id: instance.ami.image_id,
-                                              instance_type: instance.instance_type.api_name )
+          key_name: 'default', 
+          image_id: instance.ami.image_id,
+          instance_type: instance.instance_type.api_name )
         instance_names << instance.label
       end
     end
@@ -57,6 +57,8 @@ class Environment < ActiveRecord::Base
   def add_elb_resource(stack_resources, instance_names)
     instances.each do |instance|
       if instance.resource_type.name == 'ELB'
+        # Chosse the children EC2 instances, which have been created succesfully.
+        instance_names = (instance_names && instance.children.collect(&:label))
         stack_resources << Cloudster::Elb.new(name: instance.label, instance_names: instance_names )
       end
     end
@@ -68,11 +70,11 @@ class Environment < ActiveRecord::Base
         config_attributes = JSON.parse(instance.config_attributes)
         puts config_attributes.inspect
         stack_resources << Cloudster::Rds.new(name: instance.label, 
-                                              instance_class: instance.instance_type.api_name, 
-                                              storage_size: config_attributes['size'],
-                                              username: config_attributes['master_user_name'],
-                                              password: config_attributes['master_password']
-                                             )
+          instance_class: instance.instance_type.api_name, 
+          storage_size: config_attributes['size'],
+          username: config_attributes['master_user_name'],
+          password: config_attributes['master_password']
+        )
       end
     end
   end
