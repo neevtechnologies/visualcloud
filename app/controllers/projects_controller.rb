@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  include ServerMetaData
   before_filter :authenticate
   # GET /projects
   # GET /projects.json
@@ -18,10 +19,10 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])    
     @environments = Environment.where(:project_id=>@project.id).order('deploy_order')
-     respond_to do |format|
-       format.html # show.html.erb
-       format.json { render json: @project }
-     end
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @project }
+    end
   end
 
   # GET /projects/new
@@ -47,7 +48,7 @@ class ProjectsController < ApplicationController
     @project.users << current_user
     respond_to do |format|
       if @project.save
-
+        modify_data_bag "projects", @project
         format.html { redirect_to projects_path, notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
@@ -64,6 +65,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
+        modify_data_bag "projects", @project
         format.html { redirect_to projects_path, notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
@@ -77,7 +79,6 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.json
   def destroy
     @project = Project.find(params[:id])
-    @project.destroy
     if @project.destroy
       flash[:success] = "Project deleted successfully."
     else

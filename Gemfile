@@ -15,6 +15,7 @@ gem "rolify", ">= 3.2.0"
 gem 'bootstrap-sass'
 gem "simple_form", ">= 2.0.3"
 gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
+gem "chef", path: './lib/chef'
 
 gem 'cloudster'
 

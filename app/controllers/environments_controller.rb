@@ -1,4 +1,5 @@
 class EnvironmentsController < ApplicationController
+  include ServerMetaData
   before_filter :authenticate
   # GET /environments
   # GET /environments.json
@@ -69,6 +70,7 @@ class EnvironmentsController < ApplicationController
         errors += instance.errors.full_messages
       else
         saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+        modify_data_bag "nodes", instance
       end
     end
 
@@ -134,13 +136,13 @@ class EnvironmentsController < ApplicationController
       flash[:error] = "You have not added your AWS access key"
     else
       if @environment.delete_stack(current_user.aws_access_key, current_user.aws_secret_key)
-         if @environment.destroy
-           flash[:success] = "Environment deleted successfully."
-         else
-           flash[:error] = "An error occured while trying to delete environment."
-         end
+        if @environment.destroy
+          flash[:success] = "Environment deleted successfully."
+        else
+          flash[:error] = "An error occured while trying to delete environment."
+        end
       else
-         flash[:error] = "An error occured while trying to delete environment."
+        flash[:error] = "An error occured while trying to delete environment."
       end
     end
     respond_to do |format|
@@ -169,20 +171,20 @@ class EnvironmentsController < ApplicationController
 
   private
     
-    def save_connections(saved_doms)
-      return if saved_doms.empty?
-      saved_doms.each do |dom_id , instance|
-        record = instance[:instance]
-        parents = []
-        instance[:parent_dom_ids].to_a.each do |parent_dom_id|
-          parents << saved_doms[parent_dom_id][:instance]
-        end
-        record.parents = parents
-        record.save
+  def save_connections(saved_doms)
+    return if saved_doms.empty?
+    saved_doms.each do |dom_id , instance|
+      record = instance[:instance]
+      parents = []
+      instance[:parent_dom_ids].to_a.each do |parent_dom_id|
+        parents << saved_doms[parent_dom_id][:instance]
       end
+      record.parents = parents
+      record.save
     end
+  end
 
-    def update_instances
+  def update_instances
     @environment.instances.destroy_all
 
     saved_doms = {}
@@ -201,10 +203,11 @@ class EnvironmentsController < ApplicationController
         @errors += instance.errors.full_messages
       else
         saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+        modify_data_bag "nodes", instance
       end
     end
 
     save_connections(saved_doms)
-    end
+  end
 
 end
