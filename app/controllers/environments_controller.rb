@@ -27,6 +27,7 @@ class EnvironmentsController < ApplicationController
   # GET /environments/new.json
   def new
     @project = Project.find(params[:project_id])
+    @environments = @project.environments
     @environment = Environment.new
     @resource_types = RESOURCE_TYPES
 
@@ -39,6 +40,7 @@ class EnvironmentsController < ApplicationController
   # GET /environments/1/edit
   def edit
     @project = Project.find(params[:project_id])
+    @environments = @project.environments
     @environment = Environment.find(params[:id])
     @resource_types = RESOURCE_TYPES
   end

@@ -1,6 +1,20 @@
 <div class = "pull-right">
   <ul class="nav nav-pills">
-    <li><a id="projects_list" href="<%= projects_path %>"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
-    <li><a id="project_details"  href="<%=project_path(@project)%>"><%= @environment.name.present? ? @environment.name : ''%></a></li>
-  </ul> 
+    <li><a id="projects_list" href="<%= projects_path %>"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>    
+  <%if !@environment.id.to_s.empty? %>
+  <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
+    <%else%>
+    <li><a id="environments" href=""><%= @environment.name.present? ? @environment.name : ''%> &nbsp;&nbsp;</a></li>
+  <%end%>
+  </ul>
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#environments_list').live('change', function () {
+          var environment_id = $(this).val();
+          window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
+      });
+    });
+    var value = document.location.href.split('/')[6];
+  $("#environments_list option[value='" + value + "']").attr("selected","selected");
+</script>
