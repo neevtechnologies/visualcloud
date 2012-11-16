@@ -39,9 +39,9 @@ function makeSourceAndTarget(element){
 function makeConnections(instances){
     var instanceEndpoints = {} ;
     for(var key in instances){
-        var element = $('#instance-'+key);
+        var element = 'instance-'+key;
         //Make the dropped element draggable - Using JS plumb draggable
-        jsPlumb.draggable(element, {containment: element.parent()})
+        //jsPlumb.draggable(element, {containment: element.parent()})
 
         //Add connection endpoint to element
         instanceEndpoints[key] = makeSourceAndTarget(element);
@@ -49,6 +49,7 @@ function makeConnections(instances){
         var parents = instance.parents ;
         for(var i=0; i < parents.length; i++)
         {
+            instanceEndpoints[parents[i]] = makeSourceAndTarget('instance-'+parents[i]);
           //if(sourceEndPoint && targetEndPoint)
             jsPlumb.connect({source: instanceEndpoints[parents[i]], target: instanceEndpoints[key] });
         }
