@@ -16,47 +16,69 @@
     <% end %>
 </div>  
 
-<!-- Rails resource added -->
-<div id="rails-configuration" class="modal hide fade in instance-config" style="display: none; ">
+<!-- EC2 resource added -->
+<div id="ec2-configuration" class="modal hide fade in instance-config" style="display: none; ">
   <div class="modal-header">  
     <a class="close" data-dismiss="modal">×</a>  
-    <h3>Rails instance configuration</h3>
+    <h3>EC2 instance configuration</h3>
   </div>  
   <div class="modal-body">  
-    <div id="rails-config-error-messages"></div>
-    <%= simple_form_for Instance.new, url: '', html: { id: 'rails-config-frm'} do |f|%>
-      <%= f.input :label, input_html: { id: 'rails_label', class: 'instance_label'} %>
-      <%#= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'rails_ami_id'}, :prompt => "Select Ami type", :selected => 1%>
-      <%#= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('Rails'), input_html: {id: 'rails_instance_type_id'} %>
-      <%#*<div>Components :%>
-        <%#*<br />%>
-         <%#*<table style="margin-left: 10px;">%>
-           <%#*<tr>%>
-             <%#*<td><%= check_box_tag 'ec2_web', value = "", checked = false></td>%>
-             <%#*<td></td>%>
-             <%#*<td>Web Server</td>%>
-           <%#*</tr>%>
-           <%#*<tr>%>
-             <%#*<td><%= check_box_tag 'ec2_app' , value = "", checked = false></td>%>
-             <%#*<td></td>%>
-             <%#*<td>Application Server</td>%>
-           <%#*</tr>%>
-           <%#*<tr>%>
-             <%#*<td><%= check_box_tag 'ec2_db' , value = "", checked = false></td>%>
-             <%#*<td></td>%>
-             <%#*<td>DB Server</td>%>
-           <%#*</tr>%>
-         <%#*</table>%>
-      <%#*</div>%>
-      <%= f.hidden_field(:xpos, id: 'rails_xpos')%>
-      <%= f.hidden_field(:ypos, id: 'rails_ypos')%>
+    <div id="ec2-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: '', html: { id: 'ec2-config-frm'} do |f|%>
+      <%= f.input :label, input_html: { id: 'ec2_label', class: 'instance_label'} %>
+      <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'ec2_ami_id'}, :prompt => "Select Ami type", :selected => 1%>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'ec2_instance_type_id'} %>
+      <div>Components :
+        <br />
+         <table style="margin-left: 10px;">
+           <tr>
+             <td><%= check_box_tag 'ec2_web', value = "", checked = false%></td>
+             <td></td>
+             <td>Web Server</td>
+           </tr>
+           <tr>
+             <td><%= check_box_tag 'ec2_app' , value = "", checked = false%></td>
+             <td></td>
+             <td>Application Server</td>
+           </tr>
+           <tr>
+             <td><%= check_box_tag 'ec2_db' , value = "", checked = false%></td>
+             <td></td>
+             <td>DB Server</td>
+           </tr>
+         </table>
+      </div>
+      <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
+      <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
   </div>  
   <div class="modal-footer">  
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn" data-dismiss="modal">Close</a>  
   </div>  
     <% end %>
-</div>  
+</div>
+
+<!-- Rails resource added -->
+<div id="rails-configuration" class="modal hide fade in instance-config" style="display: none; ">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Rails instance configuration</h3>
+  </div>
+  <div class="modal-body">
+    <div id="rails-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: '', html: { id: 'rails-config-frm'} do |f|%>
+      <%= f.input :label, input_html: { id: 'rails_label', class: 'instance_label'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'rails_instance_type_id'} %>
+      <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'rails_ami_id'%>
+      <%= f.hidden_field(:xpos, id: 'rails_xpos')%>
+      <%= f.hidden_field(:ypos, id: 'rails_ypos')%>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+  </div>
+    <% end %>
+</div>
 
 <!-- Mysql resource added Needs to be changed-->
 <div id="mysql-configuration" class="modal hide fade in instance-config" style="display: none; ">
@@ -67,7 +89,9 @@
   <div class="modal-body">
     <div id="mysql-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: 'mysql-config-frm'} do |f|%>
-      <%= f.input :label, input_html: { id: 'mysql_label', class: 'instance_label'} %>      
+      <%= f.input :label, input_html: { id: 'mysql_label', class: 'instance_label'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'mysql_instance_type_id'} %>
+      <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'mysql_ami_id'%>
       <%= f.hidden_field(:xpos, id: 'mysql_xpos')%>
       <%= f.hidden_field(:ypos, id: 'mysql_ypos')%>
   </div>
@@ -88,6 +112,8 @@
     <div id="nginx-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: 'nginx-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'nginx_label', class: 'instance_label'} %>
+      <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'nginx_instance_type_id'} %>
+      <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'nginx_ami_id'%>
       <%= f.hidden_field(:xpos, id: 'nginx_xpos')%>
       <%= f.hidden_field(:ypos, id: 'nginx_ypos')%>
   </div>

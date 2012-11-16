@@ -15,6 +15,7 @@
       <%= f.input :frame_work, input_html: { id: 'frame_work'}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
     <%end%>
     <%= f.input :managed, :input_html => { :checked => true , id: 'managed',:disabled=>"disabled",:title=>'checked to manage the process in the project.',rel: 'tooltip'} %>
+    <% if @environments.present? %>
     <label>Environments:</label>
     <div class="accordion">
       <%= f.fields_for :environments do |env| %>
@@ -53,8 +54,8 @@
       </div>
       <% end %>
     </div>
+     <%end%>
   </div>
-
   <div>
     <%= f.button :submit, 'Save Project' ,:class=>"btn"%>
   </div>

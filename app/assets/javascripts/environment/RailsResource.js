@@ -21,20 +21,9 @@ $(document).ready(function(){
     var ypos = $('#rails-configuration').data('ypos');
     var editElement = $('#rails-configuration').data('editElement');
     var label = $('input#rails_label').val().trim();
-    //var amiId = parseInt($('select#ec2_ami_id').val());
-    var amiId = parseInt('1');    
-    //var InstanceTypeId = parseInt($('select#rails_instance_type_id').val());
-    var InstanceTypeId = parseInt('1');
-//    var web_server = '0';
-//    var app_server = '0';
-//    var db_server = '0';
-//    if($('input#ec2_web').is(':checked'))
-//        web_server = '1';
-//    if($('input#ec2_app').is(':checked'))
-//        app_server = '1';
-//    if($('input#ec2_db').is(':checked'))
-//        db_server = '1';
-    var config_attributes = {role:['rails','app_server']};
+    var amiId = parseInt($('#rails_ami_id').val());
+    var InstanceTypeId = parseInt($('select#rails_instance_type_id').val());
+    var config_attributes = {role:['app','rails']};
     if ( validateRAILSConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();

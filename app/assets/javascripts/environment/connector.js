@@ -26,7 +26,7 @@ function makeSourceAndTarget(element){
         anchor: "TopLeft",
         endpoint: ["Dot", {radius: 7}],
         connectorStyle: { lineWidth:3, strokeStyle:'#007730' },
-        connector:[ "Flowchart"],
+        connector:["Flowchart"],        
         isSource: true,
         isTarget: true, 
         maxConnections: -1

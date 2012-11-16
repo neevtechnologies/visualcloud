@@ -13,7 +13,7 @@ user.add_role :admin
 
 #ResourceTypes
 ResourceType.create(name: 'ELB', small_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", large_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg")
-#ResourceType.create(name: 'EC2', small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg")
+ResourceType.create(name: 'EC2', small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg")
 ResourceType.create(name: 'RDS', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg")
 ResourceType.create(name: 'EC', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg")
 ResourceType.create(name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg")
@@ -43,7 +43,7 @@ InstanceType.create(api_name: 'cc2.8xlarge', name:'Cluster Compute Eight Extra L
 InstanceType.create(api_name: 'cg1.4xlarge', name:'Cluster GPU Quadruple Extra Large', size:'22 GB')
 InstanceType.create(api_name: 'hi1.4xlarge', name:'High I/O Quadruple Extra Large', size:'60.5 GB')
 
-ec2 = ResourceType.find_by_name('Rails')
+ec2 = ResourceType.find_by_name('EC2')
 InstanceType.all.each do |p|
   p.update_attribute(:resource_type_id,ec2.id)
 end

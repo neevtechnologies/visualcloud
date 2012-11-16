@@ -21,9 +21,9 @@ $(document).ready(function(){
     var ypos = $('#mysql-configuration').data('ypos');
     var editElement = $('#mysql-configuration').data('editElement');
     var label = $('input#mysql_label').val().trim();
-    var amiId = parseInt('1');
-    var InstanceTypeId = parseInt('1');
-    var config_attributes = {role:['mysql','db_server']};
+    var amiId = parseInt($('#mysql_ami_id').val());
+    var InstanceTypeId = parseInt($('select#mysql_instance_type_id').val());
+    var config_attributes = {role:['db','mysql']};
     if ( validateMysqlConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();

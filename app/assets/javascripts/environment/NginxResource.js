@@ -21,9 +21,9 @@ $(document).ready(function(){
     var ypos = $('#nginx-configuration').data('ypos');
     var editElement = $('#nginx-configuration').data('editElement');
     var label = $('input#nginx_label').val().trim();
-    var amiId = parseInt('1');
-    var InstanceTypeId = parseInt('1');
-    var config_attributes = {role:['nginx','web_server']};
+    var amiId = parseInt($('#nginx_ami_id').val());
+    var InstanceTypeId = parseInt($('select#nginx_instance_type_id').val());
+    var config_attributes = {role:'nginx'};
     if ( validateNginxConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
