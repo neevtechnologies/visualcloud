@@ -1,6 +1,6 @@
-class CreateDeploys < ActiveRecord::Migration
+class CreateDeployments < ActiveRecord::Migration
   def change
-    create_table :deploys do |t|
+    create_table :deployments do |t|
       t.string :revision
       t.string :status
       t.references :environment

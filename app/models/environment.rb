@@ -4,7 +4,7 @@ class Environment < ActiveRecord::Base
 
   has_many :instances, :dependent => :destroy
   belongs_to :project
-  has_many :deploys, :dependent => :destroy
+  has_many :deployments, :dependent => :destroy
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
   def self.get_select_collection(id)    

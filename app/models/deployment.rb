@@ -1,4 +1,4 @@
-class Deploy < ActiveRecord::Base
+class Deployment < ActiveRecord::Base
   # attr_accessible :title, :body
     attr_accessible :revision, :status, :environment_id
     belongs_to :environment

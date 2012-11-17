@@ -19,7 +19,7 @@
     <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn' %>&nbsp;&nbsp;&nbsp;&nbsp;
     <%= link_to 'Delete', project_environment_path(@project,environment),:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %>&nbsp;&nbsp;&nbsp;&nbsp;
     <%#if Deploy.find_all_by_environment_id(environment).present? && Deploy.find_all_by_environment_id(environment).order('created_at DESC').status %>
-    <%= link_to 'Deploy', project_environment_deploys_path(@project,environment) ,:class=>'btn', method: :post%></td>
+    <%= link_to 'Deploy', project_environment_deployments_path(@project,environment) ,:class=>'btn', method: :post%></td>
     <%#end%>
   </tr>
   <% i += 1 %>

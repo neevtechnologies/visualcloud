@@ -5,7 +5,7 @@ VisualCloud::Application.routes.draw do
     #Environment resource
     resources :projects do
       resources :environments do
-       resources :deploys
+       resources :deployments
       end
     end
     #Instance resource
