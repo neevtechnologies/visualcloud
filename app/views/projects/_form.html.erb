@@ -8,7 +8,6 @@
     <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
     <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Svn','Git'], :prompt => "Select repository" %>
     <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
-    <%= f.input :repo_auth, label: 'Deploy Key', input_html: { id: 'repo_auth'} %>
     <% if @project.id.present? %>
       <%= f.input :frame_work, input_html: { id: 'frame_work', :disabled=>"disabled"}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
     <%else%>

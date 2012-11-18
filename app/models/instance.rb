@@ -1,4 +1,5 @@
 class Instance < ActiveRecord::Base
+  include InstanceRole
   attr_accessible :aws_instance_id, :label, :size, :url, :xpos, :ypos, :ami_id,
                   :instance_type_id, :config_attributes
 
@@ -26,4 +27,14 @@ class Instance < ActiveRecord::Base
   validates :label , presence: true
   validates :xpos , numericality: true
   validates :ypos , numericality: true
+
+  def apply_roles(roles = nil)
+    if roles.nil?
+      attributes = JSON.parse(self.config_attributes)
+      roles = attributes['roles']
+    end
+    logger.info("Applying roles #{roles.inspect} to instance : #{id}: #{label}")
+    return add_role(id, roles)
+  end
+
 end

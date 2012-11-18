@@ -49,7 +49,7 @@ class ProjectsController < ApplicationController
     @project.users << current_user
     respond_to do |format|
       if @project.save
-        modify_data_bag "projects", @project
+        update_project_data_bag(@project)
         format.html { redirect_to projects_path, notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
-        modify_data_bag "projects", @project
+        update_project_data_bag(@project)
         format.html { redirect_to projects_path, notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else

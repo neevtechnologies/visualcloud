@@ -72,7 +72,7 @@ class EnvironmentsController < ApplicationController
         errors += instance.errors.full_messages
       else
         saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-        modify_data_bag "nodes", instance
+        #update_node_data_bag(instance)
       end
     end
 
@@ -85,8 +85,6 @@ class EnvironmentsController < ApplicationController
     end
 
   rescue Exception => e
-    puts e.inspect
-    puts e.backtrace
     logger.error("Error occured while saving the environment : #{e.inspect}")
     flash.now[:error] = "Error occured while saving the Environment."
     errors << "Error occured while saving the Environment"
@@ -164,6 +162,10 @@ class EnvironmentsController < ApplicationController
     else
       if @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
         flash.now[:success] = "Provision request initiated"
+        RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
+          secret_access_key: current_user.aws_secret_key,
+          environment_id: @environment.id
+        ) 
       else
         @errors << "This environment cannot be provisioned"
         flash.now[:error] = @errors
@@ -182,11 +184,12 @@ class EnvironmentsController < ApplicationController
         parents << saved_doms[parent_dom_id][:instance]
       end
       record.parents = parents
-      record.save
+      record.save!
     end
   end
 
   def update_instances
+    #Remove all instances and start with a clean slate. It's not easy to track edited instances
     @environment.instances.destroy_all
 
     saved_doms = {}
@@ -205,10 +208,10 @@ class EnvironmentsController < ApplicationController
         @errors += instance.errors.full_messages
       else
         saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-        modify_data_bag "nodes", instance
+        #update_node_data_bag(instance)
       end
     end
-
+    @environment.reload
     save_connections(saved_doms)
   end
 

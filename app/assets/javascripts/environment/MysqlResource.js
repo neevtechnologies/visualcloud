@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#mysql_label').val().trim();
     var amiId = parseInt($('#mysql_ami_id').val());
     var InstanceTypeId = parseInt($('select#mysql_instance_type_id').val());
-    var config_attributes = {role:['db','mysql']};
+    var config_attributes = {roles:['db','mysql']};
     if ( validateMysqlConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();

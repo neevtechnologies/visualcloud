@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#nginx_label').val().trim();
     var amiId = parseInt($('#nginx_ami_id').val());
     var InstanceTypeId = parseInt($('select#nginx_instance_type_id').val());
-    var config_attributes = {role:'nginx'};
+    var config_attributes = {roles:['nginx']};
     if ( validateNginxConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();

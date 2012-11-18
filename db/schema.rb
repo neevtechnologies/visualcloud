@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "deploys", :force => true do |t|
+  create_table "deployments", :force => true do |t|
     t.string   "revision"
     t.string   "status"
     t.integer  "environment_id"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
 
   create_table "environments", :force => true do |t|
     t.string   "name"
-    t.string   "branch",       :default => "Master"
+    t.string   "branch",       :default => "master"
     t.boolean  "db_migrate",   :default => true
     t.integer  "deploy_order"
     t.integer  "project_id"
@@ -83,7 +83,6 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
     t.string   "description"
     t.string   "repo_type"
     t.string   "repo_url"
-    t.string   "repo_auth"
     t.string   "frame_work"
     t.boolean  "managed",     :default => true
     t.integer  "user_id"
@@ -100,10 +99,12 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
 
   create_table "resource_types", :force => true do |t|
     t.string   "name"
+    t.text     "description"
+    t.string   "resource_class"
     t.string   "small_icon"
     t.string   "large_icon"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "roles", :force => true do |t|

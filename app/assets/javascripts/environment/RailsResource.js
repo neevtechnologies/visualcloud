@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#rails_label').val().trim();
     var amiId = parseInt($('#rails_ami_id').val());
     var InstanceTypeId = parseInt($('select#rails_instance_type_id').val());
-    var config_attributes = {role:['app','rails']};
+    var config_attributes = {roles:['app','rails']};
     if ( validateRAILSConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
