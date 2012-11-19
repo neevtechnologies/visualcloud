@@ -2,10 +2,12 @@ VisualCloud::Application.routes.draw do
 
   authenticated :user do
     root :to => 'projects#index'
+    get 'environment_status' => 'environments#status'
+
     #Environment resource
     resources :projects do
       resources :environments do
-       resources :deployments
+        resources :deployments
       end
     end
     #Instance resource
