@@ -7,8 +7,8 @@
         <!-- This is the resouce element to which resourceElement widget is bound and added to the resource dock-->
         <% if resource_type.name != 'EC2' %>
           <div id="resource-type-<%= resource_type.id %>" data-element-type="resource" rel="tooltip" data-placement="left" title="<%=resource_type.description%>">
-          <%= image_tag("icons/#{resource_type.small_icon}", size: '30x30')%>
-          <%= resource_type.name %> 
+          <%= image_tag("icons/#{resource_type.small_icon}", size: '45x45')%>
+          <%#= resource_type.name %>
           </div>
           <br />
         <%end%>

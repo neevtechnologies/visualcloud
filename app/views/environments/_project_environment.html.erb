@@ -1,11 +1,12 @@
 <div class = "pull-right">
   <ul class="nav nav-pills">
     <li><a id="projects_list" href="<%= projects_path %>"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>    
-  <%if !@environment.id.to_s.empty? %>
+    <li><%if !@environment.id.to_s.empty? %>
   <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
     <%else%>
-    <li><a id="environments" href=""><%= @environment.name.present? ? @environment.name : ''%> &nbsp;&nbsp;</a></li>
+    <a id="environments" href=""><%= @environment.name.present? ? @environment.name : ''%> &nbsp;&nbsp;</a>
   <%end%>
+  </li>
   </ul>
 </div>
 <script type="text/javascript">

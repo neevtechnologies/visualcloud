@@ -15,10 +15,10 @@ user.add_role :admin
 ResourceType.create(resource_class: 'ELB', name: 'ELB', small_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", large_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", description: 'Elastic Load Balancer')
 ResourceType.create(resource_class: 'EC2', name: 'EC2', small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
 ResourceType.create(resource_class: 'RDS', name: 'RDS', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", description: 'Relational Database Service')
-ResourceType.create(resource_class: 'EC', name: 'EC', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", description: 'ElastiCache')
+#ResourceType.create(resource_class: 'EC', name: 'EC', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", description: 'ElastiCache')
 ResourceType.create(resource_class: 'EC2', name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg" , description: 'Rails hosting instance running Unicorn as Application Server')
 ResourceType.create(resource_class: 'EC2', name: 'Mysql', small_icon: "components/mysql.svg", large_icon: "components/mysql.svg", description: 'MySQL database server')
-ResourceType.create(resource_class: 'EC2', name: 'Nginx', small_icon: "components/nginx.svg", large_icon: "components/nginx.svg", description: 'Nginx LoadBalancer for your application servers')
+ResourceType.create(resource_class: 'EC2', name: 'Nginx', small_icon: "components/nginx.png", large_icon: "components/nginx.png", description: 'Nginx LoadBalancer for your application servers')
 
 #Components
 Component.create(name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg")

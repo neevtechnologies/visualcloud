@@ -26,10 +26,17 @@
       });
       self._trigger('onCreate');
     },
-    addInstanceToStage: function(instanceElement){
+    addInstanceToStage: function(instanceElement, instanceId){
       instanceElement.appendTo(this.element);
       //Give ID to the new element
-      this.instanceCount++ ;
+      if(instanceId != "undefined") {
+        if(this.instanceCount <  instanceId)
+            this.instanceCount = instanceId;
+        else
+            this.instanceCount++;
+      }
+      else
+        this.instanceCount++;
       instanceElement.attr('id', 'instance-' + this.instanceCount );
       this.instances.push(instanceElement);
     },

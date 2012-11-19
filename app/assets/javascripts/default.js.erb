@@ -3,10 +3,10 @@ function prepareStage(){
   $('.graph-area').graphArea();
 };
 
-function addInstanceCloneToGraph(){
+function addInstanceCloneToGraph(instanceId){
   var graphArea = $('.graph-area') ;
   var newElement = $('<div class="instance"></div>');
-  graphArea.graphArea("addInstanceToStage", newElement);
+  graphArea.graphArea("addInstanceToStage", newElement, instanceId);
 
   return newElement ;
 };

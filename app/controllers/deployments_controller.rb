@@ -44,7 +44,7 @@ class DeploymentsController < ApplicationController
     @project = Project.find(params[:project_id])
     respond_to do |format|
       if @deployment.save
-        format.html { redirect_to project_path(@project), notice: 'Deployment was successfully created.' }
+        format.html { redirect_to project_path(@project), notice: 'Environment Deployment done successfully.' }
         format.json { render json: @deployment, status: :created, location: @deployment }
       else
         format.html { render action: "new" }
