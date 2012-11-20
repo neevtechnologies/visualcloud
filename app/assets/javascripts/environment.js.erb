@@ -64,9 +64,9 @@ $(document).ready(function(){
 
 
 $(function() {
- if($('#stack-status').length != 0)
+ if($('.stack-status').length != 0)
  {
-  var environment_id = $("#stack-status").attr("data-graph-id");
+  var environment_id = $('.stack-status').attr("data-graph-id");
   setInterval(function(){
     $.ajax({
       url: '/environment_status?id='+environment_id,

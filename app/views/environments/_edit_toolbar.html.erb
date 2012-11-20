@@ -3,7 +3,7 @@
     <li><a id="graph-update" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Save</a></li>
     <li><a id="graph-provision" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Provision</a></li>
     <li><a id="graph-save" href="javascript:void(0)">Replicate</a></li>
-    <li><a id="stack-status" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><%= status_image @environment.status(current_user.aws_access_key, current_user.aws_secret_key) %></a></li>
+    <li><a class="stack-status" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><%= status_image @environment.status(current_user.aws_access_key, current_user.aws_secret_key) %></a></li>
   </ul> 
   <%= render 'project_environment' %> 
 </div>
