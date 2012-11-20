@@ -164,8 +164,14 @@ class Environment < ActiveRecord::Base
 
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = 5)
     logger.info("Waiting till stack is provisioned : environment: #{name}")
-    sleep sleep_interval while self.status(access_key_id, secret_access_key) == 'CREATE_IN_PROGRESS' 
-    if self.status(access_key_id, secret_access_key) == 'CREATE_COMPLETE'
+    stack_status = self.status(access_key_id, secret_access_key)
+    while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
+      logger.info("Stack status = #{stack_status}")
+      sleep sleep_interval
+      stack_status = self.status(access_key_id, secret_access_key)
+    end
+    logger.info("Status After +++++++++++++++++++++= #{stack_status.inspect}")
+    if stack_status == 'CREATE_COMPLETE'
       logger.info("Environment #{name} was provisioned successfully.")
       return true
     else

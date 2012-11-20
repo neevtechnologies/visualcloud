@@ -1,26 +1,26 @@
 <h1>My Projects</h1>
 
 
-<table  class="table table-striped  table-bordered table-condensed">
-  <tr>
-    <th  style="text-align: center;">#</th>
-    <th>Project Name</th>
-    <th  style="text-align: center;">Actions</th>
-  </tr>
-<%  i=1 %>
-  <% if  @projects.present? %>
-<% @projects.each do |project| %>
-  <tr>
-    <td  style="text-align: center;"><%= i %></td>
-    <td><%= link_to project.name , project_path(project) ,:class=>'btn-link' ,:style=>"text-decoration:none;",:title=>"Show details of the project" %></td>
-    <td  style="text-align: center;"><%= link_to 'Edit', edit_project_path(project) ,:class=>'btn'%>&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= link_to 'Delete', project ,:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-  <% i += 1 %>
-<% end %>
-  <%else%>
-  <tr><td colspan="3" style="color: blue;">No Projects Present.</td></tr>
-  <%end%>
+<table class="table">
+  <thead>
+    <tr class="success">
+      <th>Project Name</th>
+      <th  style="text-align: center;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if  @projects.present? %>
+      <% @projects.each do |project| %>
+        <tr>
+          <td><%= link_to project.name , project_path(project) ,:class=>'btn-link' ,:style=>"text-decoration:none;",:title=>"Show details of the project" %></td>
+          <td  style="text-align: center;"><%= link_to 'Edit', edit_project_path(project) ,:class=>'btn'%>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to 'Delete', project ,:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    <%else%>
+      <tr class="warning"><td colspan="2">You have not added a project yet.</td></tr>
+    <%end%>
+  </tbody>
 </table>
 <br />
 <%= link_to 'New Project', new_project_path  ,:class=>'btn' %>
