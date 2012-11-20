@@ -1,6 +1,5 @@
 module EnvironmentsHelper
-  def current_status_image img_name
-    "xyz.jpg"  
-#    image_path(''+img_name+'.jpg')  
+  def status_image(status)
+    image_tag("#{status}.gif", title: "#{status}", rel: 'tooltip') if status.present?
   end
 end

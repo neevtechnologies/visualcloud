@@ -10,7 +10,7 @@
   <%if @environments.present? %>
     <% @environments.each do |environment| %>
       <tr>
-        <td style="text-align: center;"><a id="stack-status" data-graph-id="<%=environment.id%>" href="javascript:void(0);"><%= environment.status(current_user.aws_access_key, current_user.aws_secret_key) %></a></td>
+        <td style="text-align: center;"><a id="stack-status" data-graph-id="<%=environment.id%>" href="javascript:void(0);"><%= status_image(environment.status(current_user.aws_access_key, current_user.aws_secret_key)) %></a></td>
         <td><%= environment.name %></td>
         <td><%= text_field_tag 'branch' ,environment.branch, id: "branch_#{environment.id}" %></td>
         <td><%= check_box_tag 'db_migrate','',environment.db_migrate, id: "db_migrate_#{environment.id}" %></td>
