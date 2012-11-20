@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
   create_table "resource_types", :force => true do |t|
     t.string   "name"
     t.text     "description"
+    t.string   "parents_list"
     t.string   "resource_class"
     t.string   "small_icon"
     t.string   "large_icon"

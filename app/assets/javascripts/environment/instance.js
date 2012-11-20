@@ -35,6 +35,7 @@
       });
 
       jsPlumb.draggable(element, {containment: element.parent()});
+
       if(options.instanceId != null)
         element.attr('id', 'instance-' + options.instanceId );
       else{
@@ -42,7 +43,7 @@
         //Make the dropped element draggable - Using JS plumb draggable
 
         //Add connection endpoint to element
-        makeSourceAndTarget(element);
+        makeSourceAndTarget(element,options.configAttributes.parents_list);
       //});
       }
 

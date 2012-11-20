@@ -21,14 +21,16 @@ $(document).ready(function(){
     var ypos = $('#elb-configuration').data('ypos'); 
     var editElement = $('#elb-configuration').data('editElement');    
     var label = $('input#elb_label').val().trim();
+    var parents_list = $('#elb_parents_list').val().trim();
+    var config_attributes = {parents_list:parents_list};
     if ( validateELBConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
-        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'ELB'});
+        newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'ELB',config_attributes: config_attributes});
       }
       else {        
         var existingInstance = $('#'+editElement);
-        existingInstance.instance("option", {label: label});
+        existingInstance.instance("option", {label: label,config_attributes: config_attributes});
       }
       $('#elb-configuration').modal('hide');
     }

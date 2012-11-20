@@ -21,15 +21,17 @@ function makeTarget(element){
 };
 
 //Makes the element a source as well as target for connections
-function makeSourceAndTarget(element){
+function makeSourceAndTarget(element , parents_list){
     var sourceAndTargetEndPointAttributes = {
         anchor: "TopLeft",
         endpoint: ["Dot", {radius: 7}],
         connectorStyle: { lineWidth:3, strokeStyle:'#007730' },
-        connector:["Flowchart"],        
+        connector:[ "Straight"],        
         isSource: true,
         isTarget: true, 
-        maxConnections: -1
+        maxConnections: -1,
+        connectorOverlays:[[ "Arrow", { width:8, length:15}]],
+        beforeDrop:function(conn) { return check_for_parent_exist(conn,parents_list); }
     };
     return jsPlumb.addEndpoint(element, sourceAndTargetEndPointAttributes);
 };
@@ -44,14 +46,16 @@ function makeConnections(instances){
         //jsPlumb.draggable(element, {containment: element.parent()})
 
         //Add connection endpoint to element
-        instanceEndpoints[key] = makeSourceAndTarget(element);
         var instance = instances[key];
+        var parents_list = instance.configAttributes.parents_list;
+        instanceEndpoints[key] = makeSourceAndTarget(element,parents_list);
         var parents = instance.parents ;
         for(var i=0; i < parents.length; i++)
         {
-            instanceEndpoints[parents[i]] = makeSourceAndTarget('instance-'+parents[i]);
+            var instanceOptions = $('#instance-'+parents[i]).instance("option");
+          //  instanceEndpoints[parents[i]] = makeSourceAndTarget('instance-'+parents[i],instanceOptions.configAttributes.parents_list);
           //if(sourceEndPoint && targetEndPoint)
-            jsPlumb.connect({source: instanceEndpoints[parents[i]], target: instanceEndpoints[key] });
+            jsPlumb.connect({source: 'instance-'+parents[i], target: element,connector:[ "Straight"],anchor:"TopLeft",endpoint: ["Dot", {radius: 7}] ,overlays:[[ "Arrow", { width:8, length:15}]]});
         }
     }
 }
@@ -65,9 +69,31 @@ function getParentDomIds(element){
   return parentDomIds;
 };
 
+function check_for_parent_exist(conn, parents_list){
+  var instanceOptions = $('#'+conn.sourceId).instance("option");
+  var result = false;
+  if(parents_list != null){
+    var parents = parents_list.split(',');
+    for(var i=0; i<parents.length; i++) {
+       if (parents[i] == instanceOptions.resourceType){
+           result = true;
+           break;
+       }
+   }
+ }
+return result;
+}
+
 $(document).ready(function(){
   // bind click listener; delete connections on click            
   jsPlumb.bind("click", function(conn) {
     jsPlumb.detach(conn);
+  });
+//modifying the default settings
+  jsPlumb.importDefaults({
+	PaintStyle : {
+		lineWidth:3,
+		strokeStyle: '#007730'
+	}
   });
 });

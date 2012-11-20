@@ -22,8 +22,9 @@ $(document).ready(function(){
     var editElement = $('#mysql-configuration').data('editElement');
     var label = $('input#mysql_label').val().trim();
     var amiId = parseInt($('#mysql_ami_id').val());
+    var parents_list = $('#mysql_parents_list').val().trim();
     var InstanceTypeId = parseInt($('select#mysql_instance_type_id').val());
-    var config_attributes = {roles:['db','mysql']};
+    var config_attributes = {roles:['db','mysql'],parents_list:parents_list};
     if ( validateMysqlConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();

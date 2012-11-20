@@ -28,6 +28,7 @@
       <%= f.input :label, input_html: { id: 'ec2_label', class: 'instance_label'} %>
       <%= f.input :ami_id, label: 'AMI', collection: Ami.get_select_collection, input_html: {id: 'ec2_ami_id'}, :prompt => "Select Ami type", :selected => 1%>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'ec2_instance_type_id'} %>
+      <%= hidden_field_tag :ec2_parents_list, ResourceType.find_by_name("EC2").parents_list, :id => 'ec2_parents_list'%>
       <div>Components :
         <br />
          <table style="margin-left: 10px;">
@@ -70,6 +71,7 @@
       <%= f.input :label, input_html: { id: 'rails_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'rails_instance_type_id'} %>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'rails_ami_id'%>
+      <%= hidden_field_tag :rails_parents_list, ResourceType.find_by_name("Rails").parents_list, :id => 'rails_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'rails_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rails_ypos')%>
   </div>
@@ -92,6 +94,7 @@
       <%= f.input :label, input_html: { id: 'mysql_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'mysql_instance_type_id'} %>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'mysql_ami_id'%>
+      <%= hidden_field_tag :mysql_parents_list, ResourceType.find_by_name("Mysql").parents_list, :id => 'mysql_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'mysql_xpos')%>
       <%= f.hidden_field(:ypos, id: 'mysql_ypos')%>
   </div>
@@ -114,6 +117,7 @@
       <%= f.input :label, input_html: { id: 'nginx_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'nginx_instance_type_id'} %>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'nginx_ami_id'%>
+      <%= hidden_field_tag :nginx_parents_list, ResourceType.find_by_name("Nginx").parents_list, :id => 'nginx_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'nginx_xpos')%>
       <%= f.hidden_field(:ypos, id: 'nginx_ypos')%>
   </div>
@@ -141,6 +145,7 @@
       <%= text_field_tag 'rds_master_user_name' %>
       <p>Master Password</p>
       <%= password_field_tag 'rds_master_password' %>
+      <%= hidden_field_tag :rds_parents_list, ResourceType.find_by_name("RDS").parents_list, :id => 'rds_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
   </div>
@@ -161,6 +166,7 @@
     <div id="elb-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'elb-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'elb_label', class: 'instance_label'} %>
+      <%= hidden_field_tag :elb_parents_list, ResourceType.find_by_name("ELB").parents_list, :id => 'elb_parents_list'%>
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
@@ -179,6 +185,7 @@
     <div id="ec-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'ec-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'ec_label', class: 'instance_label'} %>
+      <%#= hidden_field_tag :ec_parents_list, ResourceType.find_by_name("EC").parents_list, :id => 'ec_parents_list'%>
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>

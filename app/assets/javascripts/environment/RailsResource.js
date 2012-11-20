@@ -21,9 +21,10 @@ $(document).ready(function(){
     var ypos = $('#rails-configuration').data('ypos');
     var editElement = $('#rails-configuration').data('editElement');
     var label = $('input#rails_label').val().trim();
+    var parents_list = $('#rails_parents_list').val();
     var amiId = parseInt($('#rails_ami_id').val());
     var InstanceTypeId = parseInt($('select#rails_instance_type_id').val());
-    var config_attributes = {roles:['app','rails']};
+    var config_attributes = {roles:['app','rails'], parents_list:parents_list};
     if ( validateRAILSConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
