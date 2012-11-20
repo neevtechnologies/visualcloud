@@ -1,37 +1,22 @@
 <div class="well span2 graph-draggables-dock" style="padding:18px;">
-  <div id="accordion">
-    <h3><a href="#">Resources</a></h3>
     <div>
+      <ul class="thumbnails">
       <% resource_types.each do |resource_type| %>
 
         <!-- This is the resouce element to which resourceElement widget is bound and added to the resource dock-->
+        <!-- Currently not showing EC2-->
         <% if resource_type.name != 'EC2' %>
-          <div id="resource-type-<%= resource_type.id %>" data-element-type="resource" rel="tooltip" data-placement="left" title="<%=resource_type.description%>">
-          <%= image_tag("icons/#{resource_type.small_icon}", size: '45x45')%>
-          <%#= resource_type.name %>
-          </div>
-          <br />
+        <li class="span-1">
+          <a href="#" class="thumbnail">
+            <div id="resource-type-<%= resource_type.id %>" data-element-type="resource" rel="tooltip" data-placement="left" title="<%=resource_type.description%>">
+            <%= image_tag("icons/#{resource_type.small_icon}", size: '45x45')%>
+            </div>
+          </a>
+        </li>
         <%end%>
-
 
         <!-- To add resource specific JS. This is where the element is bound to the widget -->
         <%= render 'resource_script_tag', resource_type: resource_type %>
       <% end %>
     </div>
-    <%#*<h3><a href="#">Components</a></h3>%>
-    <%#*<div>%>
-      <%# Constants::COMPONENTS.each do |component| %>
-
-        <%#*<!-- This is the component to which component widget is bound and added to the component dock-->%>
-        <%#*<div id="component-<%= component.id >" data-element-type="component">%>
-          <%#= image_tag("icons/#{component.small_icon}", class: "dockIcon")%>
-          <%#= component.name %>
-        <%#*</div>%>
-        <%#*<br />%>
-
-        <%#*<!-- To add component specific JS. This is where the component is bound to the widget -->%>
-        <%#= render 'component_script_tag', component: component %>
-      <%# end %>
-    <%#*</div>%>
-  </div>
 </div>
