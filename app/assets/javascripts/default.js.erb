@@ -29,6 +29,9 @@ function showInstanceEditForm(editElement){
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
   dialog.find('#ec2_instance_type_id').val(instanceOptions.InstanceType);
   dialog.find('#rds_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#rails_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#mysql_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#nginx_instance_type_id').val(instanceOptions.InstanceType);
   if(!isEmpty(instanceOptions.configAttributes))
   {
      dialog.find('#rds_size').val(instanceOptions.configAttributes.size);

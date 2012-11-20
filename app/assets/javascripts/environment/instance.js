@@ -34,7 +34,7 @@
         offset: (options.xpos).toString() + ' ' + (options.ypos).toString() 
       });
 
-      jsPlumb.draggable(element, {containment: element.parent()})
+      jsPlumb.draggable(element, {containment: element.parent()});
       if(options.instanceId != null)
         element.attr('id', 'instance-' + options.instanceId );
       else{
