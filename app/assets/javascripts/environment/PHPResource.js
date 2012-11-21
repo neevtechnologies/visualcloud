@@ -24,7 +24,7 @@ $(document).ready(function(){
     var parents_list = $('#php_parents_list').val();
     var amiId = parseInt($('#php_ami_id').val());
     var InstanceTypeId = parseInt($('select#php_instance_type_id').val());
-    var config_attributes = {roles:['app','app-php'], parents_list:parents_list};
+    var config_attributes = {roles:['app','app_php'], parents_list:parents_list};
     if ( validatePHPConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
