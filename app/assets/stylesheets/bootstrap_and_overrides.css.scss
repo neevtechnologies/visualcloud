@@ -3,4 +3,10 @@ body {
   padding-top: 60px;
   background-image:image-url('body-bkg-pattern.png');
 }
+
+.tooltip-inner {
+    max-width:none;
+    width:160px;
+    font-size:12px;
+}
 //@import "bootstrap-responsive";
