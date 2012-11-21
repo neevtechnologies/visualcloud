@@ -2,7 +2,7 @@ default: &defaults
   validation_key_path: 'config/validation.pem'
   chef_client_interval: 20
   webserver_port: 80
-  application_port: 8080
+  application_port: 80
   load_balancer_protocol: 'HTTP'
   
 development:
