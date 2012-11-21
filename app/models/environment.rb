@@ -38,8 +38,12 @@ class Environment < ActiveRecord::Base
   end
 
   def status(access_key_id, secret_access_key)
+    if access_key_id.present? && secret_access_key.present?
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    return cloud.status(stack_name: name)
+     return cloud.status(stack_name: name)
+    else
+     return nil
+    end
   end
 
   def get_rds_endpoints(access_key_id, secret_access_key)
@@ -54,10 +58,13 @@ class Environment < ActiveRecord::Base
 
   def add_ec2_resources(stack_resources)
     instance_names = []
+    key_pair = key_pair_name.blank? ? 'ec2-access' : key_pair_name
+    security_groups = (security_group.to_s.strip.split(/\s*,\s*/).blank? ? nil : security_group.to_s.strip.split(/\s*,\s*/))
     instances.each do |instance|
       if instance.resource_type.resource_class == 'EC2'
         ec2 = Cloudster::Ec2.new(name: instance.label,
-          key_name: 'ec2-access',
+          key_name: key_pair,
+          security_group: security_groups,
           image_id: instance.ami.image_id,
           instance_type: instance.instance_type.api_name )
         chef_client = Cloudster::ChefClient.new(

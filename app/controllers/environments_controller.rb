@@ -175,10 +175,14 @@ class EnvironmentsController < ApplicationController
   
   # Get the status of the Stack
   def status
-    environment = Environment.find(params[:id])
-    @status = environment.status(current_user.aws_access_key, current_user.aws_secret_key)
-    respond_to do |format|
-      format.js
+    unless params[:id].blank?
+      environment = Environment.find(params[:id])
+      @status = environment.status(current_user.aws_access_key, current_user.aws_secret_key)
+      respond_to do |format|
+        format.js
+      end
+    else
+      render :nothing => true
     end
   end
 
