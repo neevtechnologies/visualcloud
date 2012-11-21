@@ -40,6 +40,7 @@ function showInstanceEditForm(editElement){
      dialog.find('#ec2_web').prop("checked",parseInt(instanceOptions.configAttributes.web_server));
      dialog.find('#ec2_app').prop("checked",parseInt(instanceOptions.configAttributes.app_server));
      dialog.find('#ec2_db').prop("checked",parseInt(instanceOptions.configAttributes.db_server));
+     dialog.find('#rds_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   }
   dialog.modal('show');
 };

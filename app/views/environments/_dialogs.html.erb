@@ -193,6 +193,14 @@
       <%= text_field_tag 'rds_master_user_name' %>
       <p>Master Password</p>
       <%= password_field_tag 'rds_master_password' %>
+      <table>
+           <tr>
+             <td><%= check_box_tag 'rds_multiAZ', value = "", checked = false%></td>
+             <td></td>
+             <td></td>
+             <td>Multi AZ</td>
+           </tr>
+      </table>
       <%= hidden_field_tag :rds_parents_list, ResourceType.find_by_name("RDS").parents_list, :id => 'rds_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
       <%= f.hidden_field(:ypos, id: 'rds_ypos')%>

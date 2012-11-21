@@ -27,7 +27,8 @@ $(document).ready(function(){
     var username = $('input#rds_master_user_name').val().trim();
     var password = $('input#rds_master_password').val().trim();
     var parents_list = $('#rds_parents_list').val().trim();
-    var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list};
+    var multiAZ = $('input#rds_multiAZ')[0].checked
+    var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ};
     //var config_attributes = '{"size":\"'+size+'\",'+'"master_user_name":\"'+username+'\",'+'"master_password":\"'+password+'\"}';
     if ( validateRDSConfig(label) ) {
       if (editElement == null) {
