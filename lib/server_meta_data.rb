@@ -1,9 +1,6 @@
 module ServerMetaData
   include JsonFormatter  
 
-  system("knife data bag create nodes")
-  system("knife data bag create projects")
-
   def update_node_data_bag(obj)
     begin
       # Create a temporary json file
