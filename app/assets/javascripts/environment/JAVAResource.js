@@ -24,7 +24,7 @@ $(document).ready(function(){
     var parents_list = $('#java_parents_list').val();
     var amiId = parseInt($('#java_ami_id').val());
     var InstanceTypeId = parseInt($('select#java_instance_type_id').val());
-    var config_attributes = {roles:['app','app-java'], parents_list:parents_list};
+    var config_attributes = {roles:['app','app_java'], parents_list:parents_list};
     if ( validateJAVAConfig(label) ){
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
