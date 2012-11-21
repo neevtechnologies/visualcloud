@@ -18,7 +18,7 @@ gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
 gem "chef", path: './lib/chef'
 gem 'sidekiq'
 
-gem 'cloudster', '2.8.0'
+gem 'cloudster', '2.9.0'
 
 group :development, :test do
   gem "awesome_print"
