@@ -51,6 +51,9 @@
            </tr>
          </table>
       </div>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= f.hidden_field(:xpos, id: 'ec2_xpos')%>
       <%= f.hidden_field(:ypos, id: 'ec2_ypos')%>
   </div>  
@@ -72,6 +75,9 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'rails-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'rails_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'rails_instance_type_id'} %>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'rails_ami_id'%>
       <%= hidden_field_tag :rails_parents_list, ResourceType.find_by_name("Rails").parents_list, :id => 'rails_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'rails_xpos')%>
@@ -95,6 +101,9 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'java-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'java_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'java_instance_type_id'} %>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'java_ami_id'%>
       <%= hidden_field_tag :java_parents_list, ResourceType.find_by_name("JAVA").parents_list, :id => 'java_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'java_xpos')%>
@@ -118,6 +127,9 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'php-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'php_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'php_instance_type_id'} %>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'php_ami_id'%>
       <%= hidden_field_tag :php_parents_list, ResourceType.find_by_name("PHP").parents_list, :id => 'php_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'php_xpos')%>
@@ -141,6 +153,9 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'mysql-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'mysql_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'mysql_instance_type_id'} %>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'mysql_ami_id'%>
       <%= hidden_field_tag :mysql_parents_list, ResourceType.find_by_name("Mysql").parents_list, :id => 'mysql_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'mysql_xpos')%>
@@ -164,6 +179,9 @@
     <%= simple_form_for Instance.new, url: '', html: { id: 'nginx-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'nginx_label', class: 'instance_label'} %>
       <%= f.input :instance_type_id, label: 'Size', collection: InstanceType.get_select_collection('EC2'), input_html: {id: 'nginx_instance_type_id'} %>
+      <div id="ip_address"></div>
+      <br />
+      <div id="public_dns"></div>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => 'nginx_ami_id'%>
       <%= hidden_field_tag :nginx_parents_list, ResourceType.find_by_name("Nginx").parents_list, :id => 'nginx_parents_list'%>
       <%= f.hidden_field(:xpos, id: 'nginx_xpos')%>
