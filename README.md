@@ -29,9 +29,9 @@ We use Sidekiq for this. And for this you need redis-server to be running.
 # Getting Started
 export RAILS_ENV=production
 cp config/database.yml.example config/database.yml (Make any changes to database.yml if required)
-bundle exec rake db:create RAILS_ENV=production
-bundle exec rake db:migrate:reset RAILS_ENV=production
-bundle exec rake db:seed RAILS_ENV=production
+bundle exec rake db:create
+bundle exec rake db:migrate:reset
+bundle exec rake db:seed
 bundle exec rake assets:precompile
 bundle exec rails s -e production
 

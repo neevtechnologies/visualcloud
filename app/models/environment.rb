@@ -128,12 +128,21 @@ class Environment < ActiveRecord::Base
 
   def update_instances(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    logger.info "INFO: Updating the ec2 instance details for stack #{self.name}"
+    logger.info "Updating the ec2 instance details for stack #{self.name}"
     ec2_details = cloud.get_ec2_details(stack_name: self.name)
-    instances.where('label in (?)', ec2_details.keys).each do |ec2_instance|
-     ec2_instance.update_attributes({aws_instance_id: ec2_details[ec2_instance.label]['instanceId'], public_dns: ec2_details[ec2_instance.label]['dnsName'], private_ip: ec2_details[ec2_instance.label]['ipAddress'] })
+    logger.info "EC2 details for stack #{name} : #{ec2_details.inspect}"
+    while ec2_details.nil?
+      sleep VisualCloudConfig[:status_check_interval]
+      ec2_details = cloud.get_ec2_details(stack_name: self.name)
     end
-    logger.info "INFO: Updated the ec2 instance details for stack #{self.name}"
+    instances.where('label in (?)', ec2_details.keys).each do |ec2_instance|
+      ec2_instance.update_attributes({
+        aws_instance_id: ec2_details[ec2_instance.label]['instanceId'],
+        public_dns: ec2_details[ec2_instance.label]['dnsName'],
+        private_ip: ec2_details[ec2_instance.label]['ipAddress']
+      })
+    end
+    logger.info "Updated the ec2 instance details for stack #{self.name}"
   end
 
   def set_meta_data(access_key_id, secret_access_key)
@@ -144,7 +153,7 @@ class Environment < ActiveRecord::Base
       update_node_data_bag(instance) if instance.resource_type.resource_class == 'EC2'
     end
     if has_rds?
-      logger.info("Environment has an RDS resource")
+      logger.info("Environment : #{name} has an RDS resource")
       db_instance_present = true
       endpoints = get_rds_endpoints(access_key_id, secret_access_key)
       db_ip_addr = endpoints[0][:address] unless endpoints.blank?
@@ -188,7 +197,6 @@ class Environment < ActiveRecord::Base
       sleep sleep_interval
       stack_status = self.status(access_key_id, secret_access_key)
     end
-    logger.info("Status After +++++++++++++++++++++= #{stack_status.inspect}")
     if stack_status == 'CREATE_COMPLETE'
       logger.info("Environment #{name} was provisioned successfully.")
       return true
