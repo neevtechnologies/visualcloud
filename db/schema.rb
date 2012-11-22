@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120183448) do
+ActiveRecord::Schema.define(:version => 20121122034335) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -78,6 +78,8 @@ ActiveRecord::Schema.define(:version => 20121120183448) do
     t.text     "config_attributes"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "public_dns"
+    t.string   "private_ip"
   end
 
   create_table "projects", :force => true do |t|
