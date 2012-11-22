@@ -1,7 +1,7 @@
 class Instance < ActiveRecord::Base
   include InstanceRole
   attr_accessible :aws_instance_id, :label, :size, :url, :xpos, :ypos, :ami_id,
-                  :instance_type_id, :config_attributes
+                  :instance_type_id, :config_attributes, :public_dns, :private_ip, :aws_instance_id
 
   belongs_to :environment
   belongs_to :resource_type
