@@ -1,0 +1,41 @@
+Visual Cloud
+============
+
+# Ruby on Rails
+
+This application requires:
+
+* Ruby version 1.9.3
+* Rails version 3.2.8
+
+# Database
+
+This application uses MySQL with ActiveRecord.
+
+# Development
+* Template Engine: ERB
+* Testing Framework: RSpec and Factory Girl
+* Front-end Framework: Twitter Bootstrap (Sass)
+* Form Builder: SimpleForm
+* Authentication: Devise
+* Authorization: CanCan
+
+# Email
+The application is configured to send email using a SMTP account.
+
+#Delayed/Parallel jobs
+We use Sidekiq for this. And for this you need redis-server to be running.
+
+# Getting Started
+export RAILS_ENV=production
+cp config/database.yml.example config/database.yml (Make any changes to database.yml if required)
+bundle exec rake db:create RAILS_ENV=production
+bundle exec rake db:migrate:reset RAILS_ENV=production
+bundle exec rake db:seed RAILS_ENV=production
+bundle exec rake assets:precompile
+bundle exec rails s -e production
+
+
+# Documentation and Support
+
+Go ahead read the code.

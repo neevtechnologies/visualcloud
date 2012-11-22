@@ -1,3 +1,15 @@
+def compile_asset?(path)
+  # ignores any filename that begins with '_' (e.g. sass partials)
+  # all other css/js/sass/image files are processed
+  if File.basename(path) =~ /^[^_].*\.\w+$/
+    puts "Compiling: #{path}"
+    true
+  else
+    puts "Ignoring: #{path}"
+    false
+  end
+end
+
 VisualCloud::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -9,7 +21,7 @@ VisualCloud::Application.configure do
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
+  config.serve_static_assets = true
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -68,6 +80,8 @@ VisualCloud::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default :charset => "utf-8"
+
+  config.assets.precompile = [ method(:compile_asset?).to_proc ]
 
 
   # Log the query plan for queries taking more than this (works

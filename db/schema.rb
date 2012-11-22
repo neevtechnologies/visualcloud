@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113095410) do
+ActiveRecord::Schema.define(:version => 20121120183448) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -40,13 +40,15 @@ ActiveRecord::Schema.define(:version => 20121113095410) do
 
   create_table "environments", :force => true do |t|
     t.string   "name"
-    t.string   "branch",       :default => "master"
-    t.boolean  "db_migrate",   :default => true
+    t.string   "branch",         :default => "master"
+    t.boolean  "db_migrate",     :default => true
     t.integer  "deploy_order"
     t.integer  "project_id"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.boolean  "provisioned"
+    t.string   "key_pair_name"
+    t.string   "security_group"
   end
 
   create_table "instance_relationships", :force => true do |t|

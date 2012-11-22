@@ -36,7 +36,7 @@ production:
   encoding: utf8
   reconnect: false
   database: visual_cloud_production
-  pool: 5
+  pool: 500
   username: root
   password: root
-  host: localhost
+  host: 127.0.0.1
