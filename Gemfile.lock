@@ -57,7 +57,7 @@ GEM
     celluloid (0.12.3)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
-    cloudster (2.9.0)
+    cloudster (2.10.0)
       fog
       json
     coffee-rails (3.2.2)
@@ -248,7 +248,7 @@ DEPENDENCIES
   bootstrap-sass
   cancan (>= 1.6.8)
   chef!
-  cloudster (= 2.9.0)
+  cloudster
   coffee-rails (~> 3.2.1)
   debugger
   devise (>= 2.1.2)
