@@ -126,6 +126,16 @@ class Environment < ActiveRecord::Base
     return false
   end
 
+  def update_instances(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    logger.info "INFO: Updating the ec2 instance details for stack #{self.name}"
+    ec2_details = cloud.get_ec2_details(stack_name: self.name)
+    instances.where('label in (?)', ec2_details.keys).each do |ec2_instance|
+     ec2_instance.update_attributes({aws_instance_id: ec2_details[ec2_instance.label]['instanceId'], public_dns: ec2_details[ec2_instance.label]['dnsName'], private_ip: ec2_details[ec2_instance.label]['ipAddress'] })
+    end
+    logger.info "INFO: Updated the ec2 instance details for stack #{self.name}"
+  end
+
   def set_meta_data(access_key_id, secret_access_key)
     logger.info("Setting Meta Data in DataBags before assigning roles for instances in environment : #{name}")
     db_instance_present = false

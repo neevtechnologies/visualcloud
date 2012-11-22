@@ -32,6 +32,8 @@ function showInstanceEditForm(editElement){
   dialog.find('#rails_instance_type_id').val(instanceOptions.InstanceType);
   dialog.find('#mysql_instance_type_id').val(instanceOptions.InstanceType);
   dialog.find('#nginx_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#ip_address').html("Ip Address : "+instanceOptions.ipAddress);
+  dialog.find('#public_dns').html("Public DNS : "+instanceOptions.publicDNS);
   if(!isEmpty(instanceOptions.configAttributes))
   {
      dialog.find('#rds_size').val(instanceOptions.configAttributes.size);
