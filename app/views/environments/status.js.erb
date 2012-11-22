@@ -1,1 +1,2 @@
-$(".stack-status").html("<%= status_image(@status) %>");
+$("#stack-status-image-<%=@environment.id%>").attr("src","<%= status_image(@status)["img_src"] %>");
+$("#stack-status-image-<%=@environment.id%>").attr("title","<%= status_image(@status)["img_title"] %>");

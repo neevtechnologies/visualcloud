@@ -1,14 +1,14 @@
 require 'cloudster'
 class Environment < ActiveRecord::Base
   include ServerMetaData
-  attr_accessible :name, :branch, :db_migrate, :deploy_order, :project_id
+  attr_accessible :name, :branch, :db_migrate, :deploy_order, :project_id, :key_pair_name, :security_group
 
   has_many :instances, :dependent => :destroy
   belongs_to :project
   has_many :deployments, :dependent => :destroy
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
-
+  
   #TODO: This should go , whatever it's doing.
   def self.get_select_collection(id)    
     (1..Project.find(id).environments.count).to_a.collect { |v| v.to_i }
@@ -39,10 +39,10 @@ class Environment < ActiveRecord::Base
 
   def status(access_key_id, secret_access_key)
     if access_key_id.present? && secret_access_key.present?
-    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-     return cloud.status(stack_name: name)
+      cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+      return cloud.status(stack_name: name)
     else
-     return nil
+      return nil
     end
   end
 
@@ -58,13 +58,13 @@ class Environment < ActiveRecord::Base
 
   def add_ec2_resources(stack_resources)
     instance_names = []
-    key_pair = key_pair_name.blank? ? 'ec2-access' : key_pair_name
-    security_groups = (security_group.to_s.strip.split(/\s*,\s*/).blank? ? nil : security_group.to_s.strip.split(/\s*,\s*/))
+    key_pair = self.key_pair_name.blank? ? 'ec2-access' : self.key_pair_name
+    security_groups = (self.security_group.to_s.strip.split(/\s*,\s*/).blank? ? nil : self.security_group.to_s.strip.split(/\s*,\s*/))
     instances.each do |instance|
       if instance.resource_type.resource_class == 'EC2'
         ec2 = Cloudster::Ec2.new(name: instance.label,
           key_name: key_pair,
-          security_group: security_groups,
+          security_groups: security_groups,
           image_id: instance.ami.image_id,
           instance_type: instance.instance_type.api_name )
         chef_client = Cloudster::ChefClient.new(
@@ -170,7 +170,7 @@ class Environment < ActiveRecord::Base
     return false
   end
 
-  def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = 5)
+  def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{name}")
     stack_status = self.status(access_key_id, secret_access_key)
     while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
@@ -188,4 +188,4 @@ class Environment < ActiveRecord::Base
     end
   end
   
-end
+  end

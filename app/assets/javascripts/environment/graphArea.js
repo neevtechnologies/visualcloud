@@ -40,7 +40,7 @@
       instanceElement.attr('id', 'instance-' + this.instanceCount );
       this.instances.push(instanceElement);
     },
-    save: function(graphName){
+    save: function(environmentAttributes){
       var instances = this.instances;
       var instanceAttributes = [];
       for(var i = 0; i < instances.length; i++)
@@ -51,7 +51,7 @@
         type: 'POST',
         dataType: "script",
         contentType: 'application/json',
-        data: JSON.stringify({environment: {name: graphName}, instances: instanceAttributes}),
+        data: JSON.stringify({environment: environmentAttributes, instances: instanceAttributes}),
         complete: function(){
           hideLoading();
         }
