@@ -109,7 +109,8 @@ class Environment < ActiveRecord::Base
           instance_class: instance.instance_type.api_name, 
           storage_size: config_attributes['size'],
           username: config_attributes['master_user_name'],
-          password: config_attributes['master_password']
+          password: config_attributes['master_password'],
+          multi_az: config_attributes['multiAZ']
         )
       end
     end
