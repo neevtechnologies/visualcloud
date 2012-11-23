@@ -23,7 +23,7 @@
 
       //Add the inner HTML template      
       element.html($('.' + options.resourceType + '-instance').html());
-      element.find($('.instance-label')).html(options.label);
+      element.find($('.instance-label')).html('<a href="http://www.google.com" target="_blank">' + options.label + '</a>');
 
 
       //Align the element on the stage
@@ -52,6 +52,8 @@
       element.click(function(){
         showInstanceEditForm(element.attr('id'));        
       });
+      //Do not open the dialog because it's an got to open the URL onclick
+      element.find('.instance-label').click(function(e){e.stopPropagation();})
 
       //Listen to global onElementDrop event. Expecting the droppable widget to trigger this event
       //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );
