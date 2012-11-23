@@ -1,16 +1,16 @@
 <% resource_types.each do |resource_type| %>
   <div class="<%= resource_type.name %>-instance hide">
-    <%#*<a class="close" data-dismiss="modal" onclick="destroy_instance($(this).closest('div').attr('id'));" style="margin-top: -10px;opacity: 1;" title="delete the instance element">×</a>%>
+    <a class="close" data-dismiss="modal" onclick="destroy_instance($(this).closest('div').attr('id'));" style="margin-top: -10px;opacity: 1;" title="delete the instance element">×</a>
       <%= image_tag("icons/#{resource_type.large_icon}", size: '50x50')%>
     <span class="instance-label">
       <%= resource_type.name %>
     </span>
   </div>
 <% end %>
-<%#*<script type="text/javascript">%>
-  <%#*function destroy_instance(value)%>
-  <%#*{%>
-    <%#*$('#'+value).next().remove();%>
-    <%#*$('#'+value).remove();%>
-  <%#*}%>
-<%#*</script>%>
+<script type="text/javascript">
+  function destroy_instance(value)
+  {
+    jsPlumb.removeAllEndpoints(value);
+    $('.graph-area').graphArea("removeInstanceFromStage", value);
+  }
+</script>

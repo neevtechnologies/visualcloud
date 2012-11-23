@@ -30,7 +30,7 @@ $(document).ready(function(){
         var newInstance = addInstanceCloneToGraph();
         newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'Rails', amiId: amiId, InstanceType: InstanceTypeId, configAttributes: config_attributes});
       }
-      else {        
+      else {
         var existingInstance = $('#'+editElement);
         existingInstance.instance("option", {label: label, amiId: amiId, InstanceType: InstanceTypeId, configAttributes: config_attributes});
       }

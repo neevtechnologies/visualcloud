@@ -58,21 +58,23 @@ class EnvironmentsController < ApplicationController
 
     saved_doms = {}
     params[:instances].to_a.each do |instance|
-      resouce_type_name = instance.delete(:resource_type)
-      dom_id = instance.delete(:dom_id)
-      parent_dom_ids = instance.delete(:parent_dom_ids)
-      config_attributes = instance.delete(:config_attributes).to_json
-      resource_type = ResourceType.where(name: resouce_type_name).first
-      instance = Instance.new(instance)
-      instance.config_attributes = config_attributes
-      instance.environment = @environment
-      instance.resource_type = resource_type
-      if !instance.save
-        errors << "#{instance.label} has the following error(s) :"
-        errors += instance.errors.full_messages
-      else
-        saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-        #update_node_data_bag(instance)
+      if instance.length > 2 #delete instance has length 2
+        resouce_type_name = instance.delete(:resource_type)
+        dom_id = instance.delete(:dom_id)
+        parent_dom_ids = instance.delete(:parent_dom_ids)
+        config_attributes = instance.delete(:config_attributes).to_json
+        resource_type = ResourceType.where(name: resouce_type_name).first
+        instance = Instance.new(instance)
+        instance.config_attributes = config_attributes
+        instance.environment = @environment
+        instance.resource_type = resource_type
+        if !instance.save
+          errors << "#{instance.label} has the following error(s) :"
+          errors += instance.errors.full_messages
+        else
+          saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+          #update_node_data_bag(instance)
+        end
       end
     end
 
@@ -207,21 +209,23 @@ class EnvironmentsController < ApplicationController
 
     saved_doms = {}
     params[:instances].to_a.each do |instance|
-      resouce_type_name = instance.delete(:resource_type)
-      dom_id = instance.delete(:dom_id)
-      parent_dom_ids = instance.delete(:parent_dom_ids)
-      config_attributes = instance.delete(:config_attributes).to_json
-      resource_type = ResourceType.where(name: resouce_type_name).first
-      instance = Instance.new(instance)
-      instance.config_attributes = config_attributes
-      instance.environment = @environment
-      instance.resource_type = resource_type
-      if !instance.save
-        @errors << "#{instance.label} has the following error(s) :"
-        @errors += instance.errors.full_messages
-      else
-        saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-        #update_node_data_bag(instance)
+      if instance.length > 2 #delete instance has length 2
+        resouce_type_name = instance.delete(:resource_type)
+        dom_id = instance.delete(:dom_id)
+        parent_dom_ids = instance.delete(:parent_dom_ids)
+        config_attributes = instance.delete(:config_attributes).to_json
+        resource_type = ResourceType.where(name: resouce_type_name).first
+        instance = Instance.new(instance)
+        instance.config_attributes = config_attributes
+        instance.environment = @environment
+        instance.resource_type = resource_type
+        if !instance.save
+          @errors << "#{instance.label} has the following error(s) :"
+          @errors += instance.errors.full_messages
+        else
+          saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+          #update_node_data_bag(instance)
+        end
       end
     end
     @environment.reload
