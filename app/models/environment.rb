@@ -120,11 +120,9 @@ class Environment < ActiveRecord::Base
 
   def delete_stack(access_key_id, secret_access_key)
     logger.info "INFO: Calling cloudster to delete stack #{self.name}"
-    puts "INFO: Calling cloudster to delete stack #{self.name}"
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     cloud.delete(stack_name: self.name)
     logger.info "INFO: Deleted stack #{self.name}"
-    puts "INFO: Deleted stack #{self.name}"
     return true
   rescue => e
     puts e.inspect
@@ -237,7 +235,7 @@ class Environment < ActiveRecord::Base
 
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{name}")
-    update_attribute(:status, "CREATE_IN_PROGRESS")
+    update_attribute(:provision_status, "CREATE_IN_PROGRESS")
     stack_status = self.status(access_key_id, secret_access_key)
     while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
       logger.info("Stack status = #{stack_status}")
@@ -246,11 +244,11 @@ class Environment < ActiveRecord::Base
     end
     if stack_status == 'CREATE_COMPLETE'
       logger.info("Environment #{name} was provisioned successfully.")
-      update_attribute(:status, stack_status)
+      update_attribute(:provision_status, stack_status)
       return true
     else
       logger.error("Environment #{name} was not provisioned: status - #{stack_status}")
-      update_attribute(:status, stack_status)
+      update_attribute(:provision_status, stack_status)
       return false
     end
   end
