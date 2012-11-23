@@ -23,20 +23,17 @@ function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
   var dialogId = $('#'+editElement).instance('getConfigurationDialogId') ;
   var dialog = $('#'+dialogId);
+  var resource_type = instanceOptions.resourceType.toLowerCase();
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label); 
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
-  dialog.find('#ec2_instance_type_id').val(instanceOptions.InstanceType);
-  dialog.find('#rds_instance_type_id').val(instanceOptions.InstanceType);
-  dialog.find('#rails_instance_type_id').val(instanceOptions.InstanceType);
-  dialog.find('#mysql_instance_type_id').val(instanceOptions.InstanceType);
-  dialog.find('#nginx_instance_type_id').val(instanceOptions.InstanceType);
+  dialog.find('#' + resource_type + '_instance_type_id').val(instanceOptions.InstanceType);
   if(instanceOptions.ipAddress != undefined){
-    dialog.find('#ip_address').html("Ip Address : "+instanceOptions.ipAddress);
+    dialog.find('#' + resource_type + 'ip_address').html("Ip Address : "+instanceOptions.ipAddress);
   }
   if(instanceOptions.publicDNS != undefined){
-    dialog.find('#public_dns').html("Public DNS : "+instanceOptions.publicDNS);
+    dialog.find('#' + resource_type + 'public_dns').html("Public DNS : "+instanceOptions.publicDNS);
   }
   if(!isEmpty(instanceOptions.configAttributes))
   {

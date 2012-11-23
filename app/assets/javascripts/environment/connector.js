@@ -23,9 +23,9 @@ function makeTarget(element){
 //Makes the element a source as well as target for connections
 function makeSourceAndTarget(element , parents_list){
     var sourceAndTargetEndPointAttributes = {
-        anchor: "TopLeft",
+        anchor: "BottomLeft",
         endpoint: ["Dot", {radius: 4}],
-        connectorStyle: { lineWidth:3, strokeStyle:'#ccc' },
+        connectorStyle: { lineWidth:3, strokeStyle:'#666' },
         connector:[ "Straight"],        
         isSource: true,
         isTarget: true, 
@@ -51,12 +51,7 @@ function makeConnections(instances){
         instanceEndpoints[key] = makeSourceAndTarget(element,parents_list);
         var parents = instance.parents ;
         for(var i=0; i < parents.length; i++)
-        {
-            var instanceOptions = $('#instance-'+parents[i]).instance("option");
-          //  instanceEndpoints[parents[i]] = makeSourceAndTarget('instance-'+parents[i],instanceOptions.configAttributes.parents_list);
-          //if(sourceEndPoint && targetEndPoint)
-            jsPlumb.connect({source: 'instance-'+parents[i], target: element,connector:[ "Straight"],anchor:"TopLeft",endpoint: ["Dot", {radius: 4}] ,overlays:[[ "Arrow", { width:8, length:15}]]});
-        }
+          jsPlumb.connect({source: 'instance-'+parents[i], target: element,connector:[ "Straight"],anchor:"BottomLeft",endpoint: ["Dot", {radius: 4}] ,overlays:[[ "Arrow", { width:8, length:15}]]});
     }
 }
 
@@ -93,7 +88,7 @@ $(document).ready(function(){
   jsPlumb.importDefaults({
 	PaintStyle : {
 		lineWidth:3,
-		strokeStyle: '#ccc'
+		strokeStyle: '#666'
 	}
   });
 });

@@ -27,7 +27,9 @@ class Instance < ActiveRecord::Base
   validates :label , presence: true, uniqueness: { scope: :environment_id }
   validates :xpos , numericality: true
   validates :ypos , numericality: true
-
+  
+  after_destroy :modify_node_data
+  
   def apply_roles(roles = nil)
     if roles.nil?
       attributes = JSON.parse(self.config_attributes)
@@ -35,6 +37,17 @@ class Instance < ActiveRecord::Base
     end
     logger.info("Applying roles #{roles.inspect} to instance : #{id}: #{label}")
     return add_role(id, roles)
+  end
+
+  private
+
+  def modify_node_data
+    logger.info "INFO: Started deleting node and client for Instance with id #{self.id}"
+    DeleteNodeWorker.perform_async(self.id)
+    logger.info "INFO: Finished deleting node and client for Instance with id #{self.id}"
+    logger.info "INFO: Started deleting data bag entry for node #{self.id}"
+    DeleteDataBagWorker.perform_async({data_bag_name: "nodes", item_id: self.id})
+    logger.info "INFO: Finished deleting data bag entry for node #{self.id}"
   end
 
 end

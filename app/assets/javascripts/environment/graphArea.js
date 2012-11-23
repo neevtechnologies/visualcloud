@@ -81,6 +81,12 @@
         instanceAttributes.push(instances[i].instance("getAttributes"));
       return(JSON.stringify({instances: instanceAttributes}));
     },
+    removeInstanceFromStage: function(instanceId){
+      var instances = this.instances;
+      for(var i = 0; i < instances.length; i++)
+        if(instances[i].instance("getAttributes").dom_id.toLowerCase() == instanceId.toLowerCase())
+          instances[i].instance("destroy");
+    },
     destroy: function() {
       this.element.remove();
     }
