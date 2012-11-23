@@ -40,16 +40,16 @@ ActiveRecord::Schema.define(:version => 20121123102754) do
 
   create_table "environments", :force => true do |t|
     t.string   "name"
-    t.string   "branch",         :default => "master"
-    t.boolean  "db_migrate",     :default => true
+    t.string   "branch",           :default => "master"
+    t.boolean  "db_migrate",       :default => true
     t.integer  "deploy_order"
     t.integer  "project_id"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.boolean  "provisioned"
     t.string   "key_pair_name"
     t.string   "security_group"
-    t.string   "status"
+    t.string   "provision_status"
   end
 
   create_table "instance_relationships", :force => true do |t|

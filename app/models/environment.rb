@@ -207,7 +207,7 @@ class Environment < ActiveRecord::Base
       db_instance = nil
       instances.each do |instance|
         config_attributes = JSON.parse(instance.config_attributes)
-        instance_roles = config_attributes['roles']
+        instance_roles = config_attributes['roles'] || []
         if instance_roles.include?('db')
           logger.info("Applying roles: #{instance_roles.inspect} to db instance : #{instance.id} for environment : #{name}")
           instance.apply_roles(instance_roles)
