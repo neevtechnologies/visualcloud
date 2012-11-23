@@ -9,6 +9,8 @@ class Environment < ActiveRecord::Base
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
   
+  after_destroy :modify_environment_data
+  
   #TODO: This should go , whatever it's doing.
   def self.get_select_collection(id)    
     (1..Project.find(id).environments.count).to_a.collect { |v| v.to_i }
@@ -117,8 +119,12 @@ class Environment < ActiveRecord::Base
   end
 
   def delete_stack(access_key_id, secret_access_key)
+    logger.info "INFO: Calling cloudster to delete stack #{self.name}"
+    puts "INFO: Calling cloudster to delete stack #{self.name}"
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    cloud.delete(stack_name: name)
+    cloud.delete(stack_name: self.name)
+    logger.info "INFO: Deleted stack #{self.name}"
+    puts "INFO: Deleted stack #{self.name}"
     return true
   rescue => e
     puts e.inspect
@@ -136,14 +142,14 @@ class Environment < ActiveRecord::Base
       ec2_details = cloud.get_ec2_details(stack_name: self.name)
     end
     instances.where('label in (?)', ec2_details.keys).each do |instance|
-     instance_details = ec2_details[instance.label]
-     if instance_details.present?
-       instance.update_attributes({
-         aws_instance_id: instance_details['instanceId'],
-         public_dns: instance_details['dnsName'],
-         private_ip: instance_details['ipAddress']
-       })
-     end
+      instance_details = ec2_details[instance.label]
+      if instance_details.present?
+        instance.update_attributes({
+            aws_instance_id: instance_details['instanceId'],
+            public_dns: instance_details['dnsName'],
+            private_ip: instance_details['ipAddress']
+          })
+      end
     end
     logger.info "INFO: Updated the ec2 instance details for stack #{self.name}"
   end
@@ -208,5 +214,13 @@ class Environment < ActiveRecord::Base
       return false
     end
   end
-  
+ 
+  private
+
+  def modify_environment_data
+    logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
+    UpdateProjectDataBagWorker.perform_async(self.project)
+    logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
   end
+
+end
