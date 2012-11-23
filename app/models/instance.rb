@@ -24,7 +24,7 @@ class Instance < ActiveRecord::Base
                :through               => :child_parent_relationships,
                :source                => :child
   
-  validates :label , presence: true
+  validates :label , presence: true, uniqueness: { scope: :environment_id }
   validates :xpos , numericality: true
   validates :ypos , numericality: true
 

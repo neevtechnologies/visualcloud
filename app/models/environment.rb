@@ -126,8 +126,7 @@ class Environment < ActiveRecord::Base
     return false
   end
 
-  def update_instances(access_key_id, secret_access_key)
-    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+  def update_ec2_details(cloud)
     logger.info "INFO: Updating the ec2 instance details for stack #{self.name}"
     ec2_details = cloud.get_ec2_details(stack_name: self.name)
     logger.info "INFO: EC2 details for stack #{name} : #{ec2_details.inspect}"
@@ -146,6 +145,44 @@ class Environment < ActiveRecord::Base
      end
     end
     logger.info "INFO: Updated the ec2 instance details for stack #{self.name}"
+  end
+
+  def update_elb_details(cloud)
+    logger.info "INFO: Updating the elb instance details for stack #{self.name}"
+    elb_details = cloud.get_elb_details(stack_name: self.name)
+    logger.info "INFO: elb details for stack #{name} : #{elb_details.inspect}"
+    while elb_details.nil?
+      sleep VisualCloudConfig[:status_check_interval]
+      elb_details = cloud.get_elb_details(stack_name: self.name)
+    end
+    instances.where('label in (?)', elb_details.keys).each do |instance|
+     instance_details = elb_details[instance.label]
+     if instance_details.present?
+       instance.update_attributes({
+         public_dns: instance_details['DNSName']
+       })
+     end
+    end
+    logger.info "INFO: Updated the elb instance details for stack #{self.name}"
+  end
+
+  def update_rds_details(cloud)
+    logger.info "INFO: Updating the rds instance details for stack #{self.name}"
+    rds_details = cloud.get_rds_details(stack_name: self.name)
+    logger.info "INFO: rds details for stack #{name} : #{rds_details.inspect}"
+    while rds_details.nil?
+      sleep VisualCloudConfig[:status_check_interval]
+      rds_details = cloud.get_rds_details(stack_name: self.name)
+    end
+    instances.where('label in (?)', rds_details.keys).each do |instance|
+     instance_details = rds_details[instance.label]
+     if instance_details.present?
+       instance.update_attributes({
+         public_dns: instance_details['Endpoint']['Address']
+       })
+     end
+    end
+    logger.info "INFO: Updated the rds instance details for stack #{self.name}"
   end
 
   def set_meta_data(access_key_id, secret_access_key)
@@ -194,6 +231,7 @@ class Environment < ActiveRecord::Base
 
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{name}")
+    update_attribute(:status, "CREATE_IN_PROGRESS")
     stack_status = self.status(access_key_id, secret_access_key)
     while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
       logger.info("Stack status = #{stack_status}")
@@ -202,11 +240,21 @@ class Environment < ActiveRecord::Base
     end
     if stack_status == 'CREATE_COMPLETE'
       logger.info("Environment #{name} was provisioned successfully.")
+      update_attribute(:status, stack_status)
       return true
     else
-      logger.error("Environment #{name} was not provisioned.")
+      logger.error("Environment #{name} was not provisioned: status - #{stack_status}")
+      update_attribute(:status, stack_status)
       return false
     end
   end
-  
+
+  def update_instances(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    update_elb_details(cloud)
+    update_ec2_details(cloud)
+    update_rds_details(cloud)
+    return true
   end
+
+end

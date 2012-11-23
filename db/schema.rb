@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121122034335) do
+ActiveRecord::Schema.define(:version => 20121123102754) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20121122034335) do
     t.boolean  "provisioned"
     t.string   "key_pair_name"
     t.string   "security_group"
+    t.string   "status"
   end
 
   create_table "instance_relationships", :force => true do |t|
