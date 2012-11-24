@@ -84,8 +84,10 @@
     removeInstanceFromStage: function(instanceId){
       var instances = this.instances;
       for(var i = 0; i < instances.length; i++)
-        if(instances[i].instance("getAttributes").dom_id.toLowerCase() == instanceId.toLowerCase())
+      {
+        if(instances[i].attr('id') == instanceId)
           instances[i].instance("destroy");
+      }
     },
     destroy: function() {
       this.element.remove();

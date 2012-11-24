@@ -1,39 +1,39 @@
 //Makes the element a source for connections
 function makeSource(element){
-    var sourceEndPointAttributes = {
-        anchor: "BottomLeft",
-        endpoint: ["Dot", {radius: 7}],
-        connector:[ "Bezier", { curviness:50 }],
-        isSource: true,
-        maxConnections: -1
-    };
-    jsPlumb.addEndpoint(element, sourceEndPointAttributes);
+  var sourceEndPointAttributes = {
+    anchor: "BottomLeft",
+    endpoint: ["Dot", {radius: 7}],
+    connector:[ "Bezier", { curviness:50 }],
+    isSource: true,
+    maxConnections: -1
+  };
+  jsPlumb.addEndpoint(element, sourceEndPointAttributes);
 };
 
 //Makes the element a target for connections
 function makeTarget(element){
-    var targetEndPointAttributes = {
-        anchor: "TopLeft",
-        endpoint: ["Dot", {radius: 7}],
-        isTarget: true
-    };
-    jsPlumb.addEndpoint(element, targetEndPointAttributes);
+  var targetEndPointAttributes = {
+    anchor: "TopLeft",
+    endpoint: ["Dot", {radius: 7}],
+    isTarget: true
+  };
+  jsPlumb.addEndpoint(element, targetEndPointAttributes);
 };
 
 //Makes the element a source as well as target for connections
 function makeSourceAndTarget(element , parents_list){
-    var sourceAndTargetEndPointAttributes = {
-        anchor: "BottomLeft",
-        endpoint: ["Dot", {radius: 4}],
-        connectorStyle: { lineWidth:3, strokeStyle:'#666' },
-        connector:[ "Straight"],        
-        isSource: true,
-        isTarget: true, 
-        maxConnections: -1,
-        connectorOverlays:[[ "Arrow", { width:8, length:15}]],
-        beforeDrop:function(conn) { return check_for_parent_exist(conn,parents_list); }
-    };
-    return jsPlumb.addEndpoint(element, sourceAndTargetEndPointAttributes);
+  var sourceAndTargetEndPointAttributes = {
+    anchors: ["BottomLeft","TopLeft","TopCenter","BottomCenter"],
+    endpoint: ["Dot", {radius: 4}],
+    connectorStyle: { lineWidth:3, strokeStyle:'#666' },
+    connector: [ "Straight"],
+    isSource: true,
+    isTarget: true,
+    maxConnections: -1,
+    connectorOverlays:[[ "Arrow", { width:8, length:15}]],
+    beforeDrop:function(conn) { return check_for_parent_exist(conn,parents_list); }
+  };
+  return jsPlumb.addEndpoint(element, sourceAndTargetEndPointAttributes);
 };
 
 
@@ -80,7 +80,7 @@ return result;
 }
 
 $(document).ready(function(){
-  // bind click listener; delete connections on click            
+  // bind click listener; delete connections on click
   jsPlumb.bind("click", function(conn) {
     jsPlumb.detach(conn);
   });
