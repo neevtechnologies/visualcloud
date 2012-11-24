@@ -1,10 +1,10 @@
-<div style="float:right;"><%= link_to 'All Projects', projects_path ,:class=>"btn"%></div>
+<div style="float:right;"><%= link_to 'All Projects', projects_path ,:class=>"btn btn-inverse"%></div>
 <br/><br/>
 <p id="notice"><%= notice %></p>
 <div class="well">
   <div style="margin-left: 10px;">
-<h3 style="float:left;text-decoration: none;font-family: bold;"><%= @project.name %></h3>&nbsp;&nbsp;
-<%= link_to 'Edit', edit_project_path ,:class=>"btn" ,:style=>"float:none;margin-top:14px;"%>
+<h3 class="pull-left"> <%= @project.name %></h3>&nbsp;&nbsp;
+<%= link_to 'Edit', edit_project_path ,:class=>"btn btn-inverse" ,:style=>"float:none;margin-top:14px;"%>
 <br /><br />
 <div class="clear"></div>
   <div>

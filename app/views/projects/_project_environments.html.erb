@@ -6,7 +6,6 @@
     <th>DB migrate</th>
     <th style="text-align: center;">Actions</th>
   </tr>
-  <%  i=1 %>
   <%if @environments.present? %>
     <% @environments.each do |environment| %>
       <tr>
@@ -16,20 +15,19 @@
         <td><%= text_field_tag 'branch' ,environment.branch, id: "branch_#{environment.id}" %></td>
         <td><%= check_box_tag 'db_migrate','',environment.db_migrate, id: "db_migrate_#{environment.id}" %></td>
         <td style="text-align: center;">
-          <%= link_to 'Update', "javascript:void(0);",:class=>'btn save_env', id: "save_env_#{environment.id}"%>&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn' %>&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= link_to 'Delete', project_environment_path(@project,environment),:class=>'btn', method: :delete, data: { confirm: 'Are you sure?' } %>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to 'Update', "javascript:void(0);",:class=>'btn btn-inverse save_env', id: "save_env_#{environment.id}"%>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn btn-inverse' %>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to 'Delete', project_environment_path(@project,environment),:class=>'btn btn-inverse', method: :delete, data: { confirm: 'Are you sure?' } %>&nbsp;&nbsp;&nbsp;&nbsp;
     <%#if Deploy.find_all_by_environment_id(environment).present? && Deploy.find_all_by_environment_id(environment).order('created_at DESC').status %>
-          <%= link_to 'Deploy', project_environment_deployments_path(@project,environment) ,:class=>'btn', method: :post%></td>
+          <%= link_to 'Deploy', project_environment_deployments_path(@project,environment) ,:class=>'btn btn-inverse', method: :post%></td>
     <%#end%>
       </tr>
-      <% i += 1 %>
     <% end %>
   <%else%>
     <tr>
-      <td colspan="5" style="color: blue;">Sorry, No Environments in this Project.</td>
+      <td colspan="5">Sorry, No Environments in this Project.</td>
     </tr>
   <%end%>
 </table>
 <br />
-<%= link_to 'New Environment', new_project_environment_path(@project) ,:class=>"btn"%>
+<%= link_to 'New Environment', new_project_environment_path(@project) ,:class=>"btn btn-inverse"%>

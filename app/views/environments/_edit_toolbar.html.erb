@@ -1,4 +1,5 @@
-<div class="navbar navbar-inner">
+<div class="navbar navbar-inverse">
+<div class="navbar-inner">
   <ul class="nav nav-pills">
     <li><a id="graph-update" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Save</a></li>
     <li><a id="graph-provision" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Provision</a></li>
@@ -7,4 +8,5 @@
     <li><a class="stack-status" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><%= image_tag(status_image(status)["img_src"], title: "#{status_image(status)["img_title"]}", rel: 'tooltip', id: "stack-status-image-#{@environment.id}") %></a></li>
   </ul> 
   <%= render 'project_environment' %> 
+</div>
 </div>
