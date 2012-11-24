@@ -1,0 +1,6 @@
+$("#stack-status-image-<%=@environment.id%>").attr("src","<%= status_image(@status)["img_src"] %>");
+$("#stack-status-image-<%=@environment.id%>").attr("data-original-title","<%= status_image(@status)["img_title"] %>");
+<%#- if @environment.provision_status == "CREATE_IN_PROGRESS" || "UPDATE_IN_PROGRESS"-%>
+console.log('checking status <%= @environment.provision_status%>');
+// check_stack_status('<%= @environment.id%>');
+<%#- end -%>

@@ -11,6 +11,12 @@ class InstancesController < ApplicationController
     create_instance
   end
 
+  def status
+    if params[:name].present? && params[:environment_id].present?
+      @instance = Instance.where("label = ? and environment_id = ?", params[:name].to_s, params[:environment_id].to_i).first
+    end
+  end
+
   private
 
     def create_instance

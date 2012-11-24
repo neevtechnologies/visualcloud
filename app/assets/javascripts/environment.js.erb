@@ -65,18 +65,76 @@ $(document).ready(function(){
 
 });
 
+//$(function(){
+ //$("#graph-provision").click(function(){
+ // var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
+  //check_stack_status(environment_id);
+ //});
+//});
+
+//function check_stack_status(environment_id)
+//{
+//    setInterval(function(){
+//      $.ajax({
+//        url: '/environment_status?id='+environment_id,
+//        type: 'GET'
+//      });
+//    }, <%#= VisualCloudConfig[:status_check_interval] * 1000 %>);
+//}
+
+ $(function() {
+ if($("[id^=instance-label-]").length != 0)
+ {
+    $("[id^=instance-label-]").each(function(){
+    var instance_label = $(this).text();
+    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
+    var label_id = $(this).attr('id');
+    setInterval(function(){
+      $.ajax({
+        type: 'GET',
+        url: '/instance_status',
+        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
+      });
+    }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
+  });
+ }
+});
 
 $(function() {
  if($('.stack-status').length != 0)
  {
     $('.stack-status').each(function(){
     var environment_id = $(this).attr("data-graph-id");
-    setInterval(function(){
+    var internal_status = setInterval(function(){
       $.ajax({
         url: '/environment_status?id='+environment_id,
         type: 'GET'
       });
-    }, <%= VisualCloudConfig[:status_check_interval] * 1000 %>);
+    }, <%= VisualCloudConfig[:status_check_interval] * 1500 %>);
+
+    var original_status = setInterval(function(){
+      $.ajax({
+        url: '/stack_status?id='+environment_id,
+        type: 'GET'
+      });
+    }, <%= VisualCloudConfig[:status_check_interval] * 100000 %>);
+
+  });
+ }
+});
+
+$(document).ready(function(){
+  if($("[id^=instance-label-]").length != 0)
+ {
+    $("[id^=instance-label-]").each(function(){
+    var instance_label = $(this).text();
+    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
+    var label_id = $(this).attr('id');
+      $.ajax({
+        type: 'GET',
+        url: '/instance_status',
+        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
+      });
   });
  }
 });

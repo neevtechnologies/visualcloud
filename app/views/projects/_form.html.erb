@@ -6,7 +6,7 @@
     <%= f.input :name, input_html: { id: 'name'} %>
     <%= f.label :description %>
     <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
-    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Svn','Git'], :prompt => "Select repository" %>
+    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Git'], :prompt => "Select repository" %>
     <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
     <% if @environments.present? %>
     <label>Environments:</label>

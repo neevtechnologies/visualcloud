@@ -175,11 +175,11 @@ class EnvironmentsController < ApplicationController
     end
   end
   
-  # Get the status of the Stack
-  def status
+  # Get the status of the Environment from DB
+  def environment_status
     unless params[:id].blank?
       @environment = Environment.find(params[:id])
-      @status = @environment.status(current_user.aws_access_key, current_user.aws_secret_key)
+      @status = @environment.provision_status
       respond_to do |format|
         format.js
       end
@@ -187,6 +187,21 @@ class EnvironmentsController < ApplicationController
       render :nothing => true
     end
   end
+
+  # Get the original status of the Stack from Amazon
+  def stack_status
+    unless params[:id].blank?
+      @environment = Environment.find(params[:id])
+      @status = @environment.status(current_user.aws_access_key, current_user.aws_secret_key)
+      @environment.update_column("provision_status", @status)
+      respond_to do |format|
+        format.js
+      end
+    else
+      render :nothing => true
+    end
+  end
+
 
   private
     

@@ -20,11 +20,11 @@
       var self = this;
       var options = self.options;
       var element = self.element;
-
       //Add the inner HTML template      
       element.html($('.' + options.resourceType + '-instance').html());
-      element.find($('.instance-label')).html('<a href="http://www.google.com" target="_blank">' + options.label + '</a>');
-
+     // element.find($('.instance-label')).html('<a href="#" target="_blank">' + options.label + '</a>');
+      //element.find($('.instance-label')).html(options.label);
+      element.find($('.instance-label')).html('<a id=instance-label-' + options.instanceId + ' href="#" >' + options.label + '</a>');
 
       //Align the element on the stage
       element.position({

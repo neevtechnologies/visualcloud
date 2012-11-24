@@ -1,0 +1,4 @@
+<% if @instance.public_dns.present?%>
+  $("#<%= params[:instance_label_id] %>").attr("href", "http://<%= @instance.public_dns %>");
+  $("#<%= params[:instance_label_id] %>").attr("target", "_blank");
+<% end %>
