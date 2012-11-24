@@ -6,14 +6,14 @@
     <%= f.input :name, input_html: { id: 'name'} %>
     <%= f.label :description %>
     <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
-    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Svn','Git'], :prompt => "Select repository" %>
+    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Git'], :prompt => "Select repository" %>
     <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
-    <% if @project.id.present? %>
-      <%= f.input :frame_work, input_html: { id: 'frame_work', :disabled=>"disabled"}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
-    <%else%>
-      <%= f.input :frame_work, input_html: { id: 'frame_work'}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
-    <%end%>
-    <%= f.input :managed, :input_html => { :checked => true , id: 'managed',:disabled=>"disabled",:title=>'checked to manage the process in the project.',rel: 'tooltip'} %>
+    <%# if @project.id.present? %>
+      <%#= f.input :frame_work, input_html: { id: 'frame_work', :disabled=>"disabled"}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
+    <%#else%>
+      <%#= f.input :frame_work, input_html: { id: 'frame_work'}, :collection => ['Rails','Java','PHP'], :prompt => "Select frame work" %>
+    <%#end%>
+    <%#= f.input :managed, :input_html => { :checked => true , id: 'managed',:disabled=>"disabled",:title=>'checked to manage the process in the project.',rel: 'tooltip'} %>
     <% if @environments.present? %>
     <label>Environments:</label>
     <div class="accordion">

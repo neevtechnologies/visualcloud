@@ -1,7 +1,7 @@
 class RoleAssignmentWorker
   include Sidekiq::Worker
   #Do not retry failed jobs for now. Can be changed later.
-  sidekiq_options retry: false
+  #sidekiq_options retry: false
 
 
   #Set databag item "master_db_address"

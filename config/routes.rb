@@ -2,8 +2,9 @@ VisualCloud::Application.routes.draw do
 
   authenticated :user do
     root :to => 'projects#index'
-    get 'environment_status' => 'environments#status'
-
+    get 'environment_status' => 'environments#environment_status'
+    get 'stack_status' => 'environments#stack_status'
+    get 'instance_status' => 'instances#status'
     #Environment resource
     resources :projects do
       resources :environments do
