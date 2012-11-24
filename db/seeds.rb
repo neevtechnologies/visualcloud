@@ -13,14 +13,13 @@ user.add_role :admin
 
 #ResourceTypes
 ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", large_icon: "amazon/AWS_Simple_Icons_Networking_Amazon_Elastic_Load_Balancer.svg", description: 'Elastic Load Balancer')
-ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
+ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "ELB,Nginx" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
 ResourceType.create(resource_class: 'RDS', name: 'RDS', parents_list: "Rails,JAVA,PHP" , small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_RDS.svg", description: 'Relational Database Service')
-#ResourceType.create(resource_class: 'EC', name: 'EC', small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", description: 'ElastiCache')
-ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.svg", large_icon: "components/rails.svg" , description: 'Rails hosting instance running Unicorn as Application Server')
-ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,JAVA,PHP" , small_icon: "components/mysql.svg", large_icon: "components/mysql.svg", description: 'MySQL database server')
-ResourceType.create(resource_class: 'EC2', name: 'Nginx', parents_list: "" , small_icon: "components/nginx.png", large_icon: "components/nginx.png", description: 'Nginx LoadBalancer for your application servers')
-ResourceType.create(resource_class: 'EC2', name: 'JAVA', parents_list: "ELB,Nginx" , small_icon: "components/java.svg", large_icon: "components/java.svg", description: 'JAVA your application server')
-ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx" , small_icon: "components/php.svg", large_icon: "components/php.svg", description: 'PHP your application server')
+ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.png", large_icon: "components/rails.png" , description: 'Rails hosting instance running Unicorn as Application Server')
+ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,JAVA,PHP" , small_icon: "components/mysql.png", large_icon: "components/mysql.png", description: 'MySQL database server')
+ResourceType.create(resource_class: 'EC2', name: 'Nginx', parents_list: "ELB" , small_icon: "components/nginx.png", large_icon: "components/nginx.png", description: 'Nginx LoadBalancer for your application servers')
+ResourceType.create(resource_class: 'EC2', name: 'JAVA', parents_list: "ELB,Nginx" , small_icon: "components/java.png", large_icon: "components/java.png", description: 'JAVA your application server')
+ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx" , small_icon: "components/php.png", large_icon: "components/php.png", description: 'PHP your application server')
 
 #Components
 Component.create(name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg")

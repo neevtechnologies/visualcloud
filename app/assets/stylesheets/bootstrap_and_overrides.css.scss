@@ -2,6 +2,22 @@
 
 /* line 31, ../sass/darkstrap.scss */
 .well, .breadcrumb, input,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input,
+input[type="file"],
 input[type="file"],
 select,
 textarea, .progress, code, pre {
@@ -20,7 +36,7 @@ body {
 }
 
 /* line 39, ../sass/darkstrap.scss */
-.breadcrumb {
+.well, .breadcrumb {
   border: 0;
 }
 /* line 42, ../sass/darkstrap.scss */
@@ -184,7 +200,21 @@ label {
 }
 
 /* line 154, ../sass/darkstrap.scss */
-input,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input,
 input[type="file"],
 select,
 textarea {

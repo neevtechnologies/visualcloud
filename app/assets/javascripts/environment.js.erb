@@ -81,3 +81,8 @@ $(function() {
  }
 });
 
+function delete_instance(resource_type) {
+  var instance_id = $('#'+resource_type+'-configuration').data('editElement');
+  jsPlumb.removeAllEndpoints(instance_id);
+  $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
+}

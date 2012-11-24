@@ -60,6 +60,7 @@
   <div class="modal-footer">  
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("ec2");' title="Delete the EC2 resource">Delete</a>
   </div>  
     <% end %>
 </div>
@@ -86,6 +87,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("rails");' title="Delete the Ruby on Rails resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -112,6 +114,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("java");' title="Delete the Java resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -138,6 +141,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("php");' title="Delete the PHP resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -164,6 +168,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("mysql");' title="Delete the MySQL resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -190,6 +195,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("nginx");' title="Delete the Nginx resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -226,6 +232,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
   </div>
   <% end %>
 </div>  
@@ -248,6 +255,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("elb");' title="Delete the ELB resource">Delete</a>
   </div>
   <% end %>
 </div>  
@@ -267,6 +275,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("ec");' title="Delete the ElastiCache resource">Delete</a>
   </div>
   <% end %>
 </div>
