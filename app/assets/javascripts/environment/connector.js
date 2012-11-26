@@ -1,3 +1,5 @@
+//BELOW TO BE REMOVED
+
 //Makes the element a source for connections
 function makeSource(element){
   var sourceEndPointAttributes = {
@@ -19,6 +21,8 @@ function makeTarget(element){
   };
   jsPlumb.addEndpoint(element, targetEndPointAttributes);
 };
+
+//ABOVE TO BE REMOVED
 
 //Makes the element a source as well as target for connections
 function makeSourceAndTarget(element , parents_list){
