@@ -29,7 +29,7 @@ function makeSourceAndTarget(element , parents_list){
   var sourceAndTargetEndPointAttributes = {
     anchors: ["BottomLeft","TopLeft","TopCenter","BottomCenter"],
     endpoint: ["Dot", {radius: 4}],
-    connectorStyle: { lineWidth:3, strokeStyle:'#666' },
+    connectorStyle: { lineWidth:2, strokeStyle:'#666' },
     connector: [ "Straight"],
     isSource: true,
     isTarget: true,
@@ -91,7 +91,7 @@ $(document).ready(function(){
 //modifying the default settings
   jsPlumb.importDefaults({
 	PaintStyle : {
-		lineWidth:3,
+		lineWidth:2,
 		strokeStyle: '#666'
 	}
   });
