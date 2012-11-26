@@ -1,0 +1,15 @@
+<h2>Sign In</h2>
+<br />
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div><%= f.label :email %>
+  <%= f.email_field :email %></div>
+
+  <div><%= f.label :password %>
+  <%= f.password_field :password %></div>
+  <br />
+  <div><%= f.submit "Sign In", :class=>"btn btn-inverse" %></div>
+<% end %>
+
+<%= render "devise/shared/links" %>
