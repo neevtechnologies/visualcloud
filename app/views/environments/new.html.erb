@@ -7,4 +7,9 @@
 </div>
 <script type="text/javascript">
   prepareStage();
+$(document).ready(function(){
+  $('input#graph-name').val('<%= params[:environment]['name'] %>');
+  $('input#graph-key-pair-name').val('<%= params[:environment]['key-pair-name'] %>');
+  $('input#graph-security-group-name').val('<%= params[:environment]['group-name'] %>');
+});
 </script>

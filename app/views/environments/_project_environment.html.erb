@@ -4,7 +4,7 @@
     <li><%if !@environment.id.to_s.empty? %>
   <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
     <%else%>
-    <a id="environments" href=""><%= @environment.name.present? ? @environment.name : ''%> &nbsp;&nbsp;</a>
+    <a id="environments" href="javascript:void(0)"><%= @environment.name.present? ? @environment.name : params[:environment]['name']%> &nbsp;&nbsp;</a>
   <%end%>
   </li>
   </ul>

@@ -50,7 +50,7 @@
 
       //Show edit config modal on click
       element.click(function(){
-        showInstanceEditForm(element.attr('id'));        
+        showInstanceEditForm(element.attr('id'));
       });
       //Do not open the dialog because it's an got to open the URL onclick
       element.find('.instance-label').click(function(e){e.stopPropagation();})

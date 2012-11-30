@@ -1,7 +1,11 @@
 $(document).ready(function(){
-  //On click event for "Save" button on graph toolbar
+  //On click event for "Save environment" in Save Environment modal
   $('#graph-save').click(function(){
-    $('#graph-save-modal').modal('show');
+    var graphName = $('input#graph-name').val().trim();
+    var keyPairName = $('input#graph-key-pair-name').val().trim();
+    var securityGroupName = $('input#graph-security-group-name').val().trim();
+    var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName };
+    $('.graph-area').graphArea("save", attributes);
   });
 
   //On click event for "Save" button on graph toolbar during edit
@@ -24,23 +28,6 @@ $(document).ready(function(){
         hideLoading();
       }
     });
-  });
-
-  //On click event for "Save environment" in Save Environment modal
-  $('.graph-save-submit').click(function(){
-    var graphName = $('input#graph-name').val().trim();
-    var keyPairName = $('input#graph-key-pair-name').val().trim();
-    var securityGroupName = $('input#graph-security-group-name').val().trim();
-    if(graphName == "")
-      addMessagesToDiv($('#graph-save-error-messages'), getErrorMessage('Environment name cannot be empty'));
-    else
-    {
-      var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName };
-      $('#graph-save-modal').modal('hide');
-      $('.graph-area').graphArea("save", attributes);
-    }
-    //Do not submit form
-    return false;
   });
 
   //On click of save environment, it should save respective environment

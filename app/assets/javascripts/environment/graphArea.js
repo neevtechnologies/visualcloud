@@ -9,7 +9,6 @@
 
         //Triggers onElementDrop event on draggable that was dropped on this droppable
         params.args.draggable.trigger('onElementDrop', params);
-
       }
     },
     instances: [],
@@ -22,6 +21,7 @@
         accept: '.resourceDraggable,.componentDraggable',
         drop: function(event, ui){
           self._trigger('onElementDrop', event , { args: ui, droppable: $(this)} );
+
         }
       });
       self._trigger('onCreate');
