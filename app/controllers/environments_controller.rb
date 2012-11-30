@@ -156,6 +156,7 @@ class EnvironmentsController < ApplicationController
   # Provisions the stack
   def provision
     @environment = Environment.find(params[:id])
+    @environment.update_attributes(params[:environment])
     @errors = []
     update_instances
     if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?

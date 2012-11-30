@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.update_attributes(params[:project])
         update_project_data_bag(@project)
-        format.html { redirect_to projects_path, notice: 'Project was successfully updated.' }
+        format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

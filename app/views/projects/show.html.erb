@@ -5,22 +5,28 @@
 <%= link_to 'Edit', edit_project_path ,:class=>"btn btn-inverse" ,:style=>"float:none;margin-top:14px;"%>
 <br /><br />
 <div class="clear"></div>
+  <% if @project.description.present? %>
   <div>
     <span style="display: inline-block;width: 115px;">Description</span>:
     &nbsp;&nbsp;<span><%= @project.description %></span>
   </div>
+  <%end%>
+  <% if @project.repo_type.present? %>
   <br/>
   <div>
     <span style="display: inline-block;width: 115px;">Repository Type</span>:
     &nbsp;&nbsp;<span><%= @project.repo_type %></span>
   </div>
+  <%end%>
+  <% if @project.repo_url.present? %>
   <br/>
   <div>
     <span style="display: inline-block;width: 115px;">Repository Path</span>:
     &nbsp;&nbsp;<span><%= @project.repo_url %></span>
   </div>
+  <%end%>
  </div>
 </div>
-<h4>Environments</h4>
+<h4 style="width:200px;">Environments</h4><button class="btn btn-inverse" id="new_environment" style="margin-left: 135px;margin-top: -60px;">New Environment</button>
 
 <%= render 'project_environments' %>

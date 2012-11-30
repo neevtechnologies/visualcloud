@@ -74,12 +74,12 @@
         }
       });
     },
-    getInstances: function(){
+    getInstances: function(environmentAttributes){
       var instances = this.instances;
       var instanceAttributes = [];
       for(var i = 0; i < instances.length; i++)
         instanceAttributes.push(instances[i].instance("getAttributes"));
-      return(JSON.stringify({instances: instanceAttributes}));
+      return(JSON.stringify({environment: environmentAttributes, instances: instanceAttributes}));
     },
     removeInstanceFromStage: function(instanceId){
       var instances = this.instances;

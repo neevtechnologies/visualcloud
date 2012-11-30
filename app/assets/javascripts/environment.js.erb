@@ -22,18 +22,19 @@ $(document).ready(function(){
   //On click event for "Provision" button on graph toolbar during edit
   $('#graph-provision').click(function(){
     var graphId = $(this).data("graphId");
-    showLoading();
-    $.ajax({
-      url: '/provision_environment?id='+graphId,
-      type: 'POST',
-      dataType: "script",
-      contentType: 'application/json',
-      data : $('.graph-area').graphArea("getInstances"),
-      complete: function(){
-        hideLoading();
-      }
-    });
+    $('#graph_id').text(graphId);
+    var repo_url = $('#repo_url').text();
+    if(repo_url == "")
+      requestProvision();
+    else
+      $('#deployment-config-modal').modal('show');
   });
+
+  $('.deployment-config-submit').click(function(){
+    $('#deployment-config-modal').modal('hide');
+    requestProvision();
+  });
+
 
   //On click of save environment, it should save respective environment
   $(".save_env").live('click', function() {
@@ -135,4 +136,30 @@ function delete_instance(resource_type) {
   var instance_id = $('#'+resource_type+'-configuration').data('editElement');
   jsPlumb.removeAllEndpoints(instance_id);
   $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
+}
+
+
+function requestProvision(){
+  var graphId = $('#graph_id').text();
+  var repo_url = $('#repo_url').text();
+  var environmentAttributes = {};
+  if(repo_url == "")
+    environmentAttributes = {branch: "master",db_migrate: true};
+  else
+  {
+    var branch = $('#graph-branch').val().trim();
+    var dbMigrate = $('#db_migrate')[0].checked;
+    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
+  }
+  showLoading();
+  $.ajax({
+    url: '/provision_environment?id='+graphId,
+    type: 'POST',
+    dataType: "script",
+    contentType: 'application/json',
+    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
+    complete: function(){
+      hideLoading();
+    }
+  });
 }
