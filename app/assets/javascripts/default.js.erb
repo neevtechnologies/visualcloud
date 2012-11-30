@@ -29,26 +29,23 @@ function showInstanceEditForm(editElement){
   dialog.find('.instance_label').val(instanceOptions.label); 
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
   dialog.find('#' + resource_type + '_instance_type_id').val(instanceOptions.InstanceType);
-  if(instanceOptions.ipAddress != undefined){
-    dialog.find('#' + resource_type + 'ip_address').html("Ip Address : "+instanceOptions.ipAddress);
-  }
-  if(instanceOptions.publicDNS != undefined){
-    dialog.find('#' + resource_type + 'public_dns').html("Public DNS : "+instanceOptions.publicDNS);
-  }
-  if(!isEmpty(instanceOptions.configAttributes))
+  if(instanceOptions.ipAddress != "")
+    dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>");
+  if(instanceOptions.publicDNS != "")
+    dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>");
+  //TODO : Check why the following if condition is used , if it isn't needed remove it
+  if(!noProperty(instanceOptions.configAttributes))
   {
      dialog.find('#rds_size').val(instanceOptions.configAttributes.size);
      dialog.find('#rds_master_user_name').val(instanceOptions.configAttributes.master_user_name);
      dialog.find('#rds_master_password').val(instanceOptions.configAttributes.master_password);
-     dialog.find('#ec2_web').prop("checked",parseInt(instanceOptions.configAttributes.web_server));
-     dialog.find('#ec2_app').prop("checked",parseInt(instanceOptions.configAttributes.app_server));
-     dialog.find('#ec2_db').prop("checked",parseInt(instanceOptions.configAttributes.db_server));
      dialog.find('#rds_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   }
+  dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 };
 
-function isEmpty(obj) {
+function noProperty(obj) {
     for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
             return false;
@@ -94,11 +91,6 @@ function hideLoading(){
   $('#loading').modal('hide');
 };
 
-$(document).ready(function(){
-   $("#container").notify({expires: false,speed: 1000});
-   $("[rel=tooltip]").tooltip();
-});
-
 /*
 // For debugging mouse movement inside graph area
 $(document).ready(function(){
@@ -109,3 +101,23 @@ $(document).ready(function(){
   });
 });
 */
+$(document).ready(function(){
+   $("#container").notify({expires: false,speed: 1000});
+   $("[rel=tooltip]").tooltip();
+
+   $('#new_environment').click(function(){
+     $('#graph-new-modal').modal('show');
+   });
+
+   $('.graph-new-submit').click(function(){
+    var graphName = $('input#graph-name').val().trim();
+    var keyPairName = $('input#graph-key-pair-name').val().trim();
+    var securityGroupName = $('input#graph-security-group-name').val().trim();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
+    else
+      $('#graph-new-frm').submit();
+    //Do not submit form
+    return false;
+  });
+});

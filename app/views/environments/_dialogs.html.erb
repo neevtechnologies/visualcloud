@@ -1,7 +1,7 @@
 <!-- Save Environment -->
 <div id="graph-save-modal" class="modal hide fade in" style="display: none; ">  
   <div class="modal-header">  
-    <a class="close" data-dismiss="modal">×</a>  
+    <%#*<a class="close" data-dismiss="modal">×</a>%>
     <h3>Save Environment</h3>
   </div>  
   <div class="modal-body">  
@@ -13,7 +13,7 @@
   </div>  
   <div class="modal-footer">  
     <%= f.button :submit, 'Save Environment', class: "btn btn-success graph-save-submit" %>
-    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <%#*<a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>%>
   </div>  
     <% end %>
 </div>  
@@ -60,7 +60,7 @@
   <div class="modal-footer">  
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("ec2");' title="Delete the EC2 resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="ec2_delete" onclick='delete_instance("ec2");' title="Delete the EC2 resource">Delete</a>
   </div>  
     <% end %>
 </div>
@@ -87,7 +87,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("rails");' title="Delete the Ruby on Rails resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="rails_delete" onclick='delete_instance("rails");' title="Delete the Ruby on Rails resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -114,7 +114,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("java");' title="Delete the Java resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="java_delete" onclick='delete_instance("java");' title="Delete the Java resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -141,7 +141,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("php");' title="Delete the PHP resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="php_delete" onclick='delete_instance("php");' title="Delete the PHP resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -168,7 +168,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("mysql");' title="Delete the MySQL resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="mysql_delete" onclick='delete_instance("mysql");' title="Delete the MySQL resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -195,7 +195,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("nginx");' title="Delete the Nginx resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="nginx_delete" onclick='delete_instance("nginx");' title="Delete the Nginx resource">Delete</a>
   </div>
     <% end %>
 </div>
@@ -210,8 +210,8 @@
     <div id="rds-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
-      <%= f.input :instance_type_id, label: 'Class', collection: InstanceType.get_select_collection('RDS'), input_html: {id: 'rds_instance_type_id'} %>
-      <p>Size</p>
+      <%= f.input :instance_type_id, label: 'Instance Type', collection: InstanceType.get_select_collection('RDS'), input_html: {id: 'rds_instance_type_id'} %>
+      <p>Storage Size in GB</p>
       <%= text_field_tag 'rds_size' %>
       <p>Master User Name</p>
       <%= text_field_tag 'rds_master_user_name' %>
@@ -232,7 +232,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="rds_delete" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
   </div>
   <% end %>
 </div>  
@@ -254,8 +254,8 @@
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
-    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("elb");' title="Delete the ELB resource">Delete</a>
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="elb_delete" onclick='delete_instance("elb");' title="Delete the ELB resource">Delete</a>
   </div>
   <% end %>
 </div>  
@@ -275,7 +275,7 @@
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
-    <a class="btn btn-danger pull-left" data-dismiss="modal" onclick='delete_instance("ec");' title="Delete the ElastiCache resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="ec_delete" onclick='delete_instance("ec");' title="Delete the ElastiCache resource">Delete</a>
   </div>
   <% end %>
 </div>
