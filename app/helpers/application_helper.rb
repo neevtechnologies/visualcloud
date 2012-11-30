@@ -27,4 +27,12 @@ module ApplicationHelper
     html.html_safe
   end
 
+  def get_key_pairs_select(key_pairs)
+    return key_pairs.collect{|key_pair| key_pair["keyName"]}
+  end
+
+  def get_security_groups_select(security_groups)
+    return security_groups.collect{|security_group| security_group["groupName"]}
+  end
+
 end

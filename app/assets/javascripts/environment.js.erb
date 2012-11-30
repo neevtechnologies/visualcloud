@@ -2,8 +2,8 @@ $(document).ready(function(){
   //On click event for "Save environment" in Save Environment modal
   $('#graph-save').click(function(){
     var graphName = $('input#graph-name').val().trim();
-    var keyPairName = $('input#graph-key-pair-name').val().trim();
-    var securityGroupName = $('input#graph-security-group-name').val().trim();
+    var keyPairName = $('select#graph-key-pair-name').val();
+    var securityGroupName = $('select#graph-security-group-name').val();
     var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName };
     $('.graph-area').graphArea("save", attributes);
   });

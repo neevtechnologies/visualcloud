@@ -8,8 +8,8 @@
     <div id="graph-save-error-messages"></div>
     <%= simple_form_for Environment.new, url: project_environments_path(project)  , remote: true, html: { id: 'graph-save-frm'} do |f|%>
       <%= f.input :name, input_html: { id: 'graph-name', title: 'Name of your environment. Example: production, staging etc.', rel: 'tooltip','data-placement' => "right"}  %>
-      <%= f.input :key_pair_name, input_html: { id: 'graph-key-pair-name', title: 'The name of the key pair to login to your instances', rel: 'tooltip','data-placement' => "right"} %>
-      <%= f.input :security_group, input_html: { id: 'graph-security-group-name', title: 'Give a name for the security group.', rel: 'tooltip','data-placement' => "right"}%>
+      <%= f.input :key_pair_name, include_blank: false, collection: get_key_pairs_select(@key_pairs), input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
+      <%= f.input :security_group, include_blank: false, collection: get_security_groups_select(@security_groups), input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
   </div>  
   <div class="modal-footer">  
     <%= f.button :submit, 'Save Environment', class: "btn btn-success graph-save-submit" %>

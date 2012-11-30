@@ -100,4 +100,18 @@ describe User do
 
   end
 
+  describe "get_key_pair_and_security_groups" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    it "should return key pairs and security groups" do
+      cloud = double(:cloud)
+      key_pairs = ['kp1', 'kp2']
+      security_groups = ['sg1', 'sg2']
+      cloud.stub(:get_key_pairs).and_return(key_pairs)
+      cloud.stub(:get_security_groups).and_return(security_groups)
+      Cloudster::Cloud.stub(:new).and_return(cloud)
+      user.get_key_pair_and_security_groups.should == [key_pairs, security_groups]
+    end
+  end
+
 end

@@ -111,8 +111,8 @@ $(document).ready(function(){
 
    $('.graph-new-submit').click(function(){
     var graphName = $('input#graph-name').val().trim();
-    var keyPairName = $('input#graph-key-pair-name').val().trim();
-    var securityGroupName = $('input#graph-security-group-name').val().trim();
+    var keyPairName = $('select#graph-key-pair-name').val();
+    var securityGroupName = $('select#graph-security-group-name').val();
     if(graphName == "")
       addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
     else

@@ -30,6 +30,7 @@ class EnvironmentsController < ApplicationController
     @environments = @project.environments
     @environment = Environment.new
     @resource_types = RESOURCE_TYPES
+    @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,6 +44,7 @@ class EnvironmentsController < ApplicationController
     @environments = @project.environments
     @environment = Environment.find(params[:id])
     @resource_types = RESOURCE_TYPES
+    @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
   end
 
   # POST /environments

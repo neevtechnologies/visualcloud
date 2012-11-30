@@ -1,4 +1,3 @@
-require 'cloudster'
 class Environment < ActiveRecord::Base
   include ServerMetaData
   attr_accessible :name, :branch, :db_migrate, :deploy_order, :project_id, :key_pair_name, :security_group
@@ -10,8 +9,9 @@ class Environment < ActiveRecord::Base
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
   
   after_destroy :modify_environment_data
-  
-  #TODO: This should go , whatever it's doing.
+
+  #This function just prepares a select dropdown containing the number of environments
+  #in this project. TODO : Shouldn't this move to Project model ?
   def self.get_select_collection(id)    
     (1..Project.find(id).environments.count).to_a.collect { |v| v.to_i }
   end
@@ -29,6 +29,7 @@ class Environment < ActiveRecord::Base
       provision_request = cloud.update(resources: stack_resources, stack_name: name, description: 'Updated by VisualCloud')
     else
       provision_request = cloud.provision(resources: stack_resources, stack_name: name, description: 'Provisioned by VisualCloud')
+      #TODO This logic doesn't work in edge cases. Need to refactor
       self.provisioned = true
       self.save
     end
