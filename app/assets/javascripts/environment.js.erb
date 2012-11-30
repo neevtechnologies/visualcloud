@@ -8,6 +8,11 @@ $(document).ready(function(){
     $('.graph-area').graphArea("save", attributes);
   });
 
+  //On click event for "create similar stack" it replicate Environment modal
+  $('#graph-replicate').click(function(){
+    $('#graph-save-modal').modal('show');
+  });
+
   //On click event for "Save" button on graph toolbar during edit
   $('#graph-update').click(function(){
     var graphId = $(this).data("graphId");
