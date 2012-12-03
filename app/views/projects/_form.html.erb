@@ -10,8 +10,9 @@
     <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
     <% if @environments.present? %>
     <label>Environments:</label>
-    <div class="accordion">
+    <div>
       <%= f.fields_for :environments do |env| %>
+        <!-- TODO : remove styles and put them into a css class -->
       <div style="border: 1px solid; padding:5px;margin:0px 0px 5px 10px;width:550px;">
         <table>
           <tr>

@@ -1,0 +1,35 @@
+<div id="rds-configuration" class="modal hide fade in" style="display: none; ">
+  <div class="modal-header">  
+    <a class="close" data-dismiss="modal">×</a>  
+    <h3>RDS instance configuration</h3>
+  </div>  
+  <div class="modal-body">  
+    <div id="rds-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
+      <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
+      <%= f.input :instance_type_id, label: 'Instance Type', collection: InstanceType.get_select_collection('RDS'), input_html: {id: 'rds_instance_type_id'} %>
+      <p>Storage Size in GB</p>
+      <%= text_field_tag 'rds_size' %>
+      <p>Master User Name</p>
+      <%= text_field_tag 'rds_master_user_name' %>
+      <p>Master Password</p>
+      <%= password_field_tag 'rds_master_password' %>
+      <table>
+           <tr>
+             <td><%= check_box_tag 'rds_multiAZ', value = "", checked = false%></td>
+             <td></td>
+             <td></td>
+             <td>Multi AZ</td>
+           </tr>
+      </table>
+      <%= hidden_field_tag :rds_parents_list, ResourceType.find_by_name("RDS").parents_list, :id => 'rds_parents_list'%>
+      <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
+      <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="rds_delete" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
+  </div>
+  <% end %>
+</div>  

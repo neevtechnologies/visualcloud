@@ -1,0 +1,18 @@
+<div id="graph-save-modal" class="modal hide fade in" style="display: none; ">  
+  <div class="modal-header">  
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Save Environment</h3>
+  </div>  
+  <div class="modal-body">  
+    <div id="graph-save-error-messages"></div>
+    <%= simple_form_for Environment.new, url: project_environments_path(project)  , remote: true, html: { id: 'graph-save-frm'} do |f|%>
+      <%= f.input :name, input_html: { id: 'graph-name', title: 'Name of your environment. Example: production, staging etc.', rel: 'tooltip','data-placement' => "right"}  %>
+      <%= f.input :key_pair_name, include_blank: false, collection: get_key_pairs_select(key_pairs), input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
+      <%= f.input :security_group, include_blank: false, collection: get_security_groups_select(security_groups), input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
+  </div>  
+  <div class="modal-footer">  
+    <%= f.button :submit, 'Save Environment', class: "btn btn-success graph-save-submit" %>
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+  </div>  
+    <% end %>
+</div>  
