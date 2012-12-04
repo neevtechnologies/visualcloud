@@ -1,5 +1,6 @@
 class EnvironmentsController < ApplicationController
   include ServerMetaData
+  include AwsCompatibleName 
   before_filter :authenticate
   # GET /environments
   # GET /environments.json

@@ -1,6 +1,7 @@
 class Instance < ActiveRecord::Base
+  include AwsCompatibleName
   include InstanceRole
-  attr_accessible :aws_instance_id, :label, :size, :url, :xpos, :ypos, :ami_id,
+  attr_accessible :aws_instance_id, :label, :aws_label, :size, :url, :xpos, :ypos, :ami_id,
                   :instance_type_id, :config_attributes, :public_dns, :private_ip, :aws_instance_id
 
   belongs_to :environment
@@ -28,6 +29,7 @@ class Instance < ActiveRecord::Base
   validates :xpos , numericality: true
   validates :ypos , numericality: true
   
+  before_save :set_aws_compatible_name
   after_destroy :modify_node_data
   
   def apply_roles(roles = nil)
@@ -50,4 +52,7 @@ class Instance < ActiveRecord::Base
     logger.info "INFO: Finished deleting data bag entry for node #{self.id}"
   end
 
+  def set_aws_compatible_name
+     self.aws_label = aws_compatible_name(self.label)
+  end
 end

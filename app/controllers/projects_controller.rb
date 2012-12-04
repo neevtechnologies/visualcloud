@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   include ServerMetaData
+  include AwsCompatibleName 
   before_filter :authenticate
   # GET /projects
   # GET /projects.json
@@ -64,7 +65,6 @@ class ProjectsController < ApplicationController
   # PUT /projects/1.json
   def update
     @project = Project.find(params[:id])
-
     respond_to do |format|
       if @project.update_attributes(params[:project])
         update_project_data_bag(@project)
