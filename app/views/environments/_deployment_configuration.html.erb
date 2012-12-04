@@ -1,11 +1,11 @@
 <div id="deployment-config-modal" class="modal hide fade in" style="display: none; ">
+  <%= simple_form_for Environment.new, url: '' , remote: true , html: { id: 'deployment-config-frm'} do |f|%>
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3>Deployment Configuration</h3>
   </div>
   <div class="modal-body">
     <div id="deployment-config-error-messages"></div>
-    <%= simple_form_for Environment.new, url: '' , remote: true , html: { id: 'deployment-config-frm'} do |f|%>
       <div class="row">
         <div class="span2">
           <div>
@@ -23,5 +23,5 @@
     <%= f.button :submit, 'Update Environment', class: "btn btn-success deployment-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
   </div>
-    <% end %>
+  <% end %>
 </div>
