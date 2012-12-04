@@ -30,7 +30,8 @@ $(document).ready(function(){
     var multiAZ = $('input#rds_multiAZ')[0].checked
     var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ};
     //var config_attributes = '{"size":\"'+size+'\",'+'"master_user_name":\"'+username+'\",'+'"master_password":\"'+password+'\"}';
-    if ( validateRDSConfig(label) ) {
+
+    if ( validateRDSConfig(label,size) ) {
       if (editElement == null) {
         var newInstance = addInstanceCloneToGraph();
         newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: 'RDS', InstanceType: InstanceTypeId, configAttributes: config_attributes});
@@ -46,10 +47,15 @@ $(document).ready(function(){
 
 });
 
-function validateRDSConfig(label){
+function validateRDSConfig(label,size){
     if(label == "")
     {
       addMessagesToDiv($('#rds-config-error-messages'), getErrorMessage('Label cannot be empty'));
+      return false;
+    }
+    else if(!(/[1-9]\d+|[5-9]/.test(size)) || !(!isNaN(parseFloat(size)) && isFinite(size) ))
+    {
+      addMessagesToDiv($('#rds-config-error-messages'), getErrorMessage('Size should be a number more than 5 (5 GB).'));
       return false;
     }
     else
