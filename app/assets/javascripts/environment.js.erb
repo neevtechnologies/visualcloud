@@ -58,23 +58,6 @@ $(document).ready(function(){
 
 });
 
-//$(function(){
- //$("#graph-provision").click(function(){
- // var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
-  //check_stack_status(environment_id);
- //});
-//});
-
-//function check_stack_status(environment_id)
-//{
-//    setInterval(function(){
-//      $.ajax({
-//        url: '/environment_status?id='+environment_id,
-//        type: 'GET'
-//      });
-//    }, <%#= VisualCloudConfig[:status_check_interval] * 1000 %>);
-//}
-
  $(function() {
  if($("[id^=instance-label-]").length != 0)
  {
