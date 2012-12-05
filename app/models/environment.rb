@@ -8,7 +8,6 @@ class Environment < ActiveRecord::Base
   has_many :deployments, :dependent => :destroy
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
-  validates :size, numericality: { only_integer: true, greater_than_or_equal_to: 5}
  
   before_save :set_aws_compatible_name
   after_destroy :modify_environment_data
