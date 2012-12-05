@@ -4,8 +4,9 @@ default: &defaults
   webserver_port: 80
   application_port: 80
   load_balancer_protocol: 'HTTP'
+  environment_allowed_chars: /[a-zA-Z0-9-\s]/
   status_check_interval: 5
-  
+
 development:
   <<: *defaults
   chef_server_url: 'localhost:4000'
