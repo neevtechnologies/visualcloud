@@ -7,6 +7,8 @@
       InstanceType: null,
       instanceId: null,
       resourceType: '',
+      ipAddress: '',
+      publicDNS: '',
       configAttributes:{},
       label: ''
     },
