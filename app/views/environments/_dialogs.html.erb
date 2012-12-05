@@ -4,7 +4,7 @@
 <%= render 'save_environment', key_pairs: @key_pairs, security_groups: @security_groups, project: project %>
 
 <!-- Deployment Configuration dialog  -->
-<%= render 'deployment_configuration', branch: @environment.branch %>
+<%= render 'deployment_configuration', branch: @environment.branch ,db_migrate: @environment.db_migrate %>
 
 <!-- EC2 resource  -->
 <%= render 'ec2_configuration' %>
