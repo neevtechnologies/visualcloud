@@ -35,7 +35,7 @@ function makeSourceAndTarget(element , parents_list){
     isTarget: true,
     maxConnections: -1,
     connectorOverlays:[[ "Arrow", { width:8, length:15}]],
-    beforeDrop:function(conn) { return check_for_parent_exist(conn,parents_list); }
+    beforeDrop:function(conn) { return allowParent(conn,parents_list); }
   };
   return jsPlumb.addEndpoint(element, sourceAndTargetEndPointAttributes);
 };
@@ -68,20 +68,18 @@ function getParentDomIds(element){
   return parentDomIds;
 };
 
-function check_for_parent_exist(conn, parents_list){
+function allowParent(conn, parents_list){
   var instanceOptions = $('#'+conn.sourceId).instance("option");
   var result = false;
   if(parents_list != null){
     var parents = parents_list.split(',');
-    for(var i=0; i<parents.length; i++) {
-       if (parents[i] == instanceOptions.resourceType){
-           result = true;
-           break;
-       }
-   }
- }
-return result;
-}
+    for(var i=0; i<parents.length; i++){
+      if (parents[i] == instanceOptions.resourceType)
+        return true;
+    }
+  }
+  return result;
+};
 
 $(document).ready(function(){
   // bind click listener; delete connections on click

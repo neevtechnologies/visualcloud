@@ -1,4 +1,12 @@
+require 'sidekiq/web'
+
 VisualCloud::Application.routes.draw do
+
+  # Sidekiq queue monitoring
+  constraint = lambda { |request| request.env["warden"].authenticate? and request.env['warden'].user.has_role?('admin') }
+  constraints constraint do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   authenticated :user do
     root :to => 'projects#index'
