@@ -83,3 +83,5 @@ zeus.json
 *.sw*
 Vagrantfile
 .vagrant
+cookbook*
+delete*
