@@ -47,4 +47,5 @@ class ApplicationController < ActionController::Base
   end
 
   RESOURCE_TYPES = ResourceType.all
+  AWS_REGIONS = Region.region_list
 end

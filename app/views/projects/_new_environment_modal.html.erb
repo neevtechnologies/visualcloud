@@ -1,0 +1,17 @@
+<div id="graph-new-modal" class="modal hide fade in" style="display: none;">
+  <%= simple_form_for Environment.new, url: new_project_environment_path(@project) , html: { id: 'graph-new-frm'},:method => 'get' do |f|%>
+   <div class="modal-header">
+     <a class="close" data-dismiss="modal">×</a>
+     <h3>New Environment</h3>
+   </div>
+  
+  <div class="modal-body"> 
+    <%= render 'environments/form', f: f %>
+  </div>
+
+  <div class="modal-footer">
+    <%= f.button :submit, 'Continue', class: "btn btn-success graph-new-submit" %>
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+  </div>
+  <% end %>
+</div>
