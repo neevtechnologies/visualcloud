@@ -8,6 +8,7 @@
     <%= simple_form_for Instance.new, url: '', html: { id: "#{resource_type}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type}_label", class: 'instance_label'} %>      
     <div id="<%=resource_type%>_instance_type_id" class="hide"></div>
+    <label>Instance Type</label>      
       <div id="<%=resource_type%>-slider">
         <%= render 'slider' %>
       </div>      
