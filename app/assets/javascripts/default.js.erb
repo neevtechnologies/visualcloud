@@ -12,11 +12,23 @@ function addInstanceCloneToGraph(instanceId){
 
 function showConfigurationForm(dialogId, droppedPosition){
   var dialog = $('#'+dialogId);
+  var resource_type = dialogId.split('-')[0];
+  callToAddSlider(resource_type);
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('xpos', droppedPosition.left);
   dialog.data('ypos', droppedPosition.top);
+  dialog.find('#' + resource_type + '_delete').hide();
+  dialog.find('#' + resource_type + '_ip_address').hide();
+  dialog.find('#' + resource_type + '_public_dns').hide();
   dialog.modal('show');
 };
+
+function callToAddSlider(resource_type, selectedIndex){
+  if (resource_type == "rds")
+    addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex);
+  else if(resource_type != "elb")
+    addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex);
+}
 
 function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
@@ -27,11 +39,12 @@ function showInstanceEditForm(editElement){
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label); 
   dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
-  dialog.find('#' + resource_type + '_instance_type_id').val(instanceOptions.InstanceType);
+  callToAddSlider(resource_type , instanceOptions.InstanceType);
+  $('#' + resource_type + '_instance_type_id').html(instanceOptions.InstanceType);
   if(instanceOptions.ipAddress != "")
-    dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>");
+    dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>").show();
   if(instanceOptions.publicDNS != "")
-    dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>");
+    dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>").show();
   //TODO : Check why the following if condition is used , if it isn't needed remove it
   if(!noProperty(instanceOptions.configAttributes))
   {
@@ -103,6 +116,4 @@ $(document).ready(function(){
 $(document).ready(function(){
    $("#container").notify({expires: false,speed: 1000});
    $("[rel=tooltip]").tooltip();
-
 });
-

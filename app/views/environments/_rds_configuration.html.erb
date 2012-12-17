@@ -7,7 +7,13 @@
     <div id="rds-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
       <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
-      <%= f.input :instance_type_id, label: 'Instance Type', collection: InstanceType.get_select_collection('RDS'), input_html: {id: 'rds_instance_type_id'} %>
+      <div id="rds_instance_type_id" class="hide"></div>
+      <div id="rds-slider">
+        <%= render 'slider' %>
+      </div>
+      <br />
+      <br />
+      <br />
       <p>Storage Size in GB</p>
       <%= text_field_tag 'rds_size' %>
       <p>Master User Name</p>
@@ -32,4 +38,4 @@
     <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="rds_delete" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
   </div>
   <% end %>
-</div>  
+</div>

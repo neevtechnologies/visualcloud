@@ -13,4 +13,6 @@ $(document).ready(function(){
   $('select#graph-security-group-name').val('<%= params[:environment][:security_group] %>');
   $('input#graph-region-id').val('<%= params[:environment]['region_id'] %>');
 });
+  var ec2InstanceTypes = JSON.parse('<%= raw @ec2_instance_types.to_json %>');
+  var rdsInstanceTypes = JSON.parse('<%= raw @rds_instance_types.to_json %>');
 </script>

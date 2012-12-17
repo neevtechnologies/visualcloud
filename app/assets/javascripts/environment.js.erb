@@ -109,6 +109,7 @@ $(document).ready(function(){
      save_environment();  
    });
 
+
   //On click event for "Save environment" in Save Environment modal
   $('#graph-save-submit').click(function(){
     var graphName = $('input#graph-name').val().trim();
@@ -157,10 +158,8 @@ $(document).ready(function(){
   //On click of save environment, it should save respective environment
   $(".save_env").live('click', function() {
     var id = $(this).attr('id').split('_')[2];
-    var branch = $('#branch_'+id).val();    
-    var db_migrate = '0';
-    if($('#db_migrate_'+id).is(':checked'))
-       db_migrate = '1';    
+    var branch = $('#branch_'+id).val();
+    var db_migrate = $('#db_migrate_'+id)[0].checked
     showLoading();
       $.ajax({
         url: '/update_environment?id='+id,
@@ -189,3 +188,108 @@ $(document).ready(function(){
  }
 
 });
+
+
+//Displaying the slider for the select options, displaying the selected value
+function addSlider(sliderDiv, instanceTypes, selectedIndex){
+  if (typeof(selectedIndex) == 'undefined')
+    selectedIndex = 0 ;
+    else if(sliderDiv.split('-')[0] != "rds")
+    selectedIndex -= 1; // as slider position starts with 0 and ends with length - 1
+    else
+    //re-setting index if the id value is not starting from '1'
+     for(var i = 0;i < instanceTypes.length; i++)
+       if(instanceTypes[i].id == selectedIndex ) {
+         selectedIndex = i;
+         break;
+       }
+  //setting the instance type id in the dialog box
+  var instance_type_id =   instanceTypes[selectedIndex].id;
+  $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instance_type_id);
+
+  placeLabelsOnSlider($('#' +sliderDiv + ' .slider'), instanceTypes);
+  // displaying the white background for the slider movement
+  $('.ui-slider-range').css('width',(selectedIndex) * 100/(instanceTypes.length - 1) + '%');
+  var slider = $('#' + sliderDiv + ' .slider').slider({
+    animate: "fast",
+    max: instanceTypes.length - 1,
+    value: selectedIndex,
+    slide: function(event, ui) {
+      // displaying the white background for the slider movement
+      $('.ui-slider-range').css('width',(ui.value) * 100/(instanceTypes.length - 1) + '%');
+      //setting the instance type id in the dialog box
+      $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instanceTypes[ui.value].id);
+    }
+  });
+
+  //Populating the tooltip for the first time
+  var selectedInstanceType = {};
+  for(var i = 0;i < instanceTypes.length; i++)
+    if(instanceTypes[i].id == selectedIndex ) {
+       selectedInstanceType = instanceTypes[i] ;
+       break;
+    }
+  var newHandlePosition = $('.ui-slider-handle').css('left');
+  setTooltipForSilder(selectedInstanceType, newHandlePosition);
+}
+
+function placeLabelsOnSlider(jSliderDiv, instanceTypes){
+  for(var i = 0; i < instanceTypes.length; i++){
+    var label = instanceTypes[i].label ;
+    var labelIndex = i ;
+    var labelHtml = $('<h6>').appendTo(jSliderDiv);
+    labelHtml.html(label);
+    labelHtml.css('left', labelIndex * 100/(instanceTypes.length - 1) + '%');
+    labelHtml.addClass('slider-label');
+    labelHtml.attr('title', instanceTypes[i].description);
+    labelHtml.attr('rel', 'tooltip');
+    labelHtml.data('placement', 'right');
+    jSliderDiv.append(labelHtml);
+  }
+}
+
+function setTooltipForSilder(instanceType, newSliderPosition){
+  var tooltipText = getInstanceDescription(instanceType);
+  $('.slider_tooltip').css('left', newSliderPosition);
+  $('.slider_tooltip').html(tooltipText);
+}
+
+function getInstanceDescription(instanceType){
+
+  var instanceName = instanceType.name ;
+  var instanceDescription = instanceType.description ;
+  var tooltipText = instanceName + '</br>' + instanceDescription ;
+  return tooltipText ;
+}
+
+function delete_instance(resource_type) {
+  var instance_id = $('#'+resource_type+'-configuration').data('editElement');
+  jsPlumb.removeAllEndpoints(instance_id);
+  $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
+}
+
+
+function requestProvision(){
+  var graphId = $('#graph_id').text();
+  var repo_url = $('#repo_url').text();
+  var environmentAttributes = {};
+  if(repo_url == "")
+    environmentAttributes = {branch: "master",db_migrate: true};
+  else
+  {
+    var branch = $('#graph-branch').val().trim();
+    var dbMigrate = $('#db_migrate')[0].checked;
+    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
+  }
+  showLoading();
+  $.ajax({
+    url: '/provision_environment?id='+graphId,
+    type: 'POST',
+    dataType: "script",
+    contentType: 'application/json',
+    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
+    complete: function(){
+      hideLoading();
+    }
+  });
+}

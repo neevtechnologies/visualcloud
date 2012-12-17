@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#mysql_label').val().trim();
     var amiId = parseInt($('#mysql_ami_id').val());
     var parents_list = $('#mysql_parents_list').val().trim();
-    var InstanceTypeId = parseInt($('select#mysql_instance_type_id').val());
+    var InstanceTypeId = parseInt($('#mysql_instance_type_id').html());
     var config_attributes = {roles:['db','mysql'],parents_list:parents_list};
     if ( validateMysqlConfig(label) ){
       if (editElement == null) {

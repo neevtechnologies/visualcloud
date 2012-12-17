@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#nginx_label').val().trim();
     var amiId = parseInt($('#nginx_ami_id').val());
     var parents_list = $('#nginx_parents_list').val().trim();
-    var InstanceTypeId = parseInt($('select#nginx_instance_type_id').val());
+    var InstanceTypeId = parseInt($('#nginx_instance_type_id').html());
     var config_attributes = {roles:['nginx'],parents_list:parents_list};
     if ( validateNginxConfig(label) ){
       if (editElement == null) {

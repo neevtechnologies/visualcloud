@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#java_label').val().trim();
     var parents_list = $('#java_parents_list').val();
     var amiId = parseInt($('#java_ami_id').val());
-    var InstanceTypeId = parseInt($('select#java_instance_type_id').val());
+    var InstanceTypeId = parseInt($('#java_instance_type_id').html());
     var config_attributes = {roles:['app','java'], parents_list:parents_list};
     if ( validateJAVAConfig(label) ){
       if (editElement == null) {

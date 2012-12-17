@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#rails_label').val().trim();
     var parents_list = $('#rails_parents_list').val();
     var amiId = parseInt($('#rails_ami_id').val());
-    var InstanceTypeId = parseInt($('select#rails_instance_type_id').val());
+    var InstanceTypeId = parseInt($('#rails_instance_type_id').html());
     var config_attributes = {roles:['app','rails'], parents_list:parents_list};
     if ( validateRAILSConfig(label) ){
       if (editElement == null) {

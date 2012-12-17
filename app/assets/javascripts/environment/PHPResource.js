@@ -23,7 +23,7 @@ $(document).ready(function(){
     var label = $('input#php_label').val().trim();
     var parents_list = $('#php_parents_list').val();
     var amiId = parseInt($('#php_ami_id').val());
-    var InstanceTypeId = parseInt($('select#php_instance_type_id').val());
+    var InstanceTypeId = parseInt($('#php_instance_type_id').html());
     var config_attributes = {roles:['app','php'], parents_list:parents_list};
     if ( validatePHPConfig(label) ){
       if (editElement == null) {

@@ -27,6 +27,9 @@
   <% end %>
   //Loads saved connections
   jsPlumb.ready(function(){
+    makeNodes(instances);
     makeConnections(instances);
   });
+  var ec2InstanceTypes = JSON.parse('<%= raw @ec2_instance_types.to_json %>');
+  var rdsInstanceTypes = JSON.parse('<%= raw @rds_instance_types.to_json %>');
 </script>
