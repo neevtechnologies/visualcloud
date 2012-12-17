@@ -68,6 +68,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
+        @environments = @project.environments
         format.html { render action: "edit" }
         format.js { render js: @project.errors, status: :unprocessable_entity }
       end

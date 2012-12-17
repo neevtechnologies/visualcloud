@@ -471,10 +471,14 @@ body {
 
 .tooltip-inner {
     max-width:none;
-    width:160px;
+    width:150px;
     font-size:12px;
 }
 
 .thumbnail {
   border: 1px solid dimgray;
+}
+
+.modal-body {
+  max-height: 414px;
 }
