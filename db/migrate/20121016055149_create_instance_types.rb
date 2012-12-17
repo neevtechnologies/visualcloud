@@ -4,6 +4,8 @@ class CreateInstanceTypes < ActiveRecord::Migration
       t.string :name      
       t.string :size
       t.references :resource_type
+      t.string :label
+      t.string :description
       t.timestamps
     end
   end
