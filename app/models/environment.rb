@@ -1,10 +1,11 @@
 class Environment < ActiveRecord::Base
   include ServerMetaData
   include AwsCompatibleName
-  attr_accessible :name, :aws_name, :branch, :db_migrate, :deploy_order, :project_id, :key_pair_name, :security_group
+  attr_accessible :name, :aws_name, :branch, :db_migrate, :deploy_order, :project_id, :key_pair_name, :security_group, :region_id
 
   has_many :instances, :dependent => :destroy
   belongs_to :project
+  belongs_to :region
   has_many :deployments, :dependent => :destroy
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true

@@ -11,6 +11,16 @@ user = User.create! :name => 'First User', :email => 'user@example.com', :passwo
 user2 = User.create! :name => 'Second User', :email => 'user2@example.com', :password => 'please', :password_confirmation => 'please'
 user.add_role :admin
 
+#Regions
+Region.create latitude: 38.597626, longitude: -80.454903, display_name: 'US East - N.Virginia', name: 'us-east-1'
+Region.create latitude: 43.804133, longitude: -120.554201, display_name: 'US West - Oregon', name: 'us-west-2'
+Region.create latitude: 36.778261, longitude: -119.417932, display_name: 'US West - N.California', name: 'us-west-1'
+Region.create latitude: 53.41291, longitude: -8.24389, display_name: 'EU - Ireland', name: 'eu-west-1'
+Region.create latitude: 1.352083, longitude: 103.819836, display_name: 'Asia Pacific - Singapore', name: 'ap-southeast-1'
+Region.create latitude: 35.689488, longitude: 139.691706, display_name: 'Asia Pacific - Tokyo', name: 'ap-northeast-1'
+Region.create latitude: -33.867487, longitude: 151.20699, display_name: 'Asia Pacific - Sydney', name: 'ap-southeast-2'
+Region.create latitude: 20.401439, longitude: -99.960694, display_name: 'South America - Sao Paulo', name: 'sa-east-1'
+
 #ResourceTypes
 ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small_icon: "components/elb.png", large_icon: "components/elb.png", description: 'Elastic Load Balancer')
 ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "ELB,Nginx" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')

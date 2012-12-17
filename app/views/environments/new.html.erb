@@ -11,5 +11,6 @@ $(document).ready(function(){
   $('input#graph-name').val('<%= params[:environment]['name'] %>');
   $('select#graph-key-pair-name').val('<%= params[:environment][:key_pair_name] %>');
   $('select#graph-security-group-name').val('<%= params[:environment][:security_group] %>');
+  $('input#graph-region-id').val('<%= params[:environment]['region_id'] %>');
 });
 </script>

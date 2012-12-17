@@ -1,11 +1,129 @@
-$(document).ready(function(){
-  //On click event for "Save environment" in Save Environment modal
-  $('#graph-save').click(function(){
+function save_environment(){
     var graphName = $('input#graph-name').val().trim();
     var keyPairName = $('select#graph-key-pair-name').val();
     var securityGroupName = $('select#graph-security-group-name').val();
-    var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName };
+    var regionId = $('input#graph-region-id').val();
+    var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName, region_id: regionId };
     $('.graph-area').graphArea("save", attributes);
+}
+
+function validate_environment(){
+    var graphName = $('input#graph-name').val().trim();
+    var keyPairName = $('select#graph-key-pair-name').val();
+    var securityGroupName = $('select#graph-security-group-name').val();
+    var regionId = $('input#graph-region-id').val();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
+    else if(regionId == "" || regionId == 'undefined')
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment should have a region'));
+    else
+      $('#graph-new-frm').submit();
+    //Do not submit form
+    return false;
+}
+
+function delete_instance(resource_type) {
+  var instance_id = $('#'+resource_type+'-configuration').data('editElement');
+  jsPlumb.removeAllEndpoints(instance_id);
+  $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
+}
+
+function requestProvision(){
+  var graphId = $('#graph_id').text();
+  var repo_url = $('#repo_url').text();
+  var environmentAttributes = {};
+  if(repo_url == "")
+    environmentAttributes = {branch: "master",db_migrate: true};
+  else
+  {
+    var branch = $('#graph-branch').val().trim();
+    var dbMigrate = $('#db_migrate')[0].checked;
+    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
+  }
+  showLoading();
+  $.ajax({
+    url: '/provision_environment?id='+graphId,
+    type: 'POST',
+    dataType: "script",
+    contentType: 'application/json',
+    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
+    complete: function(){
+      hideLoading();
+    }
+  });
+}
+
+$(function() {
+ if($("[id^=instance-label-]").length != 0)
+ {
+    $("[id^=instance-label-]").each(function(){
+    var instance_label = $(this).text();
+    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
+    var label_id = $(this).attr('id');
+    setInterval(function(){
+      $.ajax({
+        type: 'GET',
+        url: '/instance_status',
+        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
+      });
+    }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
+  });
+ }
+
+ if($('.stack-status').length != 0)
+ {
+    $('.stack-status').each(function(){
+    var environment_id = $(this).attr("data-graph-id");
+    var internal_status = setInterval(function(){
+      $.ajax({
+        url: '/environment_status?id='+environment_id,
+        type: 'GET'
+      });
+    }, <%= VisualCloudConfig[:status_check_interval] * 1500 %>);
+
+    var original_status = setInterval(function(){
+      $.ajax({
+        url: '/stack_status?id='+environment_id,
+        type: 'GET'
+      });
+    }, <%= VisualCloudConfig[:status_check_interval] * 100000 %>);
+
+  });
+ }
+
+});
+
+
+$(document).ready(function(){
+
+   $('#new_environment').click(function(){
+     $('#graph-new-modal').modal('show');
+     //resize_regionmap();
+   });
+
+   $('.graph-new-submit').click(function(){
+     return validate_environment();
+   });
+
+   $("#graph-save").click(function(){
+     save_environment();  
+   });
+
+  //On click event for "Save environment" in Save Environment modal
+  $('#graph-save-submit').click(function(){
+    var graphName = $('input#graph-name').val().trim();
+    var keyPairName = $('select#graph-key-pair-name').val();
+    var securityGroupName = $('select#graph-security-group-name').val();
+    var regionId = $('input#graph-region-id').val();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
+    else if(regionId == "" || regionId == 'undefined')
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment should have a region'));
+    else {
+      var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName, region_id: regionId };
+      $('.graph-area').graphArea("save", attributes);
+    }
+    return false;
   });
 
   //On click event for "create similar stack" it replicate Environment modal
@@ -56,56 +174,12 @@ $(document).ready(function(){
       });
   });
 
-});
-
- $(function() {
  if($("[id^=instance-label-]").length != 0)
  {
     $("[id^=instance-label-]").each(function(){
     var instance_label = $(this).text();
     var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
     var label_id = $(this).attr('id');
-    setInterval(function(){
-      $.ajax({
-        type: 'GET',
-        url: '/instance_status',
-        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
-      });
-    }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
-  });
- }
-});
-
-$(function() {
- if($('.stack-status').length != 0)
- {
-    $('.stack-status').each(function(){
-    var environment_id = $(this).attr("data-graph-id");
-    var internal_status = setInterval(function(){
-      $.ajax({
-        url: '/environment_status?id='+environment_id,
-        type: 'GET'
-      });
-    }, <%= VisualCloudConfig[:status_check_interval] * 1500 %>);
-
-    var original_status = setInterval(function(){
-      $.ajax({
-        url: '/stack_status?id='+environment_id,
-        type: 'GET'
-      });
-    }, <%= VisualCloudConfig[:status_check_interval] * 100000 %>);
-
-  });
- }
-});
-
-$(document).ready(function(){
-  if($("[id^=instance-label-]").length != 0)
- {
-    $("[id^=instance-label-]").each(function(){
-    var instance_label = $(this).text();
-    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
-    var label_id = $(this).attr('id');
       $.ajax({
         type: 'GET',
         url: '/instance_status',
@@ -113,36 +187,5 @@ $(document).ready(function(){
       });
   });
  }
+
 });
-
-function delete_instance(resource_type) {
-  var instance_id = $('#'+resource_type+'-configuration').data('editElement');
-  jsPlumb.removeAllEndpoints(instance_id);
-  $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
-}
-
-
-function requestProvision(){
-  var graphId = $('#graph_id').text();
-  var repo_url = $('#repo_url').text();
-  var environmentAttributes = {};
-  if(repo_url == "")
-    environmentAttributes = {branch: "master",db_migrate: true};
-  else
-  {
-    var branch = $('#graph-branch').val().trim();
-    var dbMigrate = $('#db_migrate')[0].checked;
-    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
-  }
-  showLoading();
-  $.ajax({
-    url: '/provision_environment?id='+graphId,
-    type: 'POST',
-    dataType: "script",
-    contentType: 'application/json',
-    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
-    complete: function(){
-      hideLoading();
-    }
-  });
-}

@@ -104,19 +104,5 @@ $(document).ready(function(){
    $("#container").notify({expires: false,speed: 1000});
    $("[rel=tooltip]").tooltip();
 
-   $('#new_environment').click(function(){
-     $('#graph-new-modal').modal('show');
-   });
-
-   $('.graph-new-submit').click(function(){
-    var graphName = $('input#graph-name').val().trim();
-    var keyPairName = $('select#graph-key-pair-name').val();
-    var securityGroupName = $('select#graph-security-group-name').val();
-    if(graphName == "")
-      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
-    else
-      $('#graph-new-frm').submit();
-    //Do not submit form
-    return false;
-  });
 });
+
