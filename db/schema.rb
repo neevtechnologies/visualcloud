@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121123102754) do
+ActiveRecord::Schema.define(:version => 20121206142709) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(:version => 20121123102754) do
     t.string   "key_pair_name"
     t.string   "security_group"
     t.string   "provision_status"
+    t.string   "aws_name"
+    t.integer  "region_id"
   end
 
   create_table "instance_relationships", :force => true do |t|
@@ -81,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20121123102754) do
     t.datetime "updated_at",        :null => false
     t.string   "public_dns"
     t.string   "private_ip"
+    t.string   "aws_label"
   end
 
   create_table "projects", :force => true do |t|
@@ -93,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20121123102754) do
     t.integer  "user_id"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
+    t.string   "aws_name"
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -101,6 +105,13 @@ ActiveRecord::Schema.define(:version => 20121123102754) do
   end
 
   add_index "projects_users", ["project_id", "user_id"], :name => "index_projects_users_on_project_id_and_user_id"
+
+  create_table "regions", :force => true do |t|
+    t.string "name"
+    t.string "display_name"
+    t.float  "latitude"
+    t.float  "longitude"
+  end
 
   create_table "resource_types", :force => true do |t|
     t.string   "name"
