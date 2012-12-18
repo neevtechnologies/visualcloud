@@ -64,8 +64,8 @@ class Environment < ActiveRecord::Base
 
   def add_ec2_resources(stack_resources)
     instance_names = []
-    key_pair = self.key_pair_name.blank? ? 'ec2-access' : self.key_pair_name
-    security_groups = (self.security_group.to_s.strip.split(/\s*,\s*/).blank? ? nil : self.security_group.to_s.strip.split(/\s*,\s*/))
+    key_pair = self.key_pair_name.blank? ? 'default' : self.key_pair_name
+    security_groups = (self.security_group.to_s.strip.split(/\s*,\s*/).blank? ? ['default'] : self.security_group.to_s.strip.split(/\s*,\s*/))
     instances.each do |instance|
       if instance.resource_type.resource_class == 'EC2'
         ec2 = Cloudster::Ec2.new(name: instance.aws_label,

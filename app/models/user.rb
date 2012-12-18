@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :aws_access_key, :aws_secret_key
   has_and_belongs_to_many :projects
 
-  def get_key_pair_and_security_groups
-    cloud = Cloudster::Cloud.new(access_key_id: aws_access_key, secret_access_key: aws_secret_key)
+  def get_key_pair_and_security_groups(region = nil)
+    cloud = Cloudster::Cloud.new(access_key_id: aws_access_key, secret_access_key: aws_secret_key, region: region)
     key_pairs = cloud.get_key_pairs
     security_groups = cloud.get_security_groups
     return key_pairs, security_groups
