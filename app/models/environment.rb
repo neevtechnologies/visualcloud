@@ -12,7 +12,7 @@ class Environment < ActiveRecord::Base
 
   before_save :set_aws_compatible_name
   after_destroy :modify_environment_data
-  
+
   #This function just prepares a select dropdown containing the number of environments
   #in this project. TODO : Shouldn't this move to Project model ?
   def self.get_select_collection(id)    
@@ -26,7 +26,7 @@ class Environment < ActiveRecord::Base
     add_elb_resource(stack_resources, instance_names)
     add_rds_resources(stack_resources)
 
-    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key, region: region_name)
 
     if self.provisioned
       provision_request = cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
@@ -264,7 +264,7 @@ class Environment < ActiveRecord::Base
     update_rds_details(cloud)
     return true
   end
- 
+
   private
 
   def modify_environment_data
@@ -276,4 +276,9 @@ class Environment < ActiveRecord::Base
   def set_aws_compatible_name
     self.aws_name = aws_compatible_name(self.name)
   end
+
+  def region_name
+    region.name
+  end
+
 end
