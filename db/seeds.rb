@@ -19,7 +19,7 @@ Region.create latitude: 53.41291, longitude: -8.24389, display_name: 'EU - Irela
 Region.create latitude: 1.352083, longitude: 103.819836, display_name: 'Asia Pacific - Singapore', name: 'ap-southeast-1'
 Region.create latitude: 35.689488, longitude: 139.691706, display_name: 'Asia Pacific - Tokyo', name: 'ap-northeast-1'
 Region.create latitude: -33.867487, longitude: 151.20699, display_name: 'Asia Pacific - Sydney', name: 'ap-southeast-2'
-Region.create latitude: 20.401439, longitude: -99.960694, display_name: 'South America - Sao Paulo', name: 'sa-east-1'
+Region.create latitude: -23.548943, longitude: -46.638818, display_name: 'South America - Sao Paulo', name: 'sa-east-1'
 
 #ResourceTypes
 ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small_icon: "components/elb.png", large_icon: "components/elb.png", description: 'Elastic Load Balancer')

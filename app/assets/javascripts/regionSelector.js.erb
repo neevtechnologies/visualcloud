@@ -1,4 +1,4 @@
- $(function(){
+ $(document).ready(function(){
  var markers = JSON.parse('<%= ApplicationController::AWS_REGIONS %>');
  $('.regionmap').vectorMap({
    map: 'world_mill_en',
@@ -27,43 +27,37 @@
    onMarkerClick: function(event, index){
      $('.regionmap').vectorMap('get', 'mapObject').clearSelectedMarkers();
      $('#current_region').html(''+ markers[index].display_name + ' ( ' + markers[index].name + ' ) ');     
-     $('#graph-region-id').val(markers[index].id);     
+     $('#graph-region-id').val(markers[index].id);
+     console.log($('.regionmap').vectorMap('get', 'mapObject').getSelectedMarkers());
+     event.preventDefault();     
+   },
+   onRegionLabelShow: function(event, label, code){
+     event.preventDefault();     
+   },
+   onMarkerOver: function(event, index){
+     $(this).css('cursor','pointer');
+     event.preventDefault();     
    }
  });
 });
 
-//$(document).ready(function(){
-function resize_regionmap(){
- $('svg').attr('width','500');
- $('svg').attr('height','400');
- var marker_location_cx = { 
-                            24.388010342326567: 136.57285791702878,  
-                            13.23143169373445: 74.09601748491292,
-                            13.547495479325661: 75.86597468422372,
-                            44.47893039687323: 249.0820102224901,
-                            75.65792450028641: 423.6843772016039,
-                            85.63841756078644: 497.5162097753194,
-                            88.84218031702132: 497.5162097753194,
-                            18.961005950614325: 106.18163332344024
-                          };
-
- var marker_location_cy = { 
-                            45.87115987713376: 236.87849531194905, 
-                            44.14399570884148: 227.2063759695123,
-                            46.45655575256826: 240.15671221438225,
-                            40.70350166374304: 207.939609316961,
-                            56.794859658688054: 298.05121408865307,
-                            46.80287601910838: 242.09610570700693,
-                            66.96603962374584: 355.0098218929767,
-                            51.416522545661: 267.9325262557016
-                          };
- $('svg').children('g').first().attr("transform","scale(0.6222222222222222) translate(0, 197.5039874850763)");
- var children = $('svg').children()[1].childNodes;
- for(i=0 ; i < children.length ; i++){
-  var child = children[i];
-  console.log("New location of cx for "+child.getAttribute('cx')+" is "+ marker_location_cx[child.getAttribute('cx')] +"");
-  console.log("New location of cy for "+child.getAttribute('cy')+" is "+ marker_location_cy[child.getAttribute('cy')] +"");
-  child.setAttribute('cx',marker_location_cx[child.getAttribute('cx')]);
-  child.setAttribute('cy',marker_location_cy[child.getAttribute('cy')]);
- }
-}
+$(document).ready(function(){
+//function resize_regionmap(){
+ if($('.regionmap').length > 0){
+  var svg_element = $('.regionmap').find('svg');
+  svg_element.attr('width','300');
+  svg_element.attr('height','200');
+  $('.jvectormap-zoomin').hide();
+  $('.jvectormap-zoomout').hide();
+  var map_obj = $('.regionmap').vectorMap('get', 'mapObject');
+  var cxs = [73.1640310269797, 39.69429508120335, 40.642486437976984, 133.4367911906197, 226.97377350085924, 256.9152526823593, 266.5265409510639, 97.88301785184298];
+  var cys = [87.6134796314013, 82.43198712652445, 89.36966725770478, 72.11050499122912, 120.38457897606415, 90.40862805732516, 150.89811887123753, 140.24956763698302];
+  svg_element.children('g').first().attr("transform","scale(0.3333333333333333) translate(0, 79.64684462793349)");
+  var children = svg_element.children('g')[1].childNodes;
+  for(i=0 ; i < children.length ; i++){
+   var child = children[i];
+   child.setAttribute('cx',cxs[i]);
+   child.setAttribute('cy',cys[i]);
+  }
+ } 
+});

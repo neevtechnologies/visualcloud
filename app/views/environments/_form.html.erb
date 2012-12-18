@@ -4,4 +4,5 @@
       <%= f.input :security_group, include_blank: false, collection: get_security_groups_select(@security_groups), input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
       <%= f.hidden_field :region_id, id: 'graph-region-id' %>
       Region: <span id='current_region'></span>
-     <div class="regionmap" style="height: 200px; width: 300px;"></div>
+     <div class="regionmap"></div>
+     <!-- div class="regionmap" style="height: 200px; width: 300px;"></div -->
