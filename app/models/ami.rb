@@ -6,4 +6,10 @@ class Ami < ActiveRecord::Base
     all.collect{|ami| [ami.description, ami.id]}
   end
 
+  #Give it a region and get the image id for that region
+  def image(region)
+    images = YAML.load(image_id)
+    return images[region]
+  end
+
 end

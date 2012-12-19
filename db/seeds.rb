@@ -35,7 +35,17 @@ ResourceType.create(resource_class: 'EC2', name: 'Java', parents_list: "ELB,Ngin
 ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx" , small_icon: "components/php.png", large_icon: "components/php.png", description: 'PHP application server', roles: ['app', 'php'].to_json)
 
 #Ami'S
-Ami.create(image_id:'ami-0a79db63', architecture:'x86_64', name:'EA-AppServer', description:'Ubuntu 12.04 + Ruby 1.9.3 p194')
+ubuntu_amis = {
+  'us-east-1' => 'ami-d726abbe',
+  'us-west-2' => 'ami-ca2ca4fa',
+  'us-west-1' => 'ami-827252c7',
+  'eu-west-1' => 'ami-3a0f034e',
+  'ap-southeast-1' => 'ami-15226047',
+  'ap-northeast-1' => 'ami-70a91271',
+  'ap-southeast-2' => 'ami-7f7ee945',
+  'sa-east-1' => 'ami-6beb3376'
+}
+Ami.create(image_id: ubuntu_amis.to_yaml, architecture:'amd64', name:'Precise Pangolin', description:'Ubuntu 12.04 LTS instance-store')
 
 #Instance Types for ec2
 ec2_instance_types = []
