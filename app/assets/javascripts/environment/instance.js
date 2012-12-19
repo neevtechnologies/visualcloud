@@ -71,9 +71,9 @@
       return {xpos: xpos, ypos: ypos, label: options.label, ami_id: options.amiId, instance_type_id: options.InstanceType, resource_type: options.resourceType, config_attributes: options.configAttributes, parent_dom_ids: parent_dom_ids, dom_id: dom_id };
     },
     getConfigurationDialogId: function(){
-      return this.options.resourceType.toLowerCase() + '-configuration' ;
+      return this.options.resourceType + '-configuration' ;
     },
-    destroy: function() {        
+    destroy: function() {
       this.element.remove();
     }
 
