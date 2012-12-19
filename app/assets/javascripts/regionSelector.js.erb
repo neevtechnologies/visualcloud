@@ -1,4 +1,11 @@
- $(document).ready(function(){
+function get_key_pairs_and_security_groups( region ){
+  $.ajax({
+    url: '/get_key_pairs_and_security_groups',
+    data : { region: '' + region + ''}
+  });
+}
+
+$(document).ready(function(){
  var markers = JSON.parse('<%= ApplicationController::AWS_REGIONS %>');
  $('.regionmap').vectorMap({
    map: 'world_mill_en',
@@ -28,7 +35,7 @@
      $('.regionmap').vectorMap('get', 'mapObject').clearSelectedMarkers();
      $('#current_region').html(''+ markers[index].display_name + ' ( ' + markers[index].name + ' ) ');     
      $('#graph-region-id').val(markers[index].id);
-     console.log($('.regionmap').vectorMap('get', 'mapObject').getSelectedMarkers());
+     get_key_pairs_and_security_groups(markers[index].name);
      event.preventDefault();     
    },
    onRegionLabelShow: function(event, label, code){

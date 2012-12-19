@@ -12,6 +12,7 @@ VisualCloud::Application.routes.draw do
     root :to => 'projects#index'
     get 'environment_status' => 'environments#environment_status'
     get 'stack_status' => 'environments#stack_status'
+    get 'get_key_pairs_and_security_groups' => 'environments#get_key_pairs_and_security_groups'
     get 'instance_status' => 'instances#status'
     #Environment resource
     resources :projects do

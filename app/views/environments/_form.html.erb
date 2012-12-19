@@ -1,8 +1,7 @@
     <div id="graph-new-error-messages"></div>
       <%= f.input :name, input_html: { id: 'graph-name', title: 'Name of your environment. Example: production, staging etc.', rel: 'tooltip','data-placement' => "right"}  %>
-      <%= f.input :key_pair_name, include_blank: false, collection: get_key_pairs_select(@key_pairs), input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
-      <%= f.input :security_group, include_blank: false, collection: get_security_groups_select(@security_groups), input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
       <%= f.hidden_field :region_id, id: 'graph-region-id' %>
       Region: <span id='current_region'></span>
      <div class="regionmap"></div>
-     <!-- div class="regionmap" style="height: 200px; width: 300px;"></div -->
+      <%= f.input :key_pair_name, include_blank: false, collection: [], input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
+      <%= f.input :security_group, include_blank: false, collection: [], input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>

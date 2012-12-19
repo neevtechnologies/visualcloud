@@ -1,0 +1,9 @@
+$("#graph-key-pair-name").html('');
+$.each (JSON.parse('<%= @key_pairs.html_safe %>'), function(k,v){
+ $("#graph-key-pair-name").append('<option value="'+v+'">'+v+'</option>');
+});
+
+$("#graph-security-group-name").html('');
+$.each (JSON.parse('<%= @security_groups.html_safe %>'), function(s,g){
+ $("#graph-security-group-name").append('<option value="'+g+'">'+g+'</option>');
+});

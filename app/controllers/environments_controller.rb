@@ -210,6 +210,19 @@ class EnvironmentsController < ApplicationController
     end
   end
 
+ # Fetch Key Pair and security group based on region
+ def get_key_pairs_and_security_groups
+  unless params[:region].blank?
+   key_pairs, security_groups = current_user.get_key_pair_and_security_groups(params[:region])
+   @key_pairs = key_pairs.collect {|kp| kp["keyName"]}.to_json
+   @security_groups = security_groups.collect {|sg| sg["groupName"]}.to_json
+   respond_to do |format|
+     format.js
+   end
+  else
+    render nothing: true
+  end
+ end
 
   private
     
