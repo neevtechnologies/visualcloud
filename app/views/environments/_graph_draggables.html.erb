@@ -6,17 +6,16 @@
         <!-- This is the resouce element to which resourceElement widget is bound and added to the resource dock-->
         <!-- Currently not showing EC2-->
         <% if resource_type.name != 'EC2' %>
-        <li class="span-1">
-          <a href="#" class="thumbnail">
-            <div id="resource-type-<%= resource_type.id %>" data-element-type="resource" rel="tooltip" data-placement="left" title="<%=resource_type.description%>">
-            <%= image_tag("icons/#{resource_type.small_icon}", size: '50x50')%>
-            </div>
-          </a>
-        </li>
-        <%end%>
-
+         <li class="span-1">
+           <a href="#" class="thumbnail">
+             <div id="resource-type-<%= resource_type.id %>" data-element-type="resource" rel="tooltip" data-placement="left" title="<%=resource_type.description%>">
+             <%= image_tag("icons/#{resource_type.small_icon}", size: '50x50')%>
+             </div>
+           </a>
+         </li>
         <!-- To add resource specific JS. This is where the element is bound to the widget -->
-        <%= render 'resource_script_tag', resource_type: resource_type %>
+         <%= render 'resource_script_tag', resource_type: resource_type %>
+        <%  end %>
       <% end %>
       </ul>
     </div>

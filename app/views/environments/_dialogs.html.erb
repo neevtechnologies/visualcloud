@@ -6,16 +6,12 @@
 <!-- Deployment Configuration dialog  -->
 <%= render 'deployment_configuration', branch: @environment.branch ,db_migrate: @environment.db_migrate %>
 
-<% %w(rails java php mysql nginx).each do |resource_type| %>
+<% ResourceType.find_all_by_resource_class('EC2').each do |resource_type|  %>
   <%= render 'ec2_type_resource_configuration', resource_type: resource_type %>
 <% end %>
 
 <!-- RDS resource  -->
-<%= render 'rds_configuration' %>
+<%= render 'rds_configuration', resource_type: ResourceType.find_by_resource_class('RDS') %>
 
 <!-- ELB resource  -->
-<%= render 'elb_configuration' %>
-
-<!-- EC resource  -->
-<%= render 'elasticache_configuration' %>
-
+<%= render 'elb_configuration', resource_type: ResourceType.find_by_resource_class('ELB') %>

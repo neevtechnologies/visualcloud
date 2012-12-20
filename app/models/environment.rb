@@ -71,7 +71,7 @@ class Environment < ActiveRecord::Base
         ec2 = Cloudster::Ec2.new(name: instance.aws_label,
           key_name: key_pair,
           security_groups: security_groups,
-          image_id: instance.ami.image_id,
+          image_id: instance.ami.image(region_name),
           instance_type: instance.instance_type.api_name )
         chef_client = Cloudster::ChefClient.new(
           validation_key: File.read(VisualCloudConfig[:validation_key_path]),

@@ -1,6 +1,8 @@
 <script type="text/javascript">
   $('#resource-type-<%= resource_type.id %>').resourceElement({
     name: '<%= resource_type.name %>' ,
+    roles: JSON.parse('<%= raw resource_type.roles || "[]" %>') ,
+    resourceClass: '<%= resource_type.resource_class %>',
     resourceTypeId: '<%= resource_type.id %>'
   });
 </script>

@@ -22,21 +22,30 @@ Region.create latitude: -33.867487, longitude: 151.20699, display_name: 'Asia Pa
 Region.create latitude: -23.548943, longitude: -46.638818, display_name: 'South America - Sao Paulo', name: 'sa-east-1'
 
 #ResourceTypes
+#AWS native resources
 ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small_icon: "components/elb.png", large_icon: "components/elb.png", description: 'Elastic Load Balancer')
 ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "ELB,Nginx" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
-ResourceType.create(resource_class: 'RDS', name: 'RDS', parents_list: "Rails,JAVA,PHP" , small_icon: "components/rds.png", large_icon: "components/rds.png", description: 'Relational Database Service')
-ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.png", large_icon: "components/rails.png" , description: 'Rails hosting instance running Unicorn as Application Server')
-ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,JAVA,PHP" , small_icon: "components/mysql.png", large_icon: "components/mysql.png", description: 'MySQL database server')
-ResourceType.create(resource_class: 'EC2', name: 'Nginx', parents_list: "ELB" , small_icon: "components/nginx.png", large_icon: "components/nginx.png", description: 'Nginx LoadBalancer for your application servers')
-ResourceType.create(resource_class: 'EC2', name: 'JAVA', parents_list: "ELB,Nginx" , small_icon: "components/java.png", large_icon: "components/java.png", description: 'JAVA your application server')
-ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx" , small_icon: "components/php.png", large_icon: "components/php.png", description: 'PHP your application server')
+ResourceType.create(resource_class: 'RDS', name: 'RDS', parents_list: "Rails,Java,PHP" , small_icon: "components/rds.png", large_icon: "components/rds.png", description: 'Relational Database Service')
 
-#Components
-Component.create(name: 'Rails', small_icon: "components/rails.svg", large_icon: "components/rails.svg")
-Component.create(name: 'PHP', small_icon: "components/php.svg", large_icon: "components/php.svg")
+#EC2 Type resources
+ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.png", large_icon: "components/rails.png" , description: 'Rails hosting instance running Unicorn as Application Server', roles: ['app', 'rails'].to_json)
+ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,Java,PHP" , small_icon: "components/mysql.png", large_icon: "components/mysql.png", description: 'MySQL database server', roles: ['db', 'mysql'].to_json)
+ResourceType.create(resource_class: 'EC2', name: 'Nginx', parents_list: "ELB" , small_icon: "components/nginx.png", large_icon: "components/nginx.png", description: 'Nginx LoadBalancer for your application servers', roles: ['nginx'].to_json)
+ResourceType.create(resource_class: 'EC2', name: 'Java', parents_list: "ELB,Nginx" , small_icon: "components/java.png", large_icon: "components/java.png", description: 'Java application server', roles: ['app', 'java'].to_json)
+ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx" , small_icon: "components/php.png", large_icon: "components/php.png", description: 'PHP application server', roles: ['app', 'php'].to_json)
 
 #Ami'S
-Ami.create(image_id:'ami-0a79db63', architecture:'x86_64', name:'EA-AppServer', description:'Ubuntu 12.04 + Ruby 1.9.3 p194')
+ubuntu_amis = {
+  'us-east-1' => 'ami-d726abbe',
+  'us-west-2' => 'ami-ca2ca4fa',
+  'us-west-1' => 'ami-827252c7',
+  'eu-west-1' => 'ami-3a0f034e',
+  'ap-southeast-1' => 'ami-15226047',
+  'ap-northeast-1' => 'ami-70a91271',
+  'ap-southeast-2' => 'ami-7f7ee945',
+  'sa-east-1' => 'ami-6beb3376'
+}
+Ami.create(image_id: ubuntu_amis.to_yaml, architecture:'amd64', name:'Precise Pangolin', description:'Ubuntu 12.04 LTS instance-store')
 
 #Instance Types for ec2
 ec2_instance_types = []

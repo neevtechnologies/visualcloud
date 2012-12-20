@@ -1,42 +1,42 @@
-<div id="rds-configuration" class="modal hide fade in" style="display: none; ">
+<div id="<%= resource_type.name %>-configuration" class="modal hide fade in" style="display: none; ">
   <div class="modal-header">  
     <a class="close" data-dismiss="modal">×</a>  
-    <h3>RDS instance configuration</h3>
+    <h3><%= resource_type.name %> instance configuration</h3>
   </div>  
   <div class="modal-body">  
-    <div id="rds-config-error-messages"></div>
-    <%= simple_form_for Instance.new, url: '' , html: { id: 'rds-config-frm'} do |f|%>
-      <%= f.input :label, input_html: { id: 'rds_label', class: 'instance_label'} %>
-      <div id="rds_instance_type_id" class="hide"></div>
+    <div id="<%= resource_type.name %>-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: "" , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
+      <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
+      <div id="<%= resource_type.name %>_instance_type_id" class="hide"></div>
       <label>Instance Type</label>      
-      <div id="rds-slider">
-        <%= render 'slider' %>
+      <div id="<%= resource_type.name %>-slider">
+        <%= render "slider" %>
       </div>
       <br />
       <br />
       <br />
       <p>Storage Size in GB</p>
-      <%= text_field_tag 'rds_size' %>
+      <%= text_field_tag "#{resource_type.name}_size" %>
       <p>Master User Name</p>
-      <%= text_field_tag 'rds_master_user_name' %>
+      <%= text_field_tag "#{resource_type.name}_master_user_name" %>
       <p>Master Password</p>
-      <%= password_field_tag 'rds_master_password' %>
+      <%= password_field_tag "#{resource_type.name}_master_password" %>
       <table>
            <tr>
-             <td><%= check_box_tag 'rds_multiAZ', value = "", checked = false%></td>
+             <td><%= check_box_tag "#{resource_type.name}_multiAZ", value = "", checked = false%></td>
              <td></td>
              <td></td>
              <td>Multi AZ</td>
            </tr>
       </table>
-      <%= hidden_field_tag :rds_parents_list, ResourceType.find_by_name("RDS").parents_list, :id => 'rds_parents_list'%>
-      <%= f.hidden_field(:xpos, id: 'rds_xpos')%>
-      <%= f.hidden_field(:ypos, id: 'rds_ypos')%>
+      <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
+      <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
+      <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
   </div>
   <div class="modal-footer">
-    <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <%= f.button :submit, "Apply", class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
-    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="rds_delete" onclick='delete_instance("rds");' title="Delete the RDS resource">Delete</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="<%= resource_type.name %>_delete" onclick='delete_instance("<%= resource_type.name %>");' title="Delete the <%= resource_type.name %> resource">Delete</a>
   </div>
   <% end %>
 </div>

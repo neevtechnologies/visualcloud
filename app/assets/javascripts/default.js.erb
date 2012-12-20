@@ -24,9 +24,9 @@ function showConfigurationForm(dialogId, droppedPosition){
 };
 
 function callToAddSlider(resource_type, selectedIndex){
-  if (resource_type == "rds")
+  if (resource_type == "RDS")
     addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex);
-  else if(resource_type != "elb")
+  else if(resource_type != "ELB")
     addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex);
 }
 
@@ -34,7 +34,7 @@ function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
   var dialogId = $('#'+editElement).instance('getConfigurationDialogId') ;
   var dialog = $('#'+dialogId);
-  var resource_type = instanceOptions.resourceType.toLowerCase();
+  var resource_type = instanceOptions.resourceType;
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label); 
@@ -113,7 +113,15 @@ $(document).ready(function(){
   });
 });
 */
+$(document).on('mouseenter','[rel=tooltip]', function(){
+    $(this).tooltip('show');
+});
+
+$(document).on('mouseleave','[rel=tooltip]', function(){
+    $(this).tooltip('hide');
+});
+
+
 $(document).ready(function(){
    $("#container").notify({expires: false,speed: 1000});
-   $("[rel=tooltip]").tooltip();
 });
