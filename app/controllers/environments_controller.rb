@@ -29,7 +29,7 @@ class EnvironmentsController < ApplicationController
   def new
     @project = Project.find(params[:project_id])
     @environments = @project.environments
-    @environment = Environment.new
+    @environment = Environment.new(params[:environment])
     @resource_types = RESOURCE_TYPES
     @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
     @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
@@ -57,6 +57,7 @@ class EnvironmentsController < ApplicationController
     errors = []
     @project = Project.find(params[:project_id])
     @environment = Environment.new(params[:environment])
+    logger.info "Environment: #{@environment.inspect}"
     @environment.project = @project
     if !@environment.save
       errors << "Environment has the following errors :"

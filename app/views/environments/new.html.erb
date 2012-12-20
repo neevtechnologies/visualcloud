@@ -9,8 +9,8 @@
   prepareStage();
 $(document).ready(function(){
   $('input#graph-name').val('<%= params[:environment]['name'] %>');
-  $('select#graph-key-pair-name').val('<%= params[:environment][:key_pair_name] %>');
-  $('select#graph-security-group-name').val('<%= params[:environment][:security_group] %>');
+  $('<option value="<%= params[:environment][:key_pair_name] %>"></option>').appendTo($('select#graph-key-pair-name'));
+  $('<option value="<%= params[:environment][:security_group] %>"></option>').appendTo($('select#graph-security-group-name'));
   $('input#graph-region-id').val('<%= params[:environment]['region_id'] %>');
 });
   var ec2InstanceTypes = JSON.parse('<%= raw @ec2_instance_types.to_json %>');

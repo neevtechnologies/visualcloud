@@ -36,7 +36,6 @@ $(document).ready(function(){
      $('#current_region').html(''+ markers[index].display_name + ' ( ' + markers[index].name + ' ) ');     
      $('#graph-region-id').val(markers[index].id);
      if( $('.load_image').length <= 1 ){
-      console.log($('.load_image').length);
       $('<img src="/assets/ajax-loader-small.gif" class="load_image" alt="Please wait..">').insertAfter('#graph-key-pair-name');
       $('<img src="/assets/ajax-loader-small.gif" class="load_image" alt="Please wait..">').insertAfter('#graph-security-group-name');
      }
