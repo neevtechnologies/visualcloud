@@ -242,7 +242,7 @@ function placeLabelsOnSlider(jSliderDiv, instanceTypes){
     labelHtml.html(label);
     labelHtml.css('left', labelIndex * 100/(instanceTypes.length - 1) + '%');
     labelHtml.addClass('slider-label');
-    labelHtml.attr('title', instanceTypes[i].description);
+    labelHtml.attr('title', instanceTypes[i].api_name);
     labelHtml.attr('rel', 'tooltip');
     labelHtml.data('placement', 'right');
     jSliderDiv.append(labelHtml);
