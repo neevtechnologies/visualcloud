@@ -482,3 +482,17 @@ body {
 .modal-body {
   max-height: 414px;
 }
+
+li.simple_li {
+ clear: both;
+ color: #333333;
+ display: block;
+ font-weight: normal;
+ line-height: 20px;
+ padding: 3px 20px;
+ white-space: nowrap;
+}
+
+.load_image {
+ padding: 0px 0px 5px 5px;
+}

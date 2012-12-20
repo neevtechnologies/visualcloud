@@ -7,3 +7,5 @@ $("#graph-security-group-name").html('');
 $.each (JSON.parse('<%= @security_groups.html_safe %>'), function(s,g){
  $("#graph-security-group-name").append('<option value="'+g+'">'+g+'</option>');
 });
+//$('.loading_image').css('display','none'); 
+$('.load_image').remove(); 

@@ -1,10 +1,10 @@
 <div class="navbar navbar-inverse">
 <div class="navbar-inner">
   <ul class="nav nav-pills">
+    <li><a class="stack-status" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><%= image_tag(status_image(@environment.provision_status)["img_src"], title: "#{status_image(@environment.provision_status)["img_title"]}", rel: 'tooltip', id: "stack-status-image-#{@environment.id}",  size: '20x20') %></a></li>
     <li><a id="graph-update" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Save</a></li>
     <li><a id="graph-provision" data-graph-id="<%=@environment.id%>" href="javascript:void(0)">Provision</a></li>
-    <li><a id="graph-replicate" href="javascript:void(0)">Create Similar Stack</a></li>
-    <li><a class="stack-status" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><%= image_tag(status_image(@environment.provision_status)["img_src"], title: "#{status_image(@environment.provision_status)["img_title"]}", rel: 'tooltip', id: "stack-status-image-#{@environment.id}",  size: '20x20') %></a></li>
+    <li><a id="graph-replicate" href="javascript:void(0);">Replicate</a></li>
   </ul> 
   <%= render 'project_environment' %> 
 </div>

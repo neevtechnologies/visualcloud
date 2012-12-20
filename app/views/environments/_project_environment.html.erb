@@ -1,12 +1,22 @@
 <div class = "pull-right">
   <ul class="nav nav-pills">
     <li><a id="projects_list" href="<%= project_path(@project) %>" rel="tooltip" data-placement = "bottom" title="Click here to have details of the project."><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
-    <li><%if !@environment.id.to_s.empty? %>
-  <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
-    <%else%>
-    <a id="environments" href="javascript:void(0)"><%= @environment.name.present? ? @environment.name : params[:environment]['name']%> &nbsp;&nbsp;</a>
-  <%end%>
-  </li>
+    <li>
+     <%if !@environment.id.to_s.empty? %>
+        <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
+     <%else%>
+        <a id="environments" href="javascript:void(0);"><%= @environment.name.present? ? @environment.name : params[:environment]['name']%> &nbsp;&nbsp;</a>
+     <%end%>
+    </li>
+    
+     <li class="dropdown">
+       <a href="#" data-toggle="dropdown" class="dropdown-toggle">Details<b class="caret"></b></a>
+       <ul class="dropdown-menu">
+        <li class="simple_li"> Region: <%= @environment.region.name %> </li>
+	<li class="simple_li"> Key Pair: <%= @environment.key_pair_name %> </li>
+	<li class="simple_li"> Security Group: <%= @environment.security_group %> </li>
+       </ul>
+     </li>
   </ul>
 </div>
 <div class="hide" id="repo_url"><%= @project.repo_url %></div>

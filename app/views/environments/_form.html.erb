@@ -3,5 +3,7 @@
       <%= f.hidden_field :region_id, id: 'graph-region-id' %>
       Region: <span id='current_region'></span>
      <div class="regionmap"></div>
-      <%= f.input :key_pair_name, include_blank: false, collection: [], input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
-      <%= f.input :security_group, include_blank: false, collection: [], input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
+     <%= f.input :key_pair_name, include_blank: false, collection: [], input_html: {id: 'graph-key-pair-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Please choose a keypair which you have already created using the AWS console'} %>
+     <%= image_tag("ajax_loader.png", :size => "25*25", :class => "loading_image",:id=> "loading-key-pair-name", :style=> "display:none;" )%> 
+     <%= f.input :security_group, include_blank: false, collection: [], input_html: {id: 'graph-security-group-name', rel: 'tooltip', 'data-placement' => 'right', title: 'Choose a SecurityGroup for instances of this environment'} %>
+     <%= image_tag("ajax_loader.png", :size => "25*25", :class => "loading_image",:id=> "loading-security-group-name", :style=> "display:none;" )%> 
