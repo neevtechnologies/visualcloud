@@ -12,7 +12,7 @@ development:
 
 production:
   <<: *defaults
-  chef_server_url: 'http://ec2-23-20-146-55.compute-1.amazonaws.com:4000'
+  chef_server_url: 'http://ec2-184-73-196-133.compute-1.amazonaws.com:4000'
 
 test:
   <<: *defaults
