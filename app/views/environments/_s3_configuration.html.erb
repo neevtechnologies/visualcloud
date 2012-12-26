@@ -1,0 +1,22 @@
+<div id="<%= resource_type.name %>-configuration" class="modal hide fade in" style="display: none; ">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3><%= resource_type.name %> instance configuration</h3>
+  </div>
+  <div class="modal-body">
+    <div id="<%= resource_type.name %>-config-error-messages"></div>
+    <%= simple_form_for Instance.new, url: "" , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
+      <%= f.input :label, label: 'Name', input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
+      <%= f.input :access_control, label: 'Access Control', :include_blank => true, :collection => ["public","private","protected"], input_html: {id: "#{resource_type.name}_access_control"} %>
+      <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
+      <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
+      <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, "Apply", class: "btn btn-success instance-config-submit" %>
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
+    <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="<%= resource_type.name %>_delete" onclick='delete_instance("<%= resource_type.name %>");' title="Delete the <%= resource_type.name %> resource">Delete</a>
+  </div>
+  <% end %>
+</div>
+

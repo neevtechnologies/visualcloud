@@ -15,3 +15,6 @@
 
 <!-- ELB resource  -->
 <%= render 'elb_configuration', resource_type: ResourceType.find_by_resource_class('ELB') %>
+
+<!-- S3 resource  -->
+<%= render 's3_configuration', resource_type: ResourceType.find_by_resource_class('S3') %>

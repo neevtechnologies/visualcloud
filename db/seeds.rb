@@ -26,7 +26,7 @@ Region.create latitude: -23.548943, longitude: -46.638818, display_name: 'South 
 ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small_icon: "components/elb.png", large_icon: "components/elb.png", description: 'Elastic Load Balancer')
 ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "ELB,Nginx" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
 ResourceType.create(resource_class: 'RDS', name: 'RDS', parents_list: "Rails,Java,PHP" , small_icon: "components/rds.png", large_icon: "components/rds.png", description: 'Relational Database Service')
-
+ResourceType.create(resource_class: 'S3', name: 'S3', parents_list: "" , small_icon: "amazon/AWS_Simple_Icons_Storage_Amazon_S3.svg", large_icon: "amazon/AWS_Simple_Icons_Storage_Amazon_S3.svg", description: 'S3 server')
 #EC2 Type resources
 ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.png", large_icon: "components/rails.png" , description: 'Rails hosting instance running Unicorn as Application Server', roles: ['app', 'rails'].to_json)
 ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,Java,PHP" , small_icon: "components/mysql.png", large_icon: "components/mysql.png", description: 'MySQL database server', roles: ['db', 'mysql'].to_json)

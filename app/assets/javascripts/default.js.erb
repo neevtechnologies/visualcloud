@@ -26,8 +26,8 @@ function showConfigurationForm(dialogId, droppedPosition){
 function callToAddSlider(resource_type, selectedIndex){
   if (resource_type == "RDS")
     addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex);
-  else if(resource_type != "ELB")
-    addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex);
+  else if(resource_type != "ELB" && resource_type != "S3")
+  addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex);
 }
 
 function showInstanceEditForm(editElement){
@@ -38,20 +38,21 @@ function showInstanceEditForm(editElement){
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label); 
-  dialog.find('#ec2_ami_id').val(instanceOptions.amiId);
+  dialog.find('#' + resource_type + '_ami_id').val(instanceOptions.amiId);
   callToAddSlider(resource_type , instanceOptions.InstanceType);
   $('#' + resource_type + '_instance_type_id').html(instanceOptions.InstanceType);
+  dialog.find('#' + resource_type + '_access_control').val(instanceOptions.accessControl);
   if(instanceOptions.ipAddress != "")
     dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>").show();
   if(instanceOptions.publicDNS != "")
     dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>").show();
-  //TODO : Check why the following if condition is used , if it isn't needed remove it
+  //TODO : Check why the following if condition is used , if it isn't needed remove it (now no need as size is mandatory)
   if(!noProperty(instanceOptions.configAttributes))
   {
-     dialog.find('#rds_size').val(instanceOptions.configAttributes.size);
-     dialog.find('#rds_master_user_name').val(instanceOptions.configAttributes.master_user_name);
-     dialog.find('#rds_master_password').val(instanceOptions.configAttributes.master_password);
-     dialog.find('#rds_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
+     dialog.find('#' + resource_type + '_size').val(instanceOptions.configAttributes.size);
+     dialog.find('#' + resource_type + '_master_user_name').val(instanceOptions.configAttributes.master_user_name);
+     dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
+     dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   }
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
