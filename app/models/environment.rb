@@ -25,6 +25,7 @@ class Environment < ActiveRecord::Base
     instance_names = add_ec2_resources(stack_resources)
     add_elb_resource(stack_resources, instance_names)
     add_rds_resources(stack_resources)
+    add_s3_resources(stack_resources)
 
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key, region: region_name)
 
@@ -118,6 +119,15 @@ class Environment < ActiveRecord::Base
           password: config_attributes['master_password'],
           multi_az: config_attributes['multiAZ']
         )
+      end
+    end
+  end
+
+  def add_s3_resources(stack_resources)
+    instances.each do |instance|
+      if instance.resource_type.resource_class == 'S3'
+        config_attributes = JSON.parse(instance.config_attributes)
+        stack_resources << Cloudster::S3.new(name: instance.label)
       end
     end
   end
