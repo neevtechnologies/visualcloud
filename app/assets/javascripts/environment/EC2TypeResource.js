@@ -32,7 +32,8 @@
           var parents_list = $('#' + resourceName + '_parents_list').val();
           var amiId = parseInt($('#' + resourceName + '_ami_id').val());
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
-          var config_attributes = {roles: roles, parents_list:parents_list};
+          var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
+          var config_attributes = {roles: roles, parents_list:parents_list, label: labelIcon};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

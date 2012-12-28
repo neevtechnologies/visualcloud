@@ -26,7 +26,7 @@
     instances[instanceId] = { instance: newInstance, parents: parents,configAttributes:configAttributes };
   <% end %>
   //Loads saved connections
-  jsPlumb.ready(function(){
+  jsPlumb.ready(function(){    
     makeNodes(instances);
     makeConnections(instances);
   });

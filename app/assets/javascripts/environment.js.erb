@@ -7,6 +7,12 @@ function save_environment(){
     $('.graph-area').graphArea("save", attributes);
 }
 
+function getInstanceTypeLabel(instanceTypes,instanceTypeId){
+  for(var i = 0; i < instanceTypes.length; i++)
+    if(instanceTypes[i].id == instanceTypeId)
+      return instanceTypes[i].label;
+}
+
 function validate_environment(){
     var graphName = $('input#graph-name').val().trim();
     var keyPairName = $('select#graph-key-pair-name').val();
@@ -192,18 +198,18 @@ $(document).ready(function(){
 
 
 //Displaying the slider for the select options, displaying the selected value
-function addSlider(sliderDiv, instanceTypes, selectedIndex){
+function addSlider(sliderDiv, instanceTypes, selectedIndex, elementId){
   if (typeof(selectedIndex) == 'undefined')
     selectedIndex = 0 ;
-    else if(sliderDiv.split('-')[0] != "RDS")
+  else if(sliderDiv.split('-')[0] != "RDS")
     selectedIndex -= 1; // as slider position starts with 0 and ends with length - 1
-    else
+  else
     //re-setting index if the id value is not starting from '1'
-     for(var i = 0;i < instanceTypes.length; i++)
-       if(instanceTypes[i].id == selectedIndex ) {
-         selectedIndex = i;
-         break;
-       }
+    for(var i = 0;i < instanceTypes.length; i++)
+      if(instanceTypes[i].id == selectedIndex ) {
+        selectedIndex = i;
+        break;
+      }
   //setting the instance type id in the dialog box
   var instance_type_id =   instanceTypes[selectedIndex].id;
   $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instance_type_id);
@@ -220,6 +226,8 @@ function addSlider(sliderDiv, instanceTypes, selectedIndex){
       $('.ui-slider-range').css('width',(ui.value) * 100/(instanceTypes.length - 1) + '%');
       //setting the instance type id in the dialog box
       $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instanceTypes[ui.value].id);
+      var labelIcon = getInstanceTypeLabel(instanceTypes,instanceTypes[ui.value].id);
+      $('#instance-type-label-'+ elementId).html(labelIcon);
     }
   });
 
@@ -227,8 +235,8 @@ function addSlider(sliderDiv, instanceTypes, selectedIndex){
   var selectedInstanceType = {};
   for(var i = 0;i < instanceTypes.length; i++)
     if(instanceTypes[i].id == selectedIndex ) {
-       selectedInstanceType = instanceTypes[i] ;
-       break;
+      selectedInstanceType = instanceTypes[i] ;
+      break;
     }
   var newHandlePosition = $('.ui-slider-handle').css('left');
   setTooltipForSilder(selectedInstanceType, newHandlePosition);

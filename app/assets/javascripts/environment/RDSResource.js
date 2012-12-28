@@ -43,7 +43,8 @@
           var password = $('input#'+ resourceName +'_master_password').val().trim();
           var parents_list = $('#'+ resourceName +'_parents_list').val().trim();
           var multiAZ = $('input#'+ resourceName +'_multiAZ')[0].checked
-          var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ};
+          var labelIcon = getInstanceTypeLabel(rdsInstanceTypes,InstanceTypeId);
+          var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ, label: labelIcon};
           if ( self.validate(label, size) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

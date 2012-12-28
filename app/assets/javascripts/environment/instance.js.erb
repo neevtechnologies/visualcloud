@@ -14,9 +14,10 @@
       label: ''
     },
     _setOption: function(key, value){
-      if(key == 'label')
-        this.element.find($('.instance-label')).html(value);
-
+      if(key == 'label'){
+        var label = shortenLongStrings(value, <%= VisualCloudConfig[:strings_max_length] %>);
+        this.element.find($('.instance-label')).html(label);
+      }
       //Sets the new options
       $.Widget.prototype._setOption.apply(this, arguments);
     },
@@ -24,42 +25,47 @@
       var self = this;
       var options = self.options;
       var element = self.element;
-      //Add the inner HTML template      
-      element.html($('.' + options.resourceType + '-instance').html());
-      element.find($('.instance-label')).html('<a id=instance-label-' + options.instanceId + ' href="#" >' + options.label + '</a>');
+      //Add the inner HTML template
+      element.html($('.' + options.resourceType + '-instance').html());      
 
-      //Align the element on the stage
+      // getting the attribute id on the instance
+      var instanceDivId =  element.attr('id').split('-')[1];
+
+      //Set label of the instance
+      var label = shortenLongStrings(options.label, <%= VisualCloudConfig[:strings_max_length] %>);
+      element.find($('.instance-label')).html('<a id=instance-label-' + instanceDivId + ' href="#" >' + label + '</a>');
+
+      //Set instance Type if it exists
+      if(options.InstanceType){         
+         element.find($('.instance-type-label')).attr('id', 'instance-type-label-' + instanceDivId);         
+         $('#instance-type-label-'+ instanceDivId).html(options.configAttributes.label);         
+      }
+
+     //Align the element on the stage
       element.position({
         my: 'left top',
         at: 'left top',
         of: element.parent(),
-        offset: (options.xpos).toString() + ' ' + (options.ypos).toString() 
+        offset: (options.xpos).toString() + ' ' + (options.ypos).toString()
       });
 
+      //Make the element draggable using JSPlumb
       jsPlumb.draggable(element, {containment: element.parent()});
 
-      if(options.instanceId != null)
-        element.attr('id', 'instance-' + options.instanceId );
-      else{
-      //jsPlumb.ready(function(){
-        //Make the dropped element draggable - Using JS plumb draggable
-
-        //Add connection endpoint to element
-        makeSourceAndTarget(element,options.configAttributes.parents_list);
-      //});
-      }
+      //Enable Source and Destination for connections in the instance element
+      makeSourceAndTarget(element);
 
 
       //Show edit config modal on click
       element.click(function(){
         showInstanceEditForm(element.attr('id'));
       });
-      //Do not open the dialog because it's an got to open the URL onclick
+      //Do not open the dialog because it's got to open the URL onclick
       element.find('.instance-label').click(function(e){e.stopPropagation();})
 
       //Listen to global onElementDrop event. Expecting the droppable widget to trigger this event
-      //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );
-
+      //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );      
+      
       self._trigger('onCreate');
     },
     getAttributes: function(){

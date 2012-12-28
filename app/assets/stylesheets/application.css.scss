@@ -23,10 +23,6 @@ div.graph-draggables-dock {
   height: 400px;
 }
 
-.instance {
-  display: inline-block;
-}
-
 .dockIcon {
   max-height: 30px;
   max-width: 30px;
@@ -35,7 +31,7 @@ div.graph-draggables-dock {
 //Used to bring the connector dots to the front
 ._jsPlumb_connector { z-index:4; }
 ._jsPlumb_endpoint { z-index:5; }
-
+//used for ip and dns display in modal
 .fnt_size { font-size:16px;}
 
 .slider .ui-slider-handle {
@@ -45,7 +41,6 @@ div.graph-draggables-dock {
   height: 25px;
   cursor: pointer;
   background: url('handle.png') no-repeat 50% 50%;
-  //background-image:image-url('handle.png');
   font-weight: bold;  
   outline: none;
   border: none;
@@ -64,10 +59,10 @@ div.graph-draggables-dock {
 }
 
 .ui-slider-range {
-	background: #ffffff; /* Old browsers */
-	height: 100%;
-        position: absolute;
-	border-radius: 25px;
+  background: #ffffff; /* Old browsers */
+  height: 100%;
+  position: absolute;
+  border-radius: 25px;
 }
 
 .slider_tooltip {
@@ -84,4 +79,46 @@ div.graph-draggables-dock {
 .slider-label {
   position: absolute;
   margin-top: 20px;
+}
+
+.instance {
+  display: inline-block;
+  border-radius: 4px 4px 4px 4px;
+  padding: 3.5px;
+  position: absolute;
+  width: 92px;
+  background-color: black;
+  border: 1px outset dimgray;
+  box-shadow: 0 0 4px 2px black;
+}
+
+.instance-icon {
+  left: 15px;
+  position: relative;
+}
+
+.connection-source {
+  border-radius: 2px 2px 2px 2px;
+  background-color: #994466;
+  height: 12px;
+  width: 12px;
+  margin-top: 5px;
+  float:right;
+}
+
+.greenBorder {
+  border: 1px dotted red;
+}
+
+.redBorder {
+  border: 1px dotted green;
+}
+
+.instance-type-label{
+  float:right;
+  font-size:10px;
+}
+
+.instance-label{
+  position:relative;
 }

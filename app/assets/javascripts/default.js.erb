@@ -23,11 +23,14 @@ function showConfigurationForm(dialogId, droppedPosition){
   dialog.modal('show');
 };
 
-function callToAddSlider(resource_type, selectedIndex){
+function callToAddSlider(resource_type, selectedIndex, elementId){
+  var id = '';
+  if(elementId)
+    id = elementId.split('-')[1];
   if (resource_type == "RDS")
-    addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex);
+    addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex, id);
   else if(resource_type != "ELB" && resource_type != "S3")
-  addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex);
+    addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex, id);
 }
 
 function showInstanceEditForm(editElement){
@@ -37,34 +40,22 @@ function showInstanceEditForm(editElement){
   var resource_type = instanceOptions.resourceType;
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
-  dialog.find('.instance_label').val(instanceOptions.label); 
+  dialog.find('.instance_label').val(instanceOptions.label);
   dialog.find('#' + resource_type + '_ami_id').val(instanceOptions.amiId);
-  callToAddSlider(resource_type , instanceOptions.InstanceType);
+  callToAddSlider(resource_type , instanceOptions.InstanceType, editElement);
   $('#' + resource_type + '_instance_type_id').html(instanceOptions.InstanceType);
   dialog.find('#' + resource_type + '_access_control').val(instanceOptions.accessControl);
   if(instanceOptions.ipAddress != "")
     dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>").show();
   if(instanceOptions.publicDNS != "")
     dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>").show();
-  //TODO : Check why the following if condition is used , if it isn't needed remove it (now no need as size is mandatory)
-  if(!noProperty(instanceOptions.configAttributes))
-  {
-     dialog.find('#' + resource_type + '_size').val(instanceOptions.configAttributes.size);
-     dialog.find('#' + resource_type + '_master_user_name').val(instanceOptions.configAttributes.master_user_name);
-     dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
-     dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
-  }
+  dialog.find('#' + resource_type + '_size').val(instanceOptions.configAttributes.size);
+  dialog.find('#' + resource_type + '_master_user_name').val(instanceOptions.configAttributes.master_user_name);
+  dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
+  dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 };
-
-function noProperty(obj) {
-    for(var prop in obj) {
-        if(obj.hasOwnProperty(prop))
-            return false;
-    }
-    return true;
-}
 
 function addMessagesToDiv(jDiv, content){
    jDiv.append(content);
@@ -104,25 +95,34 @@ function hideLoading(){
   $('#loading').modal('hide');
 };
 
+function shortenLongStrings(string, maxLength){
+  var shortString = string.substring(0, (maxLength-1));
+  if (string.length > maxLength)
+    shortString += '...';
+  return shortString;
+}
+
 /*
 // For debugging mouse movement inside graph area
 $(document).ready(function(){
   $('.graph-area').mousemove(function(e){
   var x = e.pageX - this.offsetLeft;
   var y = e.pageY - this.offsetTop;
-  $('.graph-area').html("X: " + x + " Y: " + y); 
+  $('.graph-area').html("X: " + x + " Y: " + y);
   });
 });
 */
+
+//Enable Bootstrap Tooltips for dialog box
 $(document).on('mouseenter','[rel=tooltip]', function(){
-    $(this).tooltip('show');
+  $(this).tooltip('show');
 });
 
 $(document).on('mouseleave','[rel=tooltip]', function(){
-    $(this).tooltip('hide');
+  $(this).tooltip('hide');
 });
 
-
 $(document).ready(function(){
-   $("#container").notify({expires: false,speed: 1000});
+  //Hide notifications
+  $("#container").notify({expires: false,speed: 1000});
 });

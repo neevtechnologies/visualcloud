@@ -31,12 +31,13 @@
       //Give ID to the new element
       if(instanceId != "undefined") {
         if(this.instanceCount <  instanceId)
-            this.instanceCount = instanceId;
+          this.instanceCount = instanceId;
         else
-            this.instanceCount++;
+          this.instanceCount++;
       }
-      else
+      else{
         this.instanceCount++;
+      }
       instanceElement.attr('id', 'instance-' + this.instanceCount );
       this.instances.push(instanceElement);
     },
