@@ -53,6 +53,7 @@ function showInstanceEditForm(editElement){
   dialog.find('#' + resource_type + '_master_user_name').val(instanceOptions.configAttributes.master_user_name);
   dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
   dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
+  dialog.find('#' + resource_type + '_cloudfront').prop("checked",instanceOptions.configAttributes.cloudFront);
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 };

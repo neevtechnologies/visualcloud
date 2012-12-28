@@ -31,6 +31,9 @@
       // getting the attribute id on the instance
       var instanceDivId =  element.attr('id').split('-')[1];
 
+      //setting id to connection element
+      element.find($('.connection-source')).attr('id', 'connection-source-' + instanceDivId);
+
       //Set label of the instance
       var label = shortenLongStrings(options.label, <%= VisualCloudConfig[:strings_max_length] %>);
       element.find($('.instance-label')).html('<a id=instance-label-' + instanceDivId + ' href="#" >' + label + '</a>');
@@ -53,7 +56,13 @@
       jsPlumb.draggable(element, {containment: element.parent()});
 
       //Enable Source and Destination for connections in the instance element
-      makeSourceAndTarget(element);
+      //Checking instance is S3 type or not
+      if(options.resourceType != "S3") {
+        $('#connection-source-'+instanceDivId).show();
+        makeSourceAndTarget(element);
+      }
+      else
+        $('#connection-source-'+instanceDivId).hide();
 
 
       //Show edit config modal on click
