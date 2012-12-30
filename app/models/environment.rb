@@ -26,6 +26,7 @@ class Environment < ActiveRecord::Base
     add_elb_resource(stack_resources, instance_names)
     add_rds_resources(stack_resources)
     add_s3_resources(stack_resources)
+    add_elasticache_resources(stack_resources)
 
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key, region: region_name)
 
@@ -112,8 +113,8 @@ class Environment < ActiveRecord::Base
     instances.each do |instance|
       if instance.resource_type.resource_class == 'RDS'
         config_attributes = JSON.parse(instance.config_attributes)
-        stack_resources << Cloudster::Rds.new(name: instance.aws_label, 
-          instance_class: instance.instance_type.api_name, 
+        stack_resources << Cloudster::Rds.new(name: instance.aws_label,
+          instance_class: instance.instance_type.api_name,
           storage_size: config_attributes['size'],
           username: config_attributes['master_user_name'],
           password: config_attributes['master_password'],
@@ -126,8 +127,22 @@ class Environment < ActiveRecord::Base
   def add_s3_resources(stack_resources)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'S3'
+        stack_resources << Cloudster::S3.new(name: instance.aws_label)
+      end
+    end
+  end
+
+  def add_elasticache_resources(stack_resources)
+    instances.each do |instance|
+      if instance.resource_type.resource_class == 'ElastiCache'
         config_attributes = JSON.parse(instance.config_attributes)
-        stack_resources << Cloudster::S3.new(name: instance.label)
+        stack_resources << Cloudster::ElastiCache.new(
+          :name => instance.aws_label,
+          :node_type => instance.instance_type.api_name,
+          :cache_security_group_names => config_attributes['cache_security_group_names'],
+          :engine => 'memcached', #Only memcached is supported by AWS right now
+          :node_count => config_attributes['node_count']
+        )
       end
     end
   end
