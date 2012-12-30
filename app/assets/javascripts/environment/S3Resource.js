@@ -34,7 +34,7 @@
           var label = $('input#'+ resourceName +'_label').val().trim();
           var accessControl = $('select#'+ resourceName +'_access_control').val().trim();          
           var parents_list = $('#'+ resourceName +'_parents_list').val().trim();
-          var cloudFront = $('input#'+ resourceName +'_cloudfront')[0].checked
+          var cloudFront = $('input#'+ resourceName +'_cloudfront')[0].checked;
           var config_attributes = {parents_list:parents_list,cloudFront:cloudFront};
           if ( self.validate(label) ){
             if (editElement == null) {
