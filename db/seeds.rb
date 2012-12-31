@@ -27,6 +27,7 @@ ResourceType.create(resource_class: 'ELB', name: 'ELB', parents_list: "" , small
 ResourceType.create(resource_class: 'EC2', name: 'EC2', parents_list: "ELB,Nginx" , small_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", large_icon: "amazon/AWS_Simple_Icons_Compute_Amazon_EC2.svg", description: 'Elastic Cloud Compute')
 ResourceType.create(resource_class: 'RDS', name: 'RDS', parents_list: "Rails,Java,PHP" , small_icon: "components/rds.png", large_icon: "components/rds.png", description: 'Relational Database Service')
 ResourceType.create(resource_class: 'S3', name: 'S3', parents_list: "" , small_icon: "amazon/AWS_Simple_Icons_Storage_Amazon_S3.svg", large_icon: "amazon/AWS_Simple_Icons_Storage_Amazon_S3.svg", description: 'S3 Bucket')
+ResourceType.create(resource_class: 'ElastiCache', name: 'ElastiCache', parents_list: "" , small_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", large_icon: "amazon/AWS_Simple_Icons_Database_Amazon_ElastiCache.svg", description: 'ElastiCache')
 #EC2 Type resources
 ResourceType.create(resource_class: 'EC2', name: 'Rails', parents_list: "ELB,Nginx" , small_icon: "components/rails.png", large_icon: "components/rails.png" , description: 'Rails hosting instance running Unicorn as Application Server', roles: ['app', 'rails'].to_json)
 ResourceType.create(resource_class: 'EC2', name: 'Mysql', parents_list: "Rails,Java,PHP" , small_icon: "components/mysql.png", large_icon: "components/mysql.png", description: 'MySQL database server', roles: ['db', 'mysql'].to_json)
@@ -75,3 +76,16 @@ InstanceType.create(api_name: 'db.m1.xlarge', name:'Extra Large', size:'',resour
 InstanceType.create(api_name: 'db.m2.xlarge', name:'High-Memory Extra Large', size:'',resource_type_id:rds.id,description: '17.1 GB memory, 6.5 ECU (2 virtual cores with 3.25 ECUs each), 64-bit platform, High I/O Capacity',label:'XL+')
 InstanceType.create(api_name: 'db.m2.2xlarge', name:'High-Memory Double Extra Large', size:'',resource_type_id:rds.id,description: '34 GB of memory, 13 ECUs (4 virtual cores with 3,25 ECUs each), 64-bit platform, High I/O Capacity',label:'2XL+')
 InstanceType.create(api_name: 'db.m2.4xlarge', name:'High-Memory Quadruple Extra Large', size:'',resource_type_id:rds.id,description: '68 GB of memory, 26 ECUs (8 virtual cores with 3.25 ECUs each), 64-bit platform, High I/O Capacity',label:'4XL+')
+
+ec = ResourceType.find_by_name('ElastiCache')
+#  cache.m2.xlarge | cache.m2.2xlarge | cache.m2.4xlarge | cache.c1.xlarge
+InstanceType.create(api_name: 'cache.t1.micro', name:'Micro', size:'',resource_type_id:ec.id,description: '',label:'XS')
+InstanceType.create(api_name: 'cache.m1.small', name:'Small', size:'',resource_type_id:ec.id,description: '',label:'S')
+InstanceType.create(api_name: 'cache.m1.medium', name:'Medium', size:'',resource_type_id:ec.id,description: '',label:'M')
+InstanceType.create(api_name: 'cache.m1.large', name:'Large', size:'',resource_type_id:ec.id,description: '',label:'L')
+InstanceType.create(api_name: 'cache.m1.xlarge', name:'Extra Large', size:'',resource_type_id:ec.id,description: '',label:'XL')
+#InstanceType.create(api_name: 'cache.m3.xlarge', name:'Memory Extra Large', size:'',resource_type_id:ec.id,description: '',label:'MXL')
+#InstanceType.create(api_name: 'cache.m3.2xlarge', name:'Memory Double Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M2XL')
+#InstanceType.create(api_name: 'cache.m2.xlarge', name:'M2 Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M2XL')
+#InstanceType.create(api_name: 'cache.m2.2xlarge', name:'M2 Double Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M22XL')
+#InstanceType.create(api_name: 'cache.c1.xlarge', name:'C1 Extra Large', size:'',resource_type_id:ec.id,description: '',label:'C1XL')
