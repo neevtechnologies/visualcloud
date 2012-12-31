@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121206142709) do
+ActiveRecord::Schema.define(:version => 20121219083733) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -20,14 +20,6 @@ ActiveRecord::Schema.define(:version => 20121206142709) do
     t.string   "name"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end
-
-  create_table "components", :force => true do |t|
-    t.string   "name"
-    t.string   "small_icon"
-    t.string   "large_icon"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "deployments", :force => true do |t|
@@ -63,6 +55,8 @@ ActiveRecord::Schema.define(:version => 20121206142709) do
     t.string   "name"
     t.string   "size"
     t.integer  "resource_type_id"
+    t.string   "label"
+    t.string   "description"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.string   "api_name"
@@ -72,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20121206142709) do
     t.string   "label"
     t.integer  "xpos"
     t.integer  "ypos"
+    t.string   "access_control"
     t.integer  "ami_id"
     t.integer  "instance_type_id"
     t.integer  "environment_id"
@@ -122,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20121206142709) do
     t.string   "large_icon"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "roles"
   end
 
   create_table "roles", :force => true do |t|
