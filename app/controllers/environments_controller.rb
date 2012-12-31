@@ -33,6 +33,7 @@ class EnvironmentsController < ApplicationController
     @resource_types = RESOURCE_TYPES
     @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
     @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
+    @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
     @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
 
     respond_to do |format|
@@ -49,6 +50,7 @@ class EnvironmentsController < ApplicationController
     @resource_types = RESOURCE_TYPES
     @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
     @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
+    @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
     @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
   end
 

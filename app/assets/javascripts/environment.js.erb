@@ -201,7 +201,7 @@ $(document).ready(function(){
 function addSlider(sliderDiv, instanceTypes, selectedIndex, elementId){
   if (typeof(selectedIndex) == 'undefined')
     selectedIndex = 0 ;
-  else if(sliderDiv.split('-')[0] != "RDS")
+  else if(sliderDiv.split('-')[0] != "RDS" && sliderDiv.split('-')[0] != "ElastiCache")
     selectedIndex -= 1; // as slider position starts with 0 and ends with length - 1
   else
     //re-setting index if the id value is not starting from '1'
