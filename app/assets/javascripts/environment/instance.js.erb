@@ -41,7 +41,7 @@
       //Set instance Type if it exists
       if(options.InstanceType){         
          element.find($('.instance-type-label')).attr('id', 'instance-type-label-' + instanceDivId);         
-         $('#instance-type-label-'+ instanceDivId).html(options.configAttributes.label);         
+         $('#instance-type-label-'+ instanceDivId).html(options.configAttributes.label);
       }
 
      //Align the element on the stage
@@ -57,10 +57,9 @@
 
       //Enable Source and Destination for connections in the instance element
       //Checking instance is S3 type or not
-      if(options.resourceType != "S3") {
+      makeSourceAndTarget(element);
+      if(options.resourceType != "S3" && options.resourceType != "ElastiCache")
         $('#connection-source-'+instanceDivId).show();
-        makeSourceAndTarget(element);
-      }
       else
         $('#connection-source-'+instanceDivId).hide();
 
@@ -73,7 +72,7 @@
       element.find('.instance-label').click(function(e){e.stopPropagation();})
 
       //Listen to global onElementDrop event. Expecting the droppable widget to trigger this event
-      //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );      
+      //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );
       
       self._trigger('onCreate');
     },

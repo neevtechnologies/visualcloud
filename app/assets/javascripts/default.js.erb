@@ -29,6 +29,8 @@ function callToAddSlider(resource_type, selectedIndex, elementId){
     id = elementId.split('-')[1];
   if (resource_type == "RDS")
     addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex, id);
+  else if(resource_type == "ElastiCache")
+    addSlider(resource_type+"-slider", elastiCacheInstanceTypes, selectedIndex, id);
   else if(resource_type != "ELB" && resource_type != "S3")
     addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex, id);
 }
@@ -54,6 +56,7 @@ function showInstanceEditForm(editElement){
   dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
   dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   dialog.find('#' + resource_type + '_cloudfront').prop("checked",instanceOptions.configAttributes.cloudFront);
+  dialog.find('#' + resource_type + '_node_count').val(instanceOptions.configAttributes.node_count);
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 };
