@@ -6,7 +6,7 @@ function makeSourceAndTarget(element){
     parent: element,
     anchor: "Continuous",
     endpoint: "Blank",
-    connector: [ "Flowchart" ],
+    connector: [ "Straight" ],
     connectorStyle: { strokeStyle:"#666", lineWidth:2 },
     maxConnections:-1
   });

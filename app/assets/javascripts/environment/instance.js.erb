@@ -15,8 +15,13 @@
     },
     _setOption: function(key, value){
       if(key == 'label'){
+        //setting the tooltip for the label in the dialog
+        this.element.find($('.instance-label')).attr('rel','tooltip');
+        this.element.find($('.instance-label')).attr('data-placement','bottom');
+        this.element.find($('.instance-label')).attr('title',value);
         var label = shortenLongStrings(value, <%= VisualCloudConfig[:strings_max_length] %>);
         this.element.find($('.instance-label')).html(label);
+
       }
       //Sets the new options
       $.Widget.prototype._setOption.apply(this, arguments);
@@ -36,7 +41,7 @@
 
       //Set label of the instance
       var label = shortenLongStrings(options.label, <%= VisualCloudConfig[:strings_max_length] %>);
-      element.find($('.instance-label')).html('<a id=instance-label-' + instanceDivId + ' href="#" >' + label + '</a>');
+      element.find($('.instance-label')).html('<a id=instance-label-' + instanceDivId + ' href="#" rel="tooltip" data-placement="bottom" title="' + options.label + '">' + label + '</a>');
 
       //Set instance Type if it exists
       if(options.InstanceType){         
