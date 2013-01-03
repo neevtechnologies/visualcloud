@@ -3,7 +3,7 @@
     <%= image_tag("icons/#{resource_type.large_icon}", size: '60x60', class: 'instance-icon')%>
     <div class="instance-type-label"></div>
     <div style="clear:both"></div>
-    <span class="instance-label">
+    <span class="instance-label" rel="tooltip" data-placement="bottom">
       <%= resource_type.name %>
     </span>
     <div class="connection-source" title="Start dragging for new connection from here." rel="tooltip" data-placement="right"></div>
