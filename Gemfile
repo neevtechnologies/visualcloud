@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -14,7 +14,7 @@ gem "cancan", ">= 1.6.8"
 gem "rolify", ">= 3.2.0"
 gem 'bootstrap-sass'
 gem "simple_form", ">= 2.0.3"
-gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
+gem "therubyracer", "= 0.10.2", :group => :assets, :platform => :ruby
 gem "chef", path: './lib/chef'
 gem 'sidekiq'
 gem 'sinatra', require: false
