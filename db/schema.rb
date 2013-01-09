@@ -66,8 +66,6 @@ ActiveRecord::Schema.define(:version => 20121219083733) do
     t.string   "label"
     t.integer  "xpos"
     t.integer  "ypos"
-    t.string   "access_control"
-    t.integer  "ami_id"
     t.integer  "instance_type_id"
     t.integer  "environment_id"
     t.integer  "resource_type_id"
