@@ -7,7 +7,8 @@
     <div id="<%= resource_type.name %>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: "" , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
-      <%= f.input :access_control, label: 'Access Control', :include_blank => false, :collection => VisualCloudConfig[:s3_access_control], input_html: {id: "#{resource_type.name}_access_control"} %>
+      <p>Access Control</p>
+      <%= select_tag "#{resource_type.name}_access_control" , options_for_select(VisualCloudConfig[:s3_access_control]), :include_blank => false %>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <div class="row">
         <div class="span0">

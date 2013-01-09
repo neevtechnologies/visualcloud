@@ -19,6 +19,7 @@
 //= require jquery.ui.draggable
 //= require jquery.ui.droppable
 //= require jquery.ui.slider
-//= require jquery.effects.all
+//= require jquery.ui.spinner
+//= require jquery.ui.effect.all
 //= require bootstrap
 //= require_tree .
