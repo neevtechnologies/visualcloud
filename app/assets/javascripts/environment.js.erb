@@ -1,3 +1,10 @@
+function display_exist_elastic_ip_list(element,value) {
+ if(value == "1")
+   $('#'+element+'_elastic_ip_dropdown').parent().show(); //displaying the drop-down
+ else
+   $('#'+element+'_elastic_ip_dropdown').parent().hide(); //hiding the drop-down
+}
+
 function save_environment(){
     var graphName = $('input#graph-name').val().trim();
     var keyPairName = $('select#graph-key-pair-name').val();

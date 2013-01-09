@@ -32,18 +32,18 @@
           var ypos = $('#'+ resourceName +'-configuration').data('ypos');
           var editElement = $('#'+ resourceName +'-configuration').data('editElement');
           var label = $('input#'+ resourceName +'_label').val().trim();
-          var accessControl = $('select#'+ resourceName +'_access_control').val().trim();          
+          var access_control = $('#'+ resourceName +'_access_control').val().trim();
           var parents_list = $('#'+ resourceName +'_parents_list').val().trim();
           var cloudFront = $('input#'+ resourceName +'_cloudfront')[0].checked;
-          var config_attributes = {parents_list:parents_list,cloudFront:cloudFront};
+          var config_attributes = {parents_list:parents_list,cloudFront:cloudFront, access_control:access_control};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();
-              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, accessControl: accessControl, configAttributes: config_attributes});
+              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, configAttributes: config_attributes});
             }
             else {
               var existingInstance = $('#'+editElement);
-              existingInstance.instance("option", {label: label, accessControl: accessControl, configAttributes: config_attributes});
+              existingInstance.instance("option", {label: label, configAttributes: config_attributes});
             }
             $('#'+ resourceName +'-configuration').modal('hide');
           }

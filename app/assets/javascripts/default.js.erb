@@ -20,6 +20,8 @@ function showConfigurationForm(dialogId, droppedPosition){
   dialog.find('#' + resource_type + '_delete').hide();
   dialog.find('#' + resource_type + '_ip_address').hide();
   dialog.find('#' + resource_type + '_public_dns').hide();
+  dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
+  dialog.find('#' + resource_type + '_elastic_ip_dropdown').parent().hide();
   dialog.modal('show');
 };
 
@@ -43,20 +45,30 @@ function showInstanceEditForm(editElement){
   dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
   dialog.find('.instance_label').val(instanceOptions.label);
-  dialog.find('#' + resource_type + '_ami_id').val(instanceOptions.amiId);
+  dialog.find('#' + resource_type + '_ami_id').val(instanceOptions.configAttributes.ami_id);
   callToAddSlider(resource_type , instanceOptions.InstanceType, editElement);
   $('#' + resource_type + '_instance_type_id').html(instanceOptions.InstanceType);
-  dialog.find('#' + resource_type + '_access_control').val(instanceOptions.accessControl);
+  dialog.find('#' + resource_type + '_access_control').val(instanceOptions.configAttributes.access_control);
   if(instanceOptions.ipAddress != "")
     dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>").show();
   if(instanceOptions.publicDNS != "")
     dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>").show();
+  dialog.find('#' + resource_type + '_version').val(instanceOptions.configAttributes.java_version);
+  dialog.find('#' + resource_type + '_tomcat_version').val(instanceOptions.configAttributes.tomcat_version);
   dialog.find('#' + resource_type + '_size').val(instanceOptions.configAttributes.size);
   dialog.find('#' + resource_type + '_master_user_name').val(instanceOptions.configAttributes.master_user_name);
   dialog.find('#' + resource_type + '_master_password').val(instanceOptions.configAttributes.master_password);
   dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   dialog.find('#' + resource_type + '_cloudfront').prop("checked",instanceOptions.configAttributes.cloudFront);
   dialog.find('#' + resource_type + '_node_count').val(instanceOptions.configAttributes.node_count);
+  if(instanceOptions.configAttributes.elastic_ip != ""){
+    dialog.find('#' + resource_type + '_elastic_ip_list').prop("checked",true);
+    dialog.find('#' + resource_type + '_elastic_ip_dropdown').val(instanceOptions.configAttributes.elastic_ip).parent().show();
+  }
+  else {
+    dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
+    dialog.find('#' + resource_type + '_elastic_ip').parent().hide();
+  }
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 };
@@ -129,4 +141,5 @@ $(document).on('mouseleave','[rel=tooltip]', function(){
 $(document).ready(function(){
   //Hide notifications
   $("#container").notify({expires: false,speed: 1000});
+  $( "#ElastiCache_node_count" ).spinner();
 });
