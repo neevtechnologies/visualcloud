@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require jquery.ui.slider
+ *= require jquery.ui.spinner
  *= require_tree .
  *= require_self
 */
@@ -120,5 +121,13 @@ div.graph-draggables-dock {
 }
 
 .instance-label{
+  position:relative;
+}
+
+.ui-spinner {
+  height:32px;
+}
+
+.relative_position{
   position:relative;
 }
