@@ -4,8 +4,6 @@ class CreateInstances < ActiveRecord::Migration
       t.string :label
       t.integer :xpos
       t.integer :ypos
-      t.string :access_control
-      t.integer :ami_id
       t.references :instance_type
       t.references :environment
       t.references :resource_type
