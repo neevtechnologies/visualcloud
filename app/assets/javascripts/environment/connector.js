@@ -7,7 +7,7 @@ function makeSourceAndTarget(element){
     anchor: "Continuous",
     endpoint: "Blank",
     connector: [ "Straight" ],
-    connectorStyle: { strokeStyle:"#666", lineWidth:2 },
+    connectorStyle: { strokeStyle:"#C6C6C6", lineWidth:2 },
     maxConnections:-1
   });
 
