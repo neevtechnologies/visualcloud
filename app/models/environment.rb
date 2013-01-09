@@ -127,7 +127,13 @@ class Environment < ActiveRecord::Base
   def add_s3_resources(stack_resources)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'S3'
-        stack_resources << Cloudster::S3.new(name: instance.aws_label)
+        config_attributes = JSON.parse(instance.config_attributes)
+        s3 = Cloudster::S3.new(name: instance.aws_label, access_control: config_attributes["access_control"])
+        if config_attributes["cloudFront"]
+          cloud_front = Cloudster::CloudFront.new(:name => "CloudFront#{instance.aws_label}")
+          cloud_front.add_to(s3)
+        end
+        stack_resources << s3
       end
     end
   end
