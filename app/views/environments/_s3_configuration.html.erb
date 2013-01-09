@@ -9,10 +9,10 @@
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
       <%= f.input :access_control, label: 'Access Control', :include_blank => false, :collection => VisualCloudConfig[:s3_access_control], input_html: {id: "#{resource_type.name}_access_control"} %>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
-      <div class="row" style="margin-left:-10px;">
+      <div class="row">
         <div class="span0">
         <%= check_box_tag "#{resource_type.name}_cloudfront", value = "", checked = false%></div>
-        <div class="span3" style="margin-left:10px;margin-top:3px;">Serve with CloudFront </div>
+        <div class="span3">Serve with CloudFront </div>
       </div>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
       <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
