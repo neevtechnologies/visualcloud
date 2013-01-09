@@ -21,14 +21,13 @@
       <%= text_field_tag "#{resource_type.name}_master_user_name" %>
       <p>Master Password</p>
       <%= password_field_tag "#{resource_type.name}_master_password" %>
-      <table>
-           <tr>
-             <td><%= check_box_tag "#{resource_type.name}_multiAZ", value = "", checked = false%></td>
-             <td></td>
-             <td></td>
-             <td>Multi AZ</td>
-           </tr>
-      </table>
+      <p>Security Group</p>
+      <%= select_tag "#{resource_type.name}_security_group" , options_for_select(["default","test"]), :include_blank => false %>
+      <div class="row">
+        <div class="span0">
+        <%= check_box_tag "#{resource_type.name}_multiAZ", value = "", checked = false%></div>
+        <div class="span3">Multi AZ</div>
+      </div>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
       <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
