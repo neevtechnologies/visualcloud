@@ -12,9 +12,9 @@
      <li class="dropdown">
        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Details<b class="caret"></b></a>
        <ul class="dropdown-menu">
-        <li class="simple_li"> Region: <%= @environment.region.name %> </li>
-	<li class="simple_li"> Key Pair: <%= @environment.key_pair_name %> </li>
-	<li class="simple_li"> Security Group: <%= @environment.security_group %> </li>
+         <li class="simple_li" title='Region' rel='tooltip' data-placement='left'><i class='icon-globe'></i> <%= @environment.region.name %> </li>
+         <li class="simple_li" title='KeyPair' rel='tooltip' data-placement='left'><i class='icon-key'></i> <%= @environment.key_pair_name %> </li>
+         <li class="simple_li" title='Security Group' rel='tooltip' data-placement='left'><i class='icon-lock'></i> <%= @environment.security_group %> </li>
        </ul>
      </li>
   </ul>

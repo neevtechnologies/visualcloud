@@ -10,6 +10,7 @@
  *
  *= require jquery.ui.slider
  *= require_tree .
+ *= require 'font-awesome'
  *= require_self
 */
 
@@ -98,11 +99,10 @@ div.graph-draggables-dock {
 }
 
 .connection-source {
-  border-radius: 2px 2px 2px 2px;
-  background-color: #994466;
-  height: 12px;
-  width: 12px;
-  margin-top: 5px;
+  //border-radius: 2px 2px 2px 2px;
+  //background-color: #994466;
+  //height: 12px;
+  //width: 12px;
   float:right;
 }
 
