@@ -32,16 +32,27 @@
           var parents_list = $('#' + resourceName + '_parents_list').val();
           var amiId = parseInt($('#' + resourceName + '_ami_id').val());
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
+          var elasticIpCheck = $('input[name="'+resourceName+'_elasticIp"]:radio:checked').val();
+          var elasticIp = "";
+          if(elasticIpCheck == "1")
+              elasticIp = $('#' + resourceName + '_elastic_ip_dropdown').val();
           var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
-          var config_attributes = {roles: roles, parents_list:parents_list, label: labelIcon};
+          var config_attributes = {}
+          if(resourceName == "Java") {
+            var java_version = $('#' + resourceName + '_version').val();
+            var tomcat_version = $('#' + resourceName + '_tomcat_version').val();
+            config_attributes = {elastic_ip:elasticIp,roles: roles, parents_list:parents_list, label: labelIcon,ami_id:amiId,tomcat_version:tomcat_version,java_version:java_version};
+          }
+          else
+           config_attributes = {elastic_ip:elasticIp,roles: roles, parents_list:parents_list, label: labelIcon,ami_id:amiId};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();
-              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, amiId: amiId, InstanceType: InstanceTypeId, configAttributes: config_attributes});
+              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, InstanceType: InstanceTypeId, configAttributes: config_attributes});
             }
             else {
               var existingInstance = $('#'+editElement);
-              existingInstance.instance("option", {label: label, amiId: amiId, InstanceType: InstanceTypeId, configAttributes: config_attributes});
+              existingInstance.instance("option", {label: label, InstanceType: InstanceTypeId, configAttributes: config_attributes});
             }
             $('#' + resourceName + '-configuration').modal('hide');
           }
