@@ -41,9 +41,10 @@
           var cache_security_group_names = $('#'+ resourceName +'_cache_security_group_names').val().trim();
           var node_count = $('#'+ resourceName +'_node_count').val().trim();
           var InstanceTypeId = parseInt($('#'+ resourceName +'_instance_type_id').html());
+          var cache_security_group = $('#'+ resourceName +'_security_group').val().trim();
           var labelIcon = getInstanceTypeLabel(elastiCacheInstanceTypes,InstanceTypeId);
           //Change cache_security_group_names to accept multiple values from UI
-          var config_attributes = {parents_list: parents_list, cache_security_group_names: [cache_security_group_names], node_count: node_count, label: labelIcon};
+          var config_attributes = {parents_list: parents_list, cache_security_group_names: [cache_security_group_names], node_count: node_count, label: labelIcon,cache_security_group:cache_security_group};
           if ( self.validate(label,node_count) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

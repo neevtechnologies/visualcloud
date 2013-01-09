@@ -10,13 +10,16 @@
       <div class="hide">
       <%= select_tag "#{resource_type.name}_cache_security_group_names" , options_for_select([["default"]]), :include_blank => false %>
       </div>
+      <p>Security Group</p>
+      <%= select_tag "#{resource_type.name}_security_group" , options_for_select(["default","test"]), :include_blank => false %>
       <div id="<%= resource_type.name %>_instance_type_id" class="hide"></div>
+      <br />
       <label>Node Type</label>
-      <div id="<%= resource_type.name %>-slider">
+      <div id="<%= resource_type.name %>-slider" class="relative_position">
         <%= render "slider" %>
       </div>
       <p style="margin-top:60px;">Node Count</p>
-      <%= text_field_tag "#{resource_type.name}_node_count" %>
+      <%= text_field_tag "#{resource_type.name}_node_count", "0", :style => "width:20px;height:18px;background:black;" %>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
       <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
