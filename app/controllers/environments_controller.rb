@@ -2,6 +2,7 @@ class EnvironmentsController < ApplicationController
   include ServerMetaData
   include AwsCompatibleName 
   before_filter :authenticate
+  require "csv"
   # GET /environments
   # GET /environments.json
   def index
@@ -52,6 +53,28 @@ class EnvironmentsController < ApplicationController
     @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
     @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
     @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
+  end
+
+  def export_csv
+    @environment = Environment.find(params[:id])
+    @project = Project.find(@environment.project_id)
+    @instances = @environment.instances
+    csv_string = CSV.generate do |csv|
+      # Project details
+      csv << ["Id", "Project Name", "repositry Type","Repository URL"]
+      csv << [@project.id, @project.name, @project.repo_type,@project.repo_url]
+      # Environment details
+      csv << ["Id", "Environment Name", "Branch","Key Pair Name", "Security Group", "Name for AWS","Region"]
+      csv << [@environment.id, @environment.name, @environment.branch,@environment.key_pair_name, @environment.security_group, @environment.aws_name,Region.find(@environment.region_id).name]
+      # Instances details
+      csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name for AWS","Public DNS","Private IP"]
+      @instances.each do |instance|
+        csv << [instance.id, instance.label, InstanceType.find(instance.instance_type_id).name, ResourceType.find(instance.resource_type_id).name, instance.config_attributes, instance.aws_label,instance.public_dns, instance.private_ip]
+      end
+    end
+
+    # send csv file(users.csv) to browser
+    send_data(csv_string, :type => 'text/csv; charset=utf-8; header=present', :filename => "environment_details.csv")
   end
 
   # POST /environments

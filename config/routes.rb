@@ -14,6 +14,7 @@ VisualCloud::Application.routes.draw do
     get 'stack_status' => 'environments#stack_status'
     get 'get_key_pairs_and_security_groups' => 'environments#get_key_pairs_and_security_groups'
     get 'instance_status' => 'instances#status'
+    match 'export_csv' => 'environments#export_csv'
     #Environment resource
     resources :projects do
       resources :environments do
