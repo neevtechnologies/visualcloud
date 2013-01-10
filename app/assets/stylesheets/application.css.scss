@@ -88,14 +88,13 @@ div.graph-draggables-dock {
   border-radius: 4px 4px 4px 4px;
   padding: 3.5px;
   position: absolute;
-  width: 92px;
+  width: 90px;
   background-color: black;
   border: 1px outset dimgray;
   box-shadow: 0 0 4px 2px black;
 }
 
 .instance-icon {
-  left: 15px;
   position: relative;
 }
 
@@ -104,7 +103,9 @@ div.graph-draggables-dock {
   //background-color: #994466;
   //height: 12px;
   //width: 12px;
+  margin-top:-56px;
   float:right;
+  position:relative;
 }
 
 .greenBorder {
@@ -116,12 +117,14 @@ div.graph-draggables-dock {
 }
 
 .instance-type-label{
-  float:right;
-  font-size:10px;
+  float:left;
+  position:relative;
+  font-size:9px;
 }
 
 .instance-label{
   position:relative;
+  margin-left:13px;
 }
 
 .ui-spinner {

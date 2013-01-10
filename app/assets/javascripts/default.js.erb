@@ -112,7 +112,7 @@ function hideLoading(){
 };
 
 function shortenLongStrings(string, maxLength){
-  var shortString = string.substring(0, (maxLength-1));
+  var shortString = string.substring(0, (maxLength-4));
   if (string.length > maxLength)
     shortString += '...';
   return shortString;
