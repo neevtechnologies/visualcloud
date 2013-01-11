@@ -16,7 +16,7 @@ module ServerMetaData
 
   def update_project_data_bag(obj, options={})
     begin
-      file = File.open("/tmp/projects.json","w+") 
+      file = File.open("/tmp/projects.json","w+")
       file.puts projects_json(obj, options)
       file.close
       system("knife data bag from file projects /tmp/projects.json")

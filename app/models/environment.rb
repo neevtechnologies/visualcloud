@@ -10,8 +10,8 @@ class Environment < ActiveRecord::Base
   validates :name, presence: true
   validates_uniqueness_of :deploy_order, :scope => 'project_id' , :allow_blank => true
 
-  before_save :set_aws_compatible_name
-  after_destroy :modify_environment_data
+  before_create :set_aws_compatible_name
+  before_destroy :modify_environment_data
 
   #This function just prepares a select dropdown containing the number of environments
   #in this project. TODO : Shouldn't this move to Project model ?
@@ -34,7 +34,7 @@ class Environment < ActiveRecord::Base
       provision_request = cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
     else
       provision_request = cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
-      #TODO This logic doesn't work in edge cases. Need to refactor
+      #TODO This logic doesn't work in edge cases. Need to refactor (Do not depend on privsioned boolean)
       self.provisioned = true
       self.save
     end
@@ -48,7 +48,7 @@ class Environment < ActiveRecord::Base
   def status(access_key_id, secret_access_key)
     if access_key_id.present? && secret_access_key.present?
       cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-      return cloud.status(stack_name: name)
+      return cloud.status(stack_name: aws_name)
     else
       return nil
     end
@@ -56,12 +56,12 @@ class Environment < ActiveRecord::Base
 
   def get_rds_endpoints(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    cloud.get_database_endpoints(stack_name: name)
+    cloud.get_database_endpoints(stack_name: aws_name)
   end
 
   def events(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    return cloud.events(stack_name: name)
+    return cloud.events(stack_name: aws_name)
   end
 
   def add_ec2_resources(stack_resources)
@@ -288,12 +288,26 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  def update_instance_outputs(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    outputs = cloud.outputs(stack_name: aws_name)
+    outputs.each do |key, value|
+      instances.where(aws_label: key).each do |instance|
+        existing_config_attributes = JSON.parse(instance.config_attributes)
+        output_attributes = value
+        merged_attributes = existing_config_attributes.merge(output_attributes).to_json
+        instance.update_attribute(:config_attributes, merged_attributes )
+      end
+    end
+  end
+
+  #To be removed once all resource outputs are ported into cloudster ,
+  #so we can use update_instance_outputs in one shot instead of doing this
   def update_instances(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     update_elb_details(cloud)
     update_ec2_details(cloud)
     update_rds_details(cloud)
-    return true
   end
 
   private
@@ -311,5 +325,4 @@ class Environment < ActiveRecord::Base
   def region_name
     region.name
   end
-
 end

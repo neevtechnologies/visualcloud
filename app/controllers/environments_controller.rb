@@ -201,7 +201,7 @@ class EnvironmentsController < ApplicationController
         RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
           secret_access_key: current_user.aws_secret_key,
           environment_id: @environment.id
-        ) 
+        )
       else
         @errors << "This environment cannot be provisioned"
         flash.now[:error] = @errors
@@ -267,10 +267,12 @@ class EnvironmentsController < ApplicationController
 
   def update_instances
     #Remove all instances and start with a clean slate. It's not easy to track edited instances
+    #Think about x, y positions
     @environment.instances.destroy_all
 
     saved_doms = {}
     params[:instances].to_a.each do |instance|
+      #TODO This logic is obscure . Need to refactor this
       if instance.length > 2 #delete instance has length 2
         resouce_type_name = instance.delete(:resource_type)
         dom_id = instance.delete(:dom_id)

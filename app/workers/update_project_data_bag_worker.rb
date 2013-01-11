@@ -7,7 +7,8 @@ class UpdateProjectDataBagWorker
 
   #Update projects data bag for the given object.
   def perform(obj)
-    update_project_data_bag(obj)
+    project = Project.find(obj['id'])
+    update_project_data_bag(project)
   end
   
 end
