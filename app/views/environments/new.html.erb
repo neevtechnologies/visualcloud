@@ -7,12 +7,12 @@
 </div>
 <script type="text/javascript">
   prepareStage();
-$(document).ready(function(){
-  $('input#graph-name').val('<%= params[:environment]['name'] %>');
-  $('<option value="<%= params[:environment][:key_pair_name] %>"></option>').appendTo($('select#graph-key-pair-name'));
-  $('<option value="<%= params[:environment][:security_group] %>"></option>').appendTo($('select#graph-security-group-name'));
-  $('input#graph-region-id').val('<%= params[:environment]['region_id'] %>');
-});
+  $(document).ready(function(){
+    $('input#graph-name').val('<%= params[:environment]['name'] %>');
+    $('<option value="<%= params[:environment][:key_pair_name] %>"></option>').appendTo($('select#graph-key-pair-name'));
+    $('<option value="<%= params[:environment][:security_group] %>"></option>').appendTo($('select#graph-security-group-name'));
+    $('input#graph-region-id').val('<%= params[:environment]['region_id'] %>');
+  });
   var ec2InstanceTypes = JSON.parse('<%= raw @ec2_instance_types.to_json %>');
   var rdsInstanceTypes = JSON.parse('<%= raw @rds_instance_types.to_json %>');
   var elastiCacheInstanceTypes = JSON.parse('<%= raw @elasticache_instance_types.to_json %>');
