@@ -1,4 +1,14 @@
-<% if @instance.public_dns.present?%>
-  $("#<%= params[:instance_label_id] %>").attr("href", "http://<%= @instance.public_dns %>");
-  $("#<%= params[:instance_label_id] %>").attr("target", "_blank");
-<% end %>
+<%if @instance.present? %>
+  var configAttributes = JSON.parse('<%= @instance.config_attributes.html_safe %>');
+  var public_dns = "";
+  if(configAttributes.Endpoint != undefined)
+    public_dns = configAttributes.Endpoint;
+  if(configAttributes.DNSName != undefined)
+    public_dns = configAttributes.DNSName;
+  if(configAttributes.dnsName != undefined)
+    public_dns = configAttributes.dnsName;
+  if(public_dns != ""){
+    $("#<%= params[:instance_label_id] %>").attr("href", "http:// " + public_dns);
+    $("#<%= params[:instance_label_id] %>").attr("target", "_blank");
+  }
+<%end%>

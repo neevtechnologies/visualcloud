@@ -37,6 +37,14 @@ function callToAddSlider(resource_type, selectedIndex, elementId){
     addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex, id);
 }
 
+function display_attribute(resourceType,attribute_value,dialog)
+{
+  if(attribute_value != undefined ) {
+  dialog.find('#' + resourceType + '_public_dns').html("Public DNS : <code class='fnt_size'>"+attribute_value+"</code>").show();
+  dialog.find('#' + resourceType + '_public_dns_value').val(attribute_value);
+  }
+}
+
 function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
   var dialogId = $('#'+editElement).instance('getConfigurationDialogId') ;
@@ -49,10 +57,16 @@ function showInstanceEditForm(editElement){
   callToAddSlider(resource_type , instanceOptions.InstanceType, editElement);
   $('#' + resource_type + '_instance_type_id').html(instanceOptions.InstanceType);
   dialog.find('#' + resource_type + '_access_control').val(instanceOptions.configAttributes.access_control);
-  if(instanceOptions.ipAddress != "")
-    dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.ipAddress+"</code>").show();
-  if(instanceOptions.publicDNS != "")
-    dialog.find('#' + resource_type + '_public_dns').html("Public DNS : <code class='fnt_size'>"+instanceOptions.publicDNS+"</code>").show();
+  if(instanceOptions.configAttributes.ipAddress != ""){
+    dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.configAttributes.ipAddress+"</code>").show();
+    dialog.find('#' + resource_type + '_ip_address_value').val(instanceOptions.configAttributes.ip_address);
+  }
+  if(instanceOptions.configAttributes.dnsName != "")
+    display_attribute(resource_type,instanceOptions.configAttributes.dnsName,dialog);
+  if(instanceOptions.configAttributes.Endpoint != "")
+    display_attribute(resource_type,instanceOptions.configAttributes.Endpoint,dialog);
+  if(instanceOptions.configAttributes.DNSName != "")
+    display_attribute(resource_type,instanceOptions.configAttributes.DNSName,dialog);
   dialog.find('#' + resource_type + '_version').val(instanceOptions.configAttributes.java_version);
   dialog.find('#' + resource_type + '_tomcat_version').val(instanceOptions.configAttributes.tomcat_version);
   dialog.find('#' + resource_type + '_size').val(instanceOptions.configAttributes.size);
@@ -67,11 +81,11 @@ function showInstanceEditForm(editElement){
   }
   else {
     dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
-    dialog.find('#' + resource_type + '_elastic_ip').parent().hide();
+    dialog.find('#' + resource_type + '_elastic_ip_dropdown').parent().hide();
   }
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
-};
+}
 
 function addMessagesToDiv(jDiv, content){
    jDiv.append(content);

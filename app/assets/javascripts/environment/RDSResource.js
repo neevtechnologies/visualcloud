@@ -44,8 +44,9 @@
           var parents_list = $('#'+ resourceName +'_parents_list').val().trim();
           var db_security_group = $('#'+ resourceName +'_security_group').val().trim();
           var multiAZ = $('input#'+ resourceName +'_multiAZ')[0].checked
+          var publicDns = $('#' + resourceName + '_public_dns_value').val();
           var labelIcon = getInstanceTypeLabel(rdsInstanceTypes,InstanceTypeId);
-          var config_attributes = {size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ, label: labelIcon,db_security_group:db_security_group};
+          var config_attributes = {Endpoint:publicDns,size:size,master_user_name:username,master_password:password,parents_list:parents_list,multiAZ:multiAZ, label: labelIcon,db_security_group:db_security_group};
           if ( self.validate(label, size) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

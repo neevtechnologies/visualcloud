@@ -32,15 +32,16 @@
           var editElement = $('#'+ resourceName +'-configuration').data('editElement');
           var label = $('input#'+ resourceName +'_label').val().trim();
           var parents_list = $('#'+ resourceName +'_parents_list').val().trim();
-          var config_attributes = {parents_list:parents_list};
+          var publicDns = $('#' + resourceName + '_public_dns_value').val();
+          var config_attributes = {DNSName:publicDns, parents_list:parents_list};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();
-              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, config_attributes: config_attributes});
+              newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceName, configAttributes: config_attributes});
             }
             else {
               var existingInstance = $('#'+editElement);
-              existingInstance.instance("option", {label: label,config_attributes: config_attributes});
+              existingInstance.instance("option", {label: label,configAttributes: config_attributes});
             }
             $('#'+ resourceName +'-configuration').modal('hide');
           }
