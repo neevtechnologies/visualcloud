@@ -74,8 +74,6 @@ ActiveRecord::Schema.define(:version => 20121219083733) do
     t.text     "config_attributes"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
-    t.string   "public_dns"
-    t.string   "private_ip"
     t.string   "aws_label"
   end
 

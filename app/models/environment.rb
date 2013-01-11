@@ -176,10 +176,13 @@ class Environment < ActiveRecord::Base
     instances.where('aws_label in (?)', ec2_details.keys).each do |instance|
       instance_details = ec2_details[instance.aws_label]
       if instance_details.present?
+        existing_config_attributes = JSON.parse(instance_details.config_attributes)
+        existing_config_attributes = existing_config_attributes.merge({'dnsName' => instance_details['dnsName'],'ipAddress'=>instance_details['ipAddress']})
         instance.update_attributes({
-            aws_instance_id: instance_details['instanceId'],
-            public_dns: instance_details['dnsName'],
-            private_ip: instance_details['ipAddress']
+            :aws_instance_id => instance_details['instanceId'],
+            :config_attributes =>  existing_config_attributes.to_json
+            #public_dns: instance_details['dnsName'],
+            #private_ip: instance_details['ipAddress']
           })
       end
     end
@@ -197,8 +200,11 @@ class Environment < ActiveRecord::Base
     instances.where('aws_label in (?)', elb_details.keys).each do |instance|
      instance_details = elb_details[instance.aws_label]
      if instance_details.present?
+       existing_config_attributes = JSON.parse(instance_details.config_attributes)
+       existing_config_attributes = existing_config_attributes.merge({'DNSName' => instance_details['DNSName']})
        instance.update_attributes({
-         public_dns: instance_details['DNSName']
+         :config_attributes =>  existing_config_attributes.to_json
+         #public_dns: instance_details['DNSName']
        })
      end
     end
@@ -216,8 +222,11 @@ class Environment < ActiveRecord::Base
     instances.where('aws_label in (?)', rds_details.keys).each do |instance|
      instance_details = rds_details[instance.aws_label]
      if instance_details.present?
+       existing_config_attributes = JSON.parse(instance_details.config_attributes)
+       existing_config_attributes = existing_config_attributes.merge({'Endpoint' => instance_details['Endpoint']['Address']})
        instance.update_attributes({
-         public_dns: instance_details['Endpoint']['Address']
+         :config_attributes =>  existing_config_attributes.to_json
+         #public_dns: instance_details['Endpoint']['Address']
        })
      end
     end

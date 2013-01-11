@@ -67,9 +67,9 @@ class EnvironmentsController < ApplicationController
       csv << ["Id", "Environment Name", "Branch","Key Pair Name", "Security Group", "Name for AWS","Region"]
       csv << [@environment.id, @environment.name, @environment.branch,@environment.key_pair_name, @environment.security_group, @environment.aws_name,Region.find(@environment.region_id).name]
       # Instances details
-      csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name for AWS","Public DNS","Private IP"]
+      csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name for AWS"]
       @instances.each do |instance|
-        csv << [instance.id, instance.label, InstanceType.find(instance.instance_type_id).name, ResourceType.find(instance.resource_type_id).name, instance.config_attributes, instance.aws_label,instance.public_dns, instance.private_ip]
+        csv << [instance.id, instance.label, InstanceType.find(instance.instance_type_id).name, ResourceType.find(instance.resource_type_id).name, instance.config_attributes, instance.aws_label]
       end
     end
 

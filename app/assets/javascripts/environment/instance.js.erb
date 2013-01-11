@@ -6,8 +6,6 @@
       InstanceType: null,
       instanceId: null,
       resourceType: '',
-      ipAddress: '',
-      publicDNS: '',
       configAttributes:{},
       label: ''
     },
@@ -45,7 +43,6 @@
          element.find($('.instance-type-label')).attr('id', 'instance-type-label-' + instanceDivId);         
          $('#instance-type-label-'+ instanceDivId).html(options.configAttributes.label);
       }
-
      //Align the element on the stage
       element.position({
         my: 'left top',

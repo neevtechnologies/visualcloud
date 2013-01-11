@@ -7,9 +7,9 @@
     <div id="<%= resource_type.name %>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '' , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{ resource_type.name}_label", class: 'instance_label'} %>
-      <div id="<%= resource_type.name %>_ip_address"></div>
       <br />
       <div id="<%= resource_type.name %>_public_dns"></div>
+      <%= hidden_field_tag "#{resource_type.name}_public_dns_value","", :id => "#{resource_type.name}_public_dns_value"%>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
   </div>
   <div class="modal-footer">

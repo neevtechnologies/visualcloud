@@ -16,12 +16,10 @@
     var ypos = <%= instance.ypos %> ;
     var parents = <%= instance.parents.collect(&:id) %> ;
     var instanceId= <%= instance.id %>
-    var ipAddress = '<%= instance.private_ip.to_s %>';
-    var publicDNS = '<%= instance.public_dns.to_s %>';
     var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
     var configAttributes = JSON.parse('<%= instance.config_attributes.html_safe %>');
     var newInstance = addInstanceCloneToGraph(instanceId);
-    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes,ipAddress:ipAddress,publicDNS:publicDNS});
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
     instances[instanceId] = { instance: newInstance, parents: parents,configAttributes:configAttributes };
   <% end %>
   //Loads saved connections
