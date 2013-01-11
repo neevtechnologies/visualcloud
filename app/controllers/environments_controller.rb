@@ -64,12 +64,13 @@ class EnvironmentsController < ApplicationController
       csv << ["Id", "Project Name", "repositry Type","Repository URL"]
       csv << [@project.id, @project.name, @project.repo_type,@project.repo_url]
       # Environment details
-      csv << ["Id", "Environment Name", "Branch","Key Pair Name", "Security Group", "Name for AWS","Region"]
-      csv << [@environment.id, @environment.name, @environment.branch,@environment.key_pair_name, @environment.security_group, @environment.aws_name,Region.find(@environment.region_id).name]
+      csv << ["Id", "Environment Name", "Branch","Key Pair Name", "Security Group", "Name in AWS Console","Region"]
+      csv << [@environment.id, @environment.name, @environment.branch,@environment.key_pair_name, @environment.security_group, @environment.aws_name,@environment.region.name]
       # Instances details
-      csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name for AWS"]
+      csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name in AWS Console"]
       @instances.each do |instance|
-        csv << [instance.id, instance.label, InstanceType.find(instance.instance_type_id).name, ResourceType.find(instance.resource_type_id).name, instance.config_attributes, instance.aws_label]
+        instance_type = instance.instance_type_id.present? ? instance.instance_type.name : ""
+        csv << [instance.id, instance.label,instance_type , instance.resource_type.name, instance.config_attributes, instance.aws_label]
       end
     end
 
