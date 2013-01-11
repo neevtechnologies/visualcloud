@@ -40,4 +40,7 @@ VisualCloud::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  #Run sidekiq inline without starting sidekiq process during development
+  #require 'sidekiq/testing/inline'
 end
