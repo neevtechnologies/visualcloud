@@ -89,4 +89,17 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  #Get the status of all environments belonging to the project
+  #TODO: Use this to set the status of environments in project show page
+  def status
+    project = Project.find(params[:id])
+    environments = project.environments
+    status = {}
+    environments.each do |env|
+      status[env.id] = env.provision_status
+    end
+    render json: status
+  end
 end

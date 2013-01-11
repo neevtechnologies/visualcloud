@@ -1,4 +1,7 @@
 function display_exist_elastic_ip_list(element,value) {
+  //TODO Code smell . What is value 1 ?
+  //Assuming 1 means 'Create new Elastic IP' checked , shouldn't the event be bound to
+  //the radio box itself ?
  if(value == "1")
    $('#'+element+'_elastic_ip_dropdown').parent().show(); //displaying the drop-down
  else
