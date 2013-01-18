@@ -70,7 +70,7 @@ GEM
     celluloid (0.12.4)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
-    cloudster (2.19.1)
+    cloudster (2.19.2)
       fog
       json
     coderay (1.0.8)

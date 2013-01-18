@@ -32,7 +32,8 @@ module JsonFormatter
     "{
       \"id\": \"#{node.id}\",
       \"environment_id\":\"#{node.environment_id}\",
-      \"project_id\":\"#{node.environment.project_id}\"
+      \"project_id\":\"#{node.environment.project_id}\",
+      \"config_attributes\":#{node.config_attributes}
     }"
   end
     

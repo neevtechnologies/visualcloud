@@ -34,19 +34,22 @@
           var ipAddress = $('#' + resourceName + '_ip_address_value').val();
           var publicDns = $('#' + resourceName + '_public_dns_value').val();
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
+          var elasticIp = $('input#'+ resourceName +'_elasticIp')[0].checked;
+          /*
           var elasticIpCheck = $('input[name="'+resourceName+'_elasticIp"]:radio:checked').val();
           var elasticIp = "";
           if(elasticIpCheck == "1")
               elasticIp = $('#' + resourceName + '_elastic_ip_dropdown').val();
+          */
           var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
           var config_attributes = {}
           if(resourceName == "Java") {
             var java_version = $('#' + resourceName + '_version').val();
             var tomcat_version = $('#' + resourceName + '_tomcat_version').val();
-            config_attributes = {ipAddress:ipAddress,dnsName:publicDns,elastic_ip:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId,tomcat_version:tomcat_version,java_version:java_version};
+            config_attributes = {ipAddress:ipAddress,dnsName:publicDns,elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId,tomcat_version:tomcat_version,java_version:java_version};
           }
           else
-           config_attributes = {ipAddress:ipAddress,dnsName:publicDns,elastic_ip:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId};
+           config_attributes = {ipAddress:ipAddress,dnsName:publicDns,elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

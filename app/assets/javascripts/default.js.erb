@@ -20,8 +20,12 @@ function showConfigurationForm(dialogId, droppedPosition){
   dialog.find('#' + resource_type + '_delete').hide();
   dialog.find('#' + resource_type + '_ip_address').hide();
   dialog.find('#' + resource_type + '_public_dns').hide();
+  dialog.find('#' + resource_type + '_bucket_name').hide();
+  dialog.find('#' + resource_type + '_dns_name').hide();
+  /* TODO : Remove this hardcoded logic
   dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
   dialog.find('#' + resource_type + '_elastic_ip_dropdown').parent().hide();
+  */
   dialog.modal('show');
 };
 
@@ -45,6 +49,8 @@ function display_attribute(resourceType,attribute_value,dialog)
   }
 }
 
+//TODO: This method is a mess. Need to refactor this.
+//Violates most programming best practices here :)
 function showInstanceEditForm(editElement){
   var instanceOptions = $('#'+editElement).instance("option") ;
   var dialogId = $('#'+editElement).instance('getConfigurationDialogId') ;
@@ -61,6 +67,14 @@ function showInstanceEditForm(editElement){
     dialog.find('#' + resource_type + '_ip_address').html("Ip Address : <code class='fnt_size'>"+instanceOptions.configAttributes.ipAddress+"</code>").show();
     dialog.find('#' + resource_type + '_ip_address_value').val(instanceOptions.configAttributes.ip_address);
   }
+  if(instanceOptions.configAttributes.bucket_name != ""){
+    dialog.find('#' + resource_type + '_bucket_name').html("Bucket Name : <code class='fnt_size'>"+instanceOptions.configAttributes.bucket_name+"</code>").show();
+    dialog.find('#' + resource_type + '_bucket_name_value').val(instanceOptions.configAttributes.bucket_name);
+  }
+  if(instanceOptions.configAttributes.dns_name != ""){
+    dialog.find('#' + resource_type + '_dns_name').html("DNS Name : <code class='fnt_size'>"+instanceOptions.configAttributes.dns_name+"</code>").show();
+    dialog.find('#' + resource_type + '_dns_name_value').val(instanceOptions.configAttributes.dns_name);
+  }
   if(instanceOptions.configAttributes.dnsName != "")
     display_attribute(resource_type,instanceOptions.configAttributes.dnsName,dialog);
   if(instanceOptions.configAttributes.Endpoint != "")
@@ -75,6 +89,8 @@ function showInstanceEditForm(editElement){
   dialog.find('#' + resource_type + '_multiAZ').prop("checked",instanceOptions.configAttributes.multiAZ);
   dialog.find('#' + resource_type + '_cloudfront').prop("checked",instanceOptions.configAttributes.cloudFront);
   dialog.find('#' + resource_type + '_node_count').val(instanceOptions.configAttributes.node_count);
+  dialog.find('#' + resource_type + '_elasticIp').prop("checked",instanceOptions.configAttributes.elasticIp);
+  /*
   if(instanceOptions.configAttributes.elastic_ip != ""){
     dialog.find('#' + resource_type + '_elastic_ip_list').prop("checked",true);
     dialog.find('#' + resource_type + '_elastic_ip_dropdown').val(instanceOptions.configAttributes.elastic_ip).parent().show();
@@ -83,6 +99,7 @@ function showInstanceEditForm(editElement){
     dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
     dialog.find('#' + resource_type + '_elastic_ip_dropdown').parent().hide();
   }
+  */
   dialog.find('#' + resource_type + '_delete').show();
   dialog.modal('show');
 }

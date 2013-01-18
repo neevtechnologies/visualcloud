@@ -11,6 +11,7 @@ VisualCloud::Application.routes.draw do
   authenticated :user do
     root :to => 'projects#index'
     get 'environment_status' => 'environments#environment_status'
+    get 'stack_info' => 'environments#status'
     get 'stack_status' => 'environments#stack_status'
     get 'project_status' => 'projects#status'
     get 'get_key_pairs_and_security_groups' => 'environments#get_key_pairs_and_security_groups'

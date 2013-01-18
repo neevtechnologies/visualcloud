@@ -1,0 +1,11 @@
+<% ["DEFAULT", "CREATE_COMPLETE", "CREATE_IN_PROGRESS", "CREATE_FAILED"].each do |status| %>
+  <li class="stack-status-icon <%= environment.provision_status == status ? '' : 'hide' %>" id='status-icon-<%= status %>'>
+    <a href="javascript:void(0);">
+      <%= image_tag(status_image(status)["img_src"], title: "#{status_image(status)["img_title"]}", rel: 'tooltip', size: '20x20') %>
+    </a>
+  </li>
+<% end %>
+
+<script type="text/javascript">
+  startStatusPoll(<%= environment.id %>)
+</script>

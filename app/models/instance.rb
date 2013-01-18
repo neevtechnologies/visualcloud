@@ -41,6 +41,11 @@ class Instance < ActiveRecord::Base
     return add_role(id, roles)
   end
 
+  def ami
+    attributes = JSON.parse(config_attributes)
+    Ami.find(attributes['ami_id']) rescue nil
+  end
+
   private
 
   def modify_node_data

@@ -7,11 +7,14 @@
     <div id="<%=resource_type.name%>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: 'instance_label'} %>
+      <!--TODO: remove the following Java attributes out from here.Whats the point in our early refactoring if all this is brought back in ?-->
       <% if  resource_type.name == "Java"%>
       <p>Java Version</p>
-        <%= select_tag "#{resource_type.name}_version" , options_for_select(["default","test"]), :include_blank => false %>
-      <p>Tomcat Version</p>
-        <%= select_tag "#{resource_type.name}_tomcat_version" , options_for_select(["default","test"]), :include_blank => false %>
+      <%= select_tag "#{resource_type.name}_version" , options_for_select(VisualCloudConfig[:java_versions]), :include_blank => false %>
+      <div class='hide'>
+        <p>Tomcat Version</p>
+          <%= select_tag "#{resource_type.name}_tomcat_version" , options_for_select(["default","test"]), :include_blank => false %>
+      </div>
       <%end%>
     <div id="<%=resource_type.name%>_instance_type_id" class="hide"></div>
     <label>Instance Type</label>
@@ -19,12 +22,19 @@
         <%= render 'slider' %>
       </div>
     <br />
-    <p style="margin-top:25px;">Elastic IP</p>
+    <br />
+    <br />
+    <!-- p style="margin-top:25px;">Elastic IP</p>
     <div>
       <input type="radio"  name="<%= resource_type.name %>_elasticIp" id="<%= resource_type.name %>_elastic_ip_new" value="0" onclick = 'display_exist_elastic_ip_list("<%= resource_type.name %>",0);'>&nbsp;&nbsp;Create new</input>&nbsp;&nbsp;
       <input type="radio"  name="<%= resource_type.name %>_elasticIp" id="<%= resource_type.name %>_elastic_ip_list" value="1" onclick = 'display_exist_elastic_ip_list("<%= resource_type.name %>",1);'>&nbsp;&nbsp;Select from exist list</input>
-    </div>
     <div class="hide" style="margin-top:10px;"><%= select_tag "#{resource_type.name}_elastic_ip_dropdown" , options_for_select(["default","test"]), :include_blank => false %></div>
+    </div -->
+    <div class="row">
+      <div class="span0">
+      <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%></div>
+      <div class="span3">Elastic IP </div>
+    </div>
     <br />
     <div id="<%=resource_type.name%>_ip_address"></div>
     <br />

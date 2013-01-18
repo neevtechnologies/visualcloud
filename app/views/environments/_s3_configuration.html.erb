@@ -15,6 +15,12 @@
         <%= check_box_tag "#{resource_type.name}_cloudfront", value = "", checked = false%></div>
         <div class="span3">Serve with CloudFront </div>
       </div>
+      <br />
+      <div id="<%=resource_type.name%>_bucket_name"></div>
+      <br />
+      <div id="<%=resource_type.name%>_dns_name"></div>
+      <%= hidden_field_tag "#{resource_type.name}_bucket_name_value","", :id => "#{resource_type.name}_bucket_name_value"%>
+      <%= hidden_field_tag "#{resource_type.name}_dns_name_value","", :id => "#{resource_type.name}_dns_name_value"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
       <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
   </div>

@@ -5,8 +5,9 @@ default: &defaults
   application_port: 80
   load_balancer_protocol: 'HTTP'
   status_check_interval: 5
-  s3_access_control: ["Private","PublicRead","PublicReadWrite","AuthenticatedRead","BucketOwnerRead","BucketOwnerFullControl"]  
-  strings_max_length: 10 
+  s3_access_control: ["Private","PublicRead","PublicReadWrite","AuthenticatedRead","BucketOwnerRead","BucketOwnerFullControl"]
+  java_versions: ["6","7"]
+  strings_max_length: 10
 
 development:
   <<: *defaults

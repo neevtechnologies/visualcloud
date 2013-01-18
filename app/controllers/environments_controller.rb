@@ -223,6 +223,20 @@ class EnvironmentsController < ApplicationController
     end
   end
 
+  # Get the status of environment and output params of instances
+  def status
+    environment = Environment.find(params[:id])
+    status_code = environment.provision_status
+    status_hash = {
+      status: status_code,
+      instanceAttributes: {}
+    }
+    environment.instances.each do |instance|
+      status_hash[:instanceAttributes][instance.id] = JSON.parse(instance.config_attributes)
+    end
+    render json: status_hash.to_json
+  end
+
   # Get the original status of the Stack from Amazon
   def stack_status
     unless params[:id].blank?

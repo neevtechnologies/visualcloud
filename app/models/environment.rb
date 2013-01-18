@@ -82,6 +82,11 @@ class Environment < ActiveRecord::Base
           interval: VisualCloudConfig[:chef_client_interval]
         )
         chef_client.add_to ec2
+        config_attributes = JSON.parse(instance.config_attributes)
+        if config_attributes["elasticIp"]
+          elastic_ip = Cloudster::ElasticIp.new(:name => "ElasticIp#{instance.aws_label}")
+          elastic_ip.add_to ec2
+        end
         stack_resources << ec2
         instance_names << instance.aws_label
       end
