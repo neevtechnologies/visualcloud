@@ -5,8 +5,7 @@ class CreateResourceTypes < ActiveRecord::Migration
       t.text :description
       t.string :parents_list
       t.string :resource_class
-      t.string :small_icon
-      t.string :large_icon
+      t.string :small_icon      
 
       t.timestamps
     end

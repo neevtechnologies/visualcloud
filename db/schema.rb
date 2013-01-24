@@ -109,8 +109,7 @@ ActiveRecord::Schema.define(:version => 20121219083733) do
     t.text     "description"
     t.string   "parents_list"
     t.string   "resource_class"
-    t.string   "small_icon"
-    t.string   "large_icon"
+    t.string   "small_icon"    
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "roles"
