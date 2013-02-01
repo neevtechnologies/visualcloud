@@ -146,6 +146,7 @@ GEM
     mixlib-shellout (1.1.0)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
+    mock_redis (0.6.3)
     moneta (0.7.5)
     multi_json (1.5.0)
     mysql2 (0.3.11)
@@ -287,12 +288,14 @@ DEPENDENCIES
   font-awesome-rails!
   jquery-rails
   jquery-ui-rails
+  mock_redis
   mysql2 (>= 0.3.11)
   rails (= 3.2.11)
   rolify (>= 3.2.0)
   rspec-rails (>= 2.11.0)
   sass-rails (~> 3.2.3)
   shoulda
+  shoulda-matchers
   sidekiq
   simple_form (>= 2.0.3)
   sinatra
