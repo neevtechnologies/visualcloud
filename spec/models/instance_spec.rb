@@ -21,20 +21,18 @@ describe Instance do
   end
 
   describe "#ami" do
+
     it "should invoke ami for instance" do
-      ec2_instance = FactoryGirl.create(:ec2_instance)
-      attributes = JSON.parse(ec2_instance.config_attributes)
-      result = {image_id: '1', architecture: 'amd64', name: 'Precise Pangolin', description: 'Ubuntu 12.04 LTS instance-store'}
-      Ami.should_receive(:find).with(attributes['ami_id']).and_return(result)
-      ec2_instance.ami.should == result
+      ami = FactoryGirl.create(:ami)
+      ec2_instance = FactoryGirl.create(:ec2_instance , config_attributes:{ami_id: ami.id}.to_json)
+      ec2_instance.ami.should == ami
     end
 
     it "should return nil, when invoked ami for instance if ami_id is not present" do
-      rds_instance = FactoryGirl.create(:rds_instance)
-      attributes = JSON.parse(rds_instance.config_attributes)
-      Ami.should_receive(:find).with(attributes['ami_id'])
-      rds_instance.ami.should == nil
+      ec2_instance = FactoryGirl.create(:ec2_instance)
+      ec2_instance.ami.should == nil
     end
+
   end
 
   describe "#apply_roles" do

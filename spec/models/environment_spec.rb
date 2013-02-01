@@ -133,7 +133,7 @@ describe Environment do
 
   describe "#add_ec2_resources" do
 
-    it "should return instances names after adding the instance to stack" do
+    it "should return instances names" do
       instance_names = []
       region = FactoryGirl.create(:region)
       ami = FactoryGirl.create(:ami)
@@ -166,6 +166,11 @@ describe Environment do
       instance_names << ec2_instance.aws_label
       stack_resources = []
       environment.add_ec2_resources(stack_resources).should == instance_names
+    end
+
+    it "should add the instance to stack" do
+      #environment.add_ec2_resources(stack_resources)
+      #stack_resources.should == ec2
     end
   end
 
