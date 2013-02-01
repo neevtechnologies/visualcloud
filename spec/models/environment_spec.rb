@@ -111,44 +111,80 @@ describe Environment do
     end
   end
 
-  describe "#provision" do
+  context "provision with not having provisioned set" do
 
-#    it "should return true after provision the environment" do
-#      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', provisioned: true)
-#      ec2_instance = FactoryGirl.create(:ec2_instance, environment: environment)
-#      rds_instance = FactoryGirl.create(:rds_instance, environment: environment)
-#      aws_access_id = 'test_id'
-#      aws_secret_key = 'test_key'
-#      cloud = cloud_should_be_initialized(aws_access_id, aws_secret_key)
-#      result = [{},{}]
-#      if environment.provisioned
-#        cloud.should_receive(:update).with({resources: result,stack_name: environment.aws_name, description: 'Updated by VisualCloud'}).and_return(true)
-#      else
-#        cloud.should_receive(:provision).with({resources: result,stack_name: environment.aws_name, description: 'Provisioned by VisualCloud'}).and_return(true)
-#      end
-#      environment.provision.should == true
-#    end
+    describe "#provision" do
+      let(:region) { FactoryGirl.create(:region) }
+      let(:ami) { FactoryGirl.create(:ami) }
+      let(:environment) { FactoryGirl.create(:environment, region: region,name: 'TestAwsLabel')}
+      let(:ec2_resource_type) { FactoryGirl.create(:resource_type , name: "Rails" ,resource_class: "EC2") }
+      let(:instance_type) { FactoryGirl.create(:instance_type) }
+      let(:ec2_instance){ FactoryGirl.create(:ec2_instance, label: "testec2",
+          environment: environment, resource_type: ec2_resource_type,
+          instance_type: instance_type,
+          config_attributes: ({key1: 'value1', key2: 'value2', roles: ['app', 'java'],ami_id: ami.id}.to_json))}
+      let(:rds_resource_type) { FactoryGirl.create(:resource_type , name: "RDS" ,resource_class: "RDS") }
+      let(:rds_instance){ FactoryGirl.create(:rds_instance, label: "testrds",
+          environment: environment, resource_type: rds_resource_type,
+          instance_type: instance_type,
+          config_attributes: ({size: '10', master_user_name: 'username', master_password: 'password',multiAZ: true}.to_json))}
+      let(:s3_resource_type) { FactoryGirl.create(:resource_type , name: "S3" ,resource_class: "S3") }
+      let(:s3_instance){ FactoryGirl.create(:s3_instance, label: "tests3",
+          environment: environment, resource_type: s3_resource_type)}
+      let(:elb_resource_type) { FactoryGirl.create(:resource_type , name: "ELB" ,resource_class: "ELB") }
+      let(:elb_instance){ FactoryGirl.create(:elb_instance, label: "testelb",
+          environment: environment, resource_type: elb_resource_type)}
+      let(:elasticache_resource_type) { FactoryGirl.create(:resource_type , name: "ElastiCache" ,resource_class: "ElastiCache") }
+      let(:elasticache_instance){ FactoryGirl.create(:elasticache_instance, label: "testsec",
+          environment: environment, resource_type: elasticache_resource_type,
+          instance_type: instance_type,
+          config_attributes: ({key1: 'value1', key2: 'value2',cache_security_group_names: ['default'], node_count: 3}.to_json))}
 
+      it "should return true after provision the environment" do
+        environment.instances = [ec2_instance,rds_instance,s3_instance,elb_instance,elasticache_instance]
+        stack_resources = []
+        cloud = Cloudster::Cloud.stub(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key', :region => 'us-east-1'}).and_return(OpenStruct.new)
+        instance_names = environment.add_ec2_resources(stack_resources)
+        environment.add_elb_resource(stack_resources, instance_names)
+        environment.add_rds_resources(stack_resources)
+        environment.add_s3_resources(stack_resources)
+        environment.add_elasticache_resources(stack_resources)
+        cloud.should_receive(:provision).with({resources: stack_resources,stack_name: environment.aws_name, description: 'Provisioned by VisualCloud'})
+        environment.provision('test_id', 'test_key')
+      end
+
+
+
+      #    it "should return true provision through update the stack" do
+      #      stack_resources = []
+      #      cloud = cloud_should_be_initialized('test_id', 'test_key')
+      #      instance_names = environment2.add_ec2_resources(stack_resources)
+      #      environment2.add_elb_resource(stack_resources, instance_names)
+      #      environment2.add_rds_resources(stack_resources)
+      #      environment2.add_s3_resources(stack_resources)
+      #      environment2.add_elasticache_resources(stack_resources)
+      #      result = cloud.should_receive(:update).with({resources: stack_resources,stack_name: environment2.aws_name, description: 'Updated by VisualCloud'})
+      #      environment2.provision('test_id', 'test_key').should == result
+      #    end
+
+    end
   end
 
   describe "#add_ec2_resources" do
 
-    it "should return instances names" do
-      instance_names = []
-      region = FactoryGirl.create(:region)
-      ami = FactoryGirl.create(:ami)
-      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', region: region, key_pair_name: "default", security_group: "default" )
-      resource_type = FactoryGirl.create(:resource_type , name: "Rails" ,resource_class: "EC2")
-      instance_type = FactoryGirl.create(:instance_type)
-      ec2_instance = FactoryGirl.create(:ec2_instance,
-        aws_label: "testec2",
-        environment: environment,
-        resource_type: resource_type,
-        instance_type: instance_type,
-        config_attributes: ({key1: 'value1', key2: 'value2', roles: ['app', 'java'],ami_id: ami.id}.to_json))
-      key_pair = environment.key_pair_name.blank? ? 'default' : environment.key_pair_name
-      security_groups = (environment.security_group.to_s.strip.split(/\s*,\s*/).blank? ? ['default'] : environment.security_group.to_s.strip.split(/\s*,\s*/))
-      ec2_instance.reload
+    let(:region) { FactoryGirl.create(:region) }
+    let(:ami) { FactoryGirl.create(:ami) }
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel',
+                                         region: region,
+                                         key_pair_name: "default",
+                                         security_group: "default" )}
+    let(:resource_type) { FactoryGirl.create(:resource_type , name: "Rails" ,resource_class: "EC2") }
+    let(:instance_type) { FactoryGirl.create(:instance_type) }
+    let(:ec2_instance){ FactoryGirl.create(:ec2_instance, label: "testec2",
+                                         environment: environment, resource_type: resource_type,
+                                         instance_type: instance_type,
+                                         config_attributes: ({key1: 'value1', key2: 'value2', roles: ['app', 'java'],ami_id: ami.id}.to_json))}
+    before(:each) do
       input = {
         name: ec2_instance.aws_label,
         key_name: key_pair,
@@ -156,22 +192,202 @@ describe Environment do
         security_groups: security_groups,
         instance_type: ec2_instance.instance_type.api_name
       }
-      ec2 = Cloudster::Ec2.new(input)
-      validation_key = File.should_receive(:read).and_return("testkey")
+      @ec2 = Cloudster::Ec2.new(input)
+      validation_key = File.should_receive(:read).with(VisualCloudConfig[:validation_key_path]).and_return("testkey")
       chef_client = Cloudster::ChefClient.new(validation_key: validation_key,
           server_url: "testurl",
           node_name: ec2_instance.id.to_s,
           interval: "20")
-      chef_client.add_to ec2
-      instance_names << ec2_instance.aws_label
+      chef_client.add_to @ec2
+    end
+
+    it "should return instances names" do
+      instance_names = []
       stack_resources = []
+      instance_names << ec2_instance.aws_label
       environment.add_ec2_resources(stack_resources).should == instance_names
     end
 
     it "should add the instance to stack" do
-      #environment.add_ec2_resources(stack_resources)
-      #stack_resources.should == ec2
+      instance_names = []
+      stack_resources = []
+      result_stack = stack_resources
+      result_stack << @ec2
+      environment.add_ec2_resources(stack_resources)
+      stack_resources.should == result_stack
     end
+
+    it "should add the instance to elasticip" do
+      stack_resources = []
+      elastic_ip = Cloudster::ElasticIp.new(name: "ElasticIp#{ec2_instance.aws_label}")
+      elastic_ip.add_to @ec2
+      result_stack = stack_resources
+      result_stack << @ec2
+      environment.add_ec2_resources(stack_resources)
+      stack_resources.should == result_stack
+    end
+
+  end
+
+  describe "#add_rds_resources" do
+
+    let(:region) { FactoryGirl.create(:region) }
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel',
+                                         region: region,
+                                         key_pair_name: "default",
+                                         security_group: "default" )}
+    let(:resource_type) { FactoryGirl.create(:resource_type) }
+    let(:instance_type) { FactoryGirl.create(:instance_type) }
+    let(:rds_instance){ FactoryGirl.create(:rds_instance, label: "testrds",
+                                         environment: environment, resource_type: resource_type,
+                                         instance_type: instance_type,
+                                         config_attributes: ({size: '10', master_user_name: 'username', master_password: 'password',multiAZ: true}.to_json))}
+    before(:each) do
+      input = {
+        name: rds_instance.aws_label,
+        storage_size: rds_instance.config_attributes['size'],
+        username: rds_instance.config_attributes['master_user_name'],
+        password: rds_instance.config_attributes['master_password'],
+        multi_az: rds_instance.config_attributes['multiAZ'],
+        instance_class: rds_instance.instance_type.api_name
+      }
+      @rds = Cloudster::Rds.new(input)
+    end
+
+    it "should add the instance to stack" do
+      stack_resources = []
+      result_stack = stack_resources
+      result_stack << @rds
+      environment.add_rds_resources(stack_resources)
+      stack_resources.should == result_stack
+    end
+  end
+
+describe "#add_s3_resources" do
+
+    let(:region) { FactoryGirl.create(:region) }
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel',
+                                         region: region,
+                                         key_pair_name: "default",
+                                         security_group: "default" )}
+    let(:resource_type) { FactoryGirl.create(:resource_type) }
+    let(:instance_type) { FactoryGirl.create(:instance_type) }
+    let(:s3_instance){ FactoryGirl.create(:s3_instance, label: "tests3",
+                                         environment: environment, resource_type: resource_type)}
+    before(:each) do
+      input = {
+        name: s3_instance.aws_label,
+        access_control: s3_instance.config_attributes["access_control"]
+      }
+      @s3 = Cloudster::S3.new(input)
+    end
+
+    it "should add the instance to stack" do
+      stack_resources = []
+      result_stack = stack_resources
+      result_stack << @s3
+      environment.add_s3_resources(stack_resources)
+      stack_resources.should == result_stack
+    end
+
+    it "should add the instance to cloudfront" do
+      stack_resources = []
+      cloud_front = Cloudster::CloudFront.new(:name => "CloudFront#{s3_instance.aws_label}")
+      cloud_front.add_to(@s3)
+      result_stack = stack_resources
+      result_stack << @s3
+      environment.add_s3_resources(stack_resources)
+      stack_resources.should == result_stack
+    end
+
+  end
+
+  describe "#add_elb_resources" do
+
+    let(:region) { FactoryGirl.create(:region) }
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel',
+                                         region: region,
+                                         key_pair_name: "default",
+                                         security_group: "default" )}
+    let(:resource_type1) { FactoryGirl.create(:resource_type,resource_class: "ELB") }
+    let(:resource_type2) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
+    let(:instance_type) { FactoryGirl.create(:instance_type) }
+    let(:elb_instance1){ FactoryGirl.create(:elb_instance, label: "testelb",
+                                         environment: environment, resource_type: resource_type1)}
+    let(:elb_instance2){ FactoryGirl.create(:elb_instance, label: "testelb",
+                                         environment: environment, resource_type: resource_type2)}
+    it "should add the instance to stack" do
+      environment.instances = [elb_instance1]
+      stack_resources = []
+      instance_names = ['AppServer1','AppServer2']
+      #instance_names = (instance_names & elb_instance1.children.collect(&:aws_label))
+      input = {
+        name: elb_instance1.aws_label,
+        instance_names: instance_names,
+        listeners: [
+            {
+              port: "300",
+              instance_port: "200",
+              protocol: "tcp"
+            }
+          ]
+      }
+      result_stack = stack_resources
+      result_stack << Cloudster::Elb.new(input)
+      environment.add_elb_resource(stack_resources,['AppServer1','AppServer2'])
+      stack_resources.should == result_stack
+    end
+
+    it "should not add the instance to stack" do
+      environment.instances = [elb_instance2]
+      stack_resources = []
+      environment.add_elb_resource(stack_resources,['AppServer1','AppServer2'])
+      stack_resources.should == []
+    end
+
+  end
+
+  describe "#add_elasticache_resources" do
+
+    let(:region) { FactoryGirl.create(:region) }
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel',
+                                         region: region,
+                                         key_pair_name: "default",
+                                         security_group: "default" )}
+    let(:resource_type1) { FactoryGirl.create(:resource_type,resource_class: "ElastiCache") }
+    let(:resource_type2) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
+    let(:instance_type) { FactoryGirl.create(:instance_type) }
+    let(:elasticache_instance1){ FactoryGirl.create(:elasticache_instance, label: "testec",
+                                         environment: environment, resource_type: resource_type1,
+                                         instance_type: instance_type,
+                                         config_attributes: ({key1: 'value1', key2: 'value2',cache_security_group_names: ['default'], node_count: 3}.to_json))}
+    let(:elasticache_instance2){ FactoryGirl.create(:elasticache_instance, label: "testec",
+                                         environment: environment, resource_type: resource_type2,
+                                         instance_type: instance_type,
+                                         config_attributes: ({key1: 'value1', key2: 'value2',cache_security_group_names: ['default'], node_count: 3}.to_json))}
+    it "should add the instance to stack" do
+      environment.instances = [elasticache_instance1]
+      stack_resources = []
+      input = {
+        name: elasticache_instance1.aws_label,
+        node_type: elasticache_instance1.instance_type.api_name,
+        cache_security_group_names: elasticache_instance1.config_attributes['cache_security_group_names'],
+        engine: 'memcached',
+        node_count: elasticache_instance1.config_attributes['node_count']
+      }
+      result_stack = stack_resources
+      result_stack << Cloudster::ElastiCache.new(input)
+      environment.add_elasticache_resources(stack_resources)
+      stack_resources.should == result_stack
+    end
+
+    it "should not add the instance to stack" do
+      environment.instances = [elasticache_instance2]
+      stack_resources = []
+      environment.add_elasticache_resources(stack_resources)
+      stack_resources.should == []
+    end
+
   end
 
   describe "#update_instance_outputs" do
