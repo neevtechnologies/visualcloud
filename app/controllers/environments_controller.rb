@@ -150,12 +150,10 @@ class EnvironmentsController < ApplicationController
 
   def update_environment
     @environment = Environment.find(params[:id])
-    @errors = []    
     if @environment.update_attributes(params[:environment])
       flash.now[:success] = "Environment fields updated successfully."
     else
-      @errors << "Environment fields could not be updated successfully."
-      flash.now[:error] = @errors
+      flash.now[:error] = "An error occured while trying to update environment fields."
     end
 
     respond_to do |format|

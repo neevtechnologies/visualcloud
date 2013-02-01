@@ -39,4 +39,6 @@ group :test do
   gem "rspec-rails", ">= 2.11.0"#, :group => [:development, :test]
   gem "factory_girl_rails", ">= 4.1.0"#, :group => [:development, :test]
   gem 'shoulda'
+  gem "mock_redis"
+  gem 'shoulda-matchers'
 end

@@ -17,6 +17,7 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
+  require 'mock_redis'
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
@@ -57,3 +58,8 @@ Spork.each_run do
   FactoryGirl.reload
 
 end
+
+#mocking redis-server
+redis_instance = MockRedis.new
+Redis.stubs(:new).returns(redis_instance)
+#Redis::Store.stubs(:new).returns(redis_instance)

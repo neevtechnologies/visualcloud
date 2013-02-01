@@ -13,11 +13,6 @@ class Environment < ActiveRecord::Base
   before_create :set_aws_compatible_name
   before_destroy :modify_environment_data
 
-  #This function just prepares a select dropdown containing the number of environments
-  #in this project. TODO : Shouldn't this move to Project model ?
-  def self.get_select_collection(id)    
-    (1..Project.find(id).environments.count).to_a.collect { |v| v.to_i }
-  end
 
   def provision(access_key_id, secret_access_key)
     stack_resources = []
@@ -34,14 +29,13 @@ class Environment < ActiveRecord::Base
       provision_request = cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
     else
       provision_request = cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
-      #TODO This logic doesn't work in edge cases. Need to refactor (Do not depend on privsioned boolean)
+      #TODO This logic doesn't work in edge cases. Need to re-factor (Do not depend on provisioned boolean)
       self.provisioned = true
       self.save
     end
     return true
   rescue Exception => e
-    puts e.inspect
-    puts e.backtrace
+    logger.error "Error while provisioning environment: #{self.name}"
     return false
   end
 
@@ -159,14 +153,13 @@ class Environment < ActiveRecord::Base
   end
 
   def delete_stack(access_key_id, secret_access_key)
-    logger.info "INFO: Calling cloudster to delete stack #{self.name}"
+    logger.info "INFO: Calling cloudster to delete environment #{self.name}"
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     cloud.delete(stack_name: self.aws_name)
-    logger.info "INFO: Deleted stack #{self.name}"
+    logger.info "INFO: Deleted environment #{self.name}"
     return true
   rescue => e
-    puts e.inspect
-    puts e.backtrace
+    logger.error "Error while deleting environment: #{self.name}"
     return false
   end
 

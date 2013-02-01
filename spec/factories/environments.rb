@@ -3,5 +3,7 @@
 FactoryGirl.define do
   factory :environment do
     name "MyString"
+    db_migrate false
+    branch "MyBranch"
   end
 end

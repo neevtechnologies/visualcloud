@@ -15,4 +15,10 @@ module EnvironmentsHelper
       {"img_src" => image_path("default_status.png"),"img_title" => "#{status}"}
     end
   end
+
+  def get_select_options_for_deploy_order(id)
+    environments_count = Environment.where(:project_id => id).count
+    return (1..environments_count).to_a
+  end
+
 end
