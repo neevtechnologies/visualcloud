@@ -2,10 +2,10 @@
 <div class="navbar-inner">
   <ul class="nav nav-pills">
     <%= render 'status_icons', environment: @environment %>
-    <li><a id="graph-update" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><i class='icon-save'></i> Save</a></li>
-    <li><a id="graph-provision" data-graph-id="<%=@environment.id%>" href="javascript:void(0);"><i class='icon-cloud-upload'></i> Provision</a></li>
-    <li><a id="graph-replicate" href="javascript:void(0);"><i class='icon-copy'></i>Replicate</a></li>
-    <li><%= link_to 'Export To CSV', export_csv_path(:id => @environment.id) %></li>
+    <li><a id="graph-update" data-graph-id="<%=@environment.id%>" href="javascript:void(0);" title='Save' rel='tooltip' data-placement='bottom'><i class='icon-save'></i></a></li>
+    <li><a id="graph-provision" data-graph-id="<%=@environment.id%>" href="javascript:void(0);" title='Provision' rel='tooltip' data-placement='bottom'><i class='icon-cloud-upload'></i></a></li>
+    <li><a id="graph-replicate" href="javascript:void(0);" title='Replicate' rel='tooltip' data-placement='bottom'><i class='icon-copy'></i></a></li>
+    <li><a id="graph-export" href="<%= export_csv_path(:id => @environment.id) %>" title='Export as CSV' rel='tooltip' data-placement='bottom'><i class='icon-th-list'></i></a></li>
   </ul> 
   <%= render 'project_environment' %> 
 </div>

@@ -27,7 +27,9 @@
         element[options.widgetType]({resourceName: options.name, roles: options.roles});
 
       element.draggable({
-        helper: 'clone',
+        helper: function(event){
+          return element.find('img').clone();
+        },
         appendTo: 'body'
       });
 

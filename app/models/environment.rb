@@ -307,10 +307,7 @@ class Environment < ActiveRecord::Base
     outputs = cloud.outputs(stack_name: aws_name)
     outputs.each do |key, value|
       instances.where(aws_label: key).each do |instance|
-        existing_config_attributes = JSON.parse(instance.config_attributes)
-        output_attributes = value
-        merged_attributes = existing_config_attributes.merge(output_attributes).to_json
-        instance.update_attribute(:config_attributes, merged_attributes )
+        instance.update_output(key, value)
       end
     end
   end

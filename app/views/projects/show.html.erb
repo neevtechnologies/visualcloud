@@ -4,7 +4,9 @@
 <div class="well">
   <div style="margin-left: 10px;">
 <h3 class="pull-left"> <%= @project.name %></h3>&nbsp;&nbsp;
-<%= link_to 'Edit', edit_project_path ,:class=>"btn btn-inverse" ,:style=>"margin-top:14px;"%>
+<a href="<%= edit_project_path %>" title='Edit project details' rel='tooltip' data-placement='right' class="btn btn-inverse" style="margin-top:14px;">
+  <i class='icon-edit icon-large'></i>
+</a>
 <br /><br />
 <div class="clear"></div>
   <% if @project.description.present? %>
@@ -29,6 +31,9 @@
   <%end%>
  </div>
 </div>
-<h4 class="span2">Environments</h4><button class="btn btn-inverse" id="new_environment">New Environment</button>
+<h4 class="span2">Environments</h4>
+  <button class="btn btn-inverse" id="new_environment" title='Create new environment' rel='tooltip' data-placement='right'>
+    <i class='icon-plus-sign'></i>
+  </button>
 
 <%= render 'project_environments' %>

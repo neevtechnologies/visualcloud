@@ -12,6 +12,7 @@ function display_exist_elastic_ip_list(element,value) {
 }
 */
 
+//Get environment details and trigger graph widget save
 function save_environment(){
     var graphName = $('input#graph-name').val().trim();
     var keyPairName = $('select#graph-key-pair-name').val();
@@ -74,23 +75,6 @@ function requestProvision(){
 }
 
 $(function() {
-/* //Do not query resources one by one . Use the environment status check for this .
- if($("[id^=instance-label-]").length != 0)
- {
-    $("[id^=instance-label-]").each(function(){
-    var instance_label = $(this).text();
-    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
-    var label_id = $(this).attr('id');
-    setInterval(function(){
-      $.ajax({
-        type: 'GET',
-        url: '/instance_status',
-        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
-      });
-    }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
-  });
- }
- */
 
  if($('.stack-status').length != 0)
  {
@@ -103,123 +87,12 @@ $(function() {
       });
     }, <%= VisualCloudConfig[:status_check_interval] * 1500 %>);
 
-    /*
-    //TODO: Browsers should fetch the stack status
-    //from the DB only. Server should have a parallely running task
-    //that fetches the statuses of all existing stacks and update DB
-    //accordingly
-
-    var original_status = setInterval(function(){
-      $.ajax({
-        url: '/stack_status?id='+environment_id,
-        type: 'GET'
-      });
-    }, <%= VisualCloudConfig[:status_check_interval] * 100000 %>);
-    */
-
   });
  }
 
 });
 
 
-$(document).ready(function(){
-
-   $('#new_environment').click(function(){
-     $('#graph-new-modal').modal('show');
-     //resize_regionmap();
-   });
-
-   $('.graph-new-submit').click(function(){
-     return validate_environment();
-   });
-
-   $("#graph-save").click(function(){
-     save_environment();  
-   });
-
-
-  //On click event for "Save environment" in Save Environment modal
-  $('#graph-save-submit').click(function(){
-    var graphName = $('input#graph-name').val().trim();
-    var keyPairName = $('select#graph-key-pair-name').val();
-    var securityGroupName = $('select#graph-security-group-name').val();
-    var regionId = $('input#graph-region-id').val();
-    if(graphName == "")
-      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
-    else if(regionId == "" || regionId == 'undefined')
-      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment should have a region'));
-    else {
-      var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName, region_id: regionId };
-      $('.graph-area').graphArea("save", attributes);
-    }
-    return false;
-  });
-
-  //On click event for "create similar stack" it replicate Environment modal
-  $('#graph-replicate').click(function(){
-    $('#graph-save-modal').modal('show');
-     //resize_regionmap();
-  });
-
-  //On click event for "Save" button on graph toolbar during edit
-  $('#graph-update').click(function(){
-    var graphId = $(this).data("graphId");
-    $('.graph-area').graphArea("update", graphId);
-  });
-
-  //On click event for "Provision" button on graph toolbar during edit
-  $('#graph-provision').click(function(){
-    var graphId = $(this).data("graphId");
-    $('#graph_id').text(graphId);
-    var repo_url = $('#repo_url').text();
-    if(repo_url == "")
-      requestProvision();
-    else
-      $('#deployment-config-modal').modal('show');
-  });
-
-  $('.deployment-config-submit').click(function(){
-    $('#deployment-config-modal').modal('hide');
-    requestProvision();
-  });
-
-
-  //On click of save environment, it should save respective environment
-  $(".save_env").live('click', function() {
-    var id = $(this).attr('id').split('_')[2];
-    var branch = $('#branch_'+id).val();
-    var db_migrate = $('#db_migrate_'+id)[0].checked
-    showLoading();
-      $.ajax({
-        url: '/update_environment?id='+id,
-        type: 'PUT',
-        dataType: "script",
-        contentType: 'application/json',
-        data: JSON.stringify({environment: {branch: branch ,db_migrate: db_migrate}}),
-        complete: function(){
-          hideLoading();
-        }
-      });
-  });
-
-/* //Do not query resources one by one . Use the environment status check for this .
- if($("[id^=instance-label-]").length != 0)
- {
-    $("[id^=instance-label-]").each(function(){
-    var instance_label = $(this).text();
-    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
-    var label_id = $(this).attr('id');
-      $.ajax({
-        type: 'GET',
-        url: '/instance_status',
-        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
-      });
-  });
- }
-*/
-
-});
 
 
 //Displaying the slider for the select options, displaying the selected value
@@ -296,38 +169,6 @@ function getInstanceDescription(instanceType){
   return tooltipText ;
 }
 
-function delete_instance(resource_type) {
-  var instance_id = $('#'+resource_type+'-configuration').data('editElement');
-  jsPlumb.removeAllEndpoints(instance_id);
-  $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
-}
-
-
-function requestProvision(){
-  var graphId = $('#graph_id').text();
-  var repo_url = $('#repo_url').text();
-  var environmentAttributes = {};
-  if(repo_url == "")
-    environmentAttributes = {branch: "master",db_migrate: true};
-  else
-  {
-    var branch = $('#graph-branch').val().trim();
-    var dbMigrate = $('#db_migrate')[0].checked;
-    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
-  }
-  showLoading();
-  $.ajax({
-    url: '/provision_environment?id='+graphId,
-    type: 'POST',
-    dataType: "script",
-    contentType: 'application/json',
-    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
-    complete: function(){
-      hideLoading();
-    }
-  });
-}
-
 function startStatusPoll(environmentId){
   $(document).ready(function(){
     if($('.stack-status-icon').length != 0){
@@ -338,7 +179,14 @@ function startStatusPoll(environmentId){
         }).done(function(data){
           var stackStatus = data.status;
           setStatusIcon(stackStatus);
-          //Set the output values now
+
+          //Set the output values for each instance
+          for(var key in data.instanceAttributes){
+            var configAttributes = data.instanceAttributes[key];
+            //Adding get() for configattributes
+            injectConfigGetter(configAttributes);
+            $('#instance-'+key).instance('setConfigAttributes', configAttributes);
+          }
         });
       }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
     }
@@ -349,3 +197,115 @@ function setStatusIcon(stackStatus){
   $(".stack-status-icon").hide();
   $('#status-icon-'+stackStatus).show();
 }
+
+function prepareStage(){
+  $('.graph-area').graphArea();
+};
+
+function addInstanceCloneToGraph(instanceId){
+  var graphArea = $('.graph-area') ;
+  var newElement = $('<div class="instance"></div>');
+  graphArea.graphArea("addInstanceToStage", newElement, instanceId);
+
+  return newElement ;
+};
+
+//Show dialog for creating new instances
+function showConfigurationForm(dialogId, droppedPosition){
+  var dialog = $('#'+dialogId);
+  var resource_type = dialogId.split('-')[0];
+  callToAddSlider(resource_type);
+  //Start with a clean sheet for new instances
+  //editElement is the domID of element used while editing it
+  //xpos and ypos will not be available when the new instance
+  //is just dropped on the stage
+  dialog.removeData(['editElement', 'xpos', 'ypos']);
+  dialog.data('xpos', droppedPosition.left);
+  dialog.data('ypos', droppedPosition.top);
+  dialog.find('#' + resource_type + '_delete').hide();
+  /*//TODO:Configuration Dialog shouldn't know about the instance specific fields
+  dialog.find('#' + resource_type + '_ip_address').hide();
+  dialog.find('#' + resource_type + '_public_dns').hide();
+  dialog.find('#' + resource_type + '_bucket_name').hide();
+  dialog.find('#' + resource_type + '_dns_name').hide();
+  */
+  /* TODO : Remove this hardcoded logic
+  dialog.find('#' + resource_type + '_elastic_ip_new').prop("checked",true);
+  dialog.find('#' + resource_type + '_elastic_ip_dropdown').parent().hide();
+  */
+  dialog.modal('show');
+};
+
+//TODO: Logic is totally hardcoded here.
+//TODO: Please choose a better name than "callToAddSlider"
+function callToAddSlider(resource_type, selectedIndex, elementId){
+  var id = '';
+  if(elementId)
+    id = elementId.split('-')[1];
+  if (resource_type == "RDS")
+    addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex, id);
+  else if(resource_type == "ElastiCache")
+    addSlider(resource_type+"-slider", elastiCacheInstanceTypes, selectedIndex, id);
+  else if(resource_type != "ELB" && resource_type != "S3")
+    addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex, id);
+}
+
+function addMessagesToDiv(jDiv, content){
+   jDiv.append(content);
+   $(".messages").delay(10000).fadeOut("slow", function () { $(this).remove(); });
+}
+
+function showFlashMessages(jDiv, type, content){
+   var id = "ajax-template";
+   if(type == "notice")
+     id = "basic-template";
+   if(type == "error")
+     id = "themeroller";
+   jDiv.notify("create",id,{text: content},{expires: 5000,speed: 1000,custom: true});
+}
+
+function getErrorMessage(message){
+  var errorMessage = '<div class="alert alert-error messages"><button type="button" class="close" data-dismiss="alert">x</button>' + message + '</div>' ;
+  return errorMessage ;
+};
+
+//Replace reallylongstrings with reallylo...
+function shortenLongStrings(string, maxLength){
+  var shortString = string.substring(0, (maxLength-4));
+  if (string.length > maxLength)
+    shortString += '...';
+  return shortString;
+}
+
+//Inject Getter for config attributes which returns Not Available if attr doesn't exist
+function injectConfigGetter(configAttributes){
+  configAttributes.get = function(attr){
+    return this[attr] == undefined ? "Not Available" : this[attr] ;
+  }
+}
+
+//Enable Bootstrap Tooltips for dialog box
+$(document).on('mouseenter','[rel=tooltip]', function(){
+  $(this).tooltip('show');
+});
+
+$(document).on('mouseleave','[rel=tooltip]', function(){
+  $(this).tooltip('hide');
+});
+
+$(document).ready(function(){
+  //Hide notifications
+  $("#container").notify({expires: false,speed: 1000});
+  $( "#ElastiCache_node_count" ).spinner();
+});
+
+/*
+// For debugging mouse movement inside graph area
+$(document).ready(function(){
+  $('.graph-area').mousemove(function(e){
+  var x = e.pageX - this.offsetLeft;
+  var y = e.pageY - this.offsetTop;
+  $('.graph-area').html("X: " + x + " Y: " + y);
+  });
+});
+*/

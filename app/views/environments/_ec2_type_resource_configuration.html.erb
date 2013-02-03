@@ -1,8 +1,12 @@
 <div id="<%=resource_type.name%>-configuration" class="modal hide fade in instance-config" style="display: none; ">
+
+  <!-- Modal header -->
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3><%= resource_type.name %> Instance configuration</h3>
   </div>
+
+  <!-- Modal content -->
   <div class="modal-body">
     <div id="<%=resource_type.name%>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: "#{resource_type.name}-config-frm"} do |f|%>
@@ -32,24 +36,27 @@
     </div -->
     <div class="row">
       <div class="span0">
-      <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%></div>
+        <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%>
+      </div>
       <div class="span3">Elastic IP </div>
     </div>
     <br />
-    <div id="<%=resource_type.name%>_ip_address"></div>
+    <div id="<%=resource_type.name%>_private_ip"></div>
+    <br />
+    <div id="<%=resource_type.name%>_public_ip"></div>
     <br />
     <div id="<%=resource_type.name%>_public_dns"></div>
-      <%= hidden_field_tag "#{resource_type.name}_ip_address_value","", :id => "#{resource_type.name}_ip_address_value"%>
-      <%= hidden_field_tag "#{resource_type.name}_public_dns_value","", :id => "#{resource_type.name}_public_dns_value"%>
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => "#{resource_type.name}_ami_id"%>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
       <%= f.hidden_field(:ypos, id: "#{resource_type.name}_ypos")%>
   </div>
+
+  <!-- Modal Footer Buttons -->
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
     <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="<%=resource_type.name%>_delete" onclick='delete_instance("<%=resource_type.name%>");' title="Delete this <%= resource_type.name %>resource">Delete</a>
   </div>
-    <% end %>
+  <% end %>
 </div>
