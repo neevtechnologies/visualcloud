@@ -124,8 +124,8 @@ describe ProjectsController do
       #      cloud.stub(:get_key_pairs).and_return(key_pairs)
       #      cloud.stub(:get_security_groups).and_return(security_groups)
       #      Cloudster::Cloud.stub(:new).and_return(cloud)
-      @user.should_receiive(:get_key_pair_and_security_groups)
-      controller.should_receive(:current_user).and_return(@user)
+      controller.should_receive(:current_user).exactly(2).times.and_return(@user)
+      @user.should_receive(:get_key_pair_and_security_groups)
       get :show , id: @rails_project.id
       response.should_not be_redirect
     end
@@ -133,19 +133,25 @@ describe ProjectsController do
 
   describe "DELETE #destroy" do
 
-    it "redirects back" do
-      delete :destroy, :id => @rails_project.id
+    def to_destroy(id)
+      DeleteDataBagWorker.should_receive(:perform_async)
+      UpdateProjectDataBagWorker.should_receive(:perform_async).exactly(2).times
+      delete :destroy, :id => id
+    end
+
+    it "redirects back" do      
+      to_destroy(@rails_project.id)
       response.should be_redirect
     end
 
     it "removes a project" do
       expect {
-        delete :destroy, :id => @rails_project.id
+        to_destroy(@rails_project.id)
       }.to change { Project.count }.by(-1)
     end
 
     it "should give flash success message" do
-      delete :destroy, :id => @rails_project.id
+      to_destroy(@rails_project.id)
       flash[:success].should == "Project deleted successfully."
     end
 

@@ -13,7 +13,7 @@
     <div>
       <%= f.fields_for :environments do |env| %>
         <!-- TODO : remove styles and put them into a css class -->
-      <div style="border: 1px solid; padding:5px;margin:0px 0px 5px 10px;width:550px;">
+      <div class="environment_block_display">
         <table>
           <tr>
             <td>
@@ -40,9 +40,9 @@
             </td>
           </tr>
         </table>
-        <div style="margin-left: 370px;margin-top:-70px;">
+        <div class="set_margin_left_top">
           <label>Priority</label>
-          <%=env.input :deploy_order , :label => false, collection: Environment.get_select_collection(@project.id) , :input_html => {:style=> 'width: 80px;'}%>
+          <%=env.input :deploy_order , :label => false, collection: get_select_options_for_deploy_order(@project.id) , :input_html => {:style=> 'width: 80px;'}%>
         </div>
 
       </div>

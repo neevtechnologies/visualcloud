@@ -46,7 +46,6 @@ Spork.prefork do
     config.infer_base_class_for_anonymous_controllers = false
 
     config.include FactoryGirl::Syntax::Methods
-
   end
 
 end
@@ -55,5 +54,4 @@ Spork.each_run do
   # This code will be run each time you run your specs.
   I18n.backend.reload!
   FactoryGirl.reload
-
 end
