@@ -139,7 +139,7 @@ describe ProjectsController do
       delete :destroy, :id => id
     end
 
-    it "redirects back" do      
+    it "redirects back" do
       to_destroy(@rails_project.id)
       response.should be_redirect
     end
