@@ -1,0 +1,98 @@
+//OnClick listeners
+$(document).ready(function(){
+
+   $('#new_environment').click(function(){
+     $('#graph-new-modal').modal('show');
+     //resize_regionmap();
+   });
+
+   $('.graph-new-submit').click(function(){
+     return validate_environment();
+   });
+
+   $("#graph-save").click(function(){
+     save_environment();
+   });
+
+
+  //On click event for "Save environment" in Save Environment modal
+  $('#graph-save-submit').click(function(){
+    var graphName = $('input#graph-name').val().trim();
+    var keyPairName = $('select#graph-key-pair-name').val();
+    var securityGroupName = $('select#graph-security-group-name').val();
+    var regionId = $('input#graph-region-id').val();
+    if(graphName == "")
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment name cannot be empty'));
+    else if(regionId == "" || regionId == 'undefined')
+      addMessagesToDiv($('#graph-new-error-messages'), getErrorMessage('Environment should have a region'));
+    else {
+      var attributes = { name: graphName, key_pair_name: keyPairName, security_group: securityGroupName, region_id: regionId };
+      $('.graph-area').graphArea("save", attributes);
+    }
+    return false;
+  });
+
+  //On click event for "create similar stack" it replicate Environment modal
+  $('#graph-replicate').click(function(){
+    $('#graph-save-modal').modal('show');
+     //resize_regionmap();
+  });
+
+  //On click event for "Save" button on graph toolbar during edit
+  $('#graph-update').click(function(){
+    var graphId = $(this).data("graphId");
+    $('.graph-area').graphArea("update", graphId);
+  });
+
+  //On click event for "Provision" button on graph toolbar during edit
+  $('#graph-provision').click(function(){
+    var graphId = $(this).data("graphId");
+    $('#graph_id').text(graphId);
+    var repo_url = $('#repo_url').text();
+    if(repo_url == "")
+      requestProvision();
+    else
+      $('#deployment-config-modal').modal('show');
+  });
+
+  $('.deployment-config-submit').click(function(){
+    $('#deployment-config-modal').modal('hide');
+    requestProvision();
+  });
+
+
+  //On click of save environment, it should save respective environment
+  $(".save_env").live('click', function() {
+    var id = $(this).attr('id').split('_')[2];
+    var branch = $('#branch_'+id).val();
+    var db_migrate = $('#db_migrate_'+id)[0].checked
+    showLoading();
+      $.ajax({
+        url: '/update_environment?id='+id,
+        type: 'PUT',
+        dataType: "script",
+        contentType: 'application/json',
+        data: JSON.stringify({environment: {branch: branch ,db_migrate: db_migrate}}),
+        complete: function(){
+          hideLoading();
+        }
+      });
+  });
+
+/* //Do not query resources one by one . Use the environment status check for this .
+ if($("[id^=instance-label-]").length != 0)
+ {
+    $("[id^=instance-label-]").each(function(){
+    var instance_label = $(this).text();
+    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
+    var label_id = $(this).attr('id');
+      $.ajax({
+        type: 'GET',
+        url: '/instance_status',
+        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
+      });
+  });
+ }
+*/
+
+});

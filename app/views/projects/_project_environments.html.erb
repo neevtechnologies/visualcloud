@@ -17,7 +17,7 @@
           <%= link_to 'Update', "javascript:void(0);",:class=>'btn btn-inverse save_env', id: "save_env_#{environment.id}"%>&nbsp;&nbsp;&nbsp;&nbsp;
           <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn btn-inverse' %>&nbsp;&nbsp;&nbsp;&nbsp;
           <%= link_to 'Delete', project_environment_path(@project,environment),:class=>'btn btn-inverse', method: :delete, data: { confirm: 'Are you sure?' } %>&nbsp;&nbsp;&nbsp;&nbsp;    
-          <%= link_to 'Deploy', project_environment_deployments_path(@project,environment) ,:class=>'btn btn-inverse', method: :post%></td>    
+          <%= link_to 'Deploy', project_environment_deployments_path(@project,environment) ,:class=>'btn btn-inverse', method: :post%></td>
       </tr>
     <% end %>
   <%else%>

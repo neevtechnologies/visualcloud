@@ -9,6 +9,7 @@
       configAttributes:{},
       label: ''
     },
+    resource: null,
     _setOption: function(key, value){
       if(key == 'label'){
         //setting the tooltip for the label in the dialog
@@ -24,8 +25,13 @@
       var self = this;
       var options = self.options;
       var element = self.element;
+
+      //Getter for config attributes which returns Not Available if attr doesn't exist
+      injectConfigGetter(options.configAttributes);
+
+
       //Add the inner HTML template
-      element.html($('.' + options.resourceType + '-instance').html());      
+      element.html($('.' + options.resourceType + '-instance').html());
 
       // getting the attribute id on the instance
       var instanceDivId =  element.attr('id').split('-')[1];
@@ -57,15 +63,21 @@
       //Enable Source and Destination for connections in the instance element
       //Checking instance is S3 type or not
       makeSourceAndTarget(element);
+
+      //TODO: This logic should be derived and not hardcoded
       if(options.resourceType != "S3" && options.resourceType != "ElastiCache")
         $('#connection-source-'+instanceDivId).show();
       else
         $('#connection-source-'+instanceDivId).hide();
 
+      //Set the resource object of instance based on resourceType
+      var resourceOptions = options;
+      resourceOptions.element = element
+      this.resource = ResourceFactory.getResource(options.resourceType, resourceOptions);
 
       //Show edit config modal on click
       element.click(function(){
-        showInstanceEditForm(element.attr('id'));
+        self.resource.showInstanceDialog();
       });
       //Do not open the dialog because it's got to open the URL onclick
       element.find('.instance-label').click(function(e){e.stopPropagation();})
@@ -83,7 +95,20 @@
       var xpos = element.offset().left - stage.offset().left ;
       var dom_id = element.attr('id');
       var parent_dom_ids = getParentDomIds(element);
-      return {xpos: xpos, ypos: ypos, label: options.label, instance_type_id: options.InstanceType, resource_type: options.resourceType, config_attributes: options.configAttributes, parent_dom_ids: parent_dom_ids, dom_id: dom_id };
+      var attributes = {
+        xpos: xpos,
+        ypos: ypos,
+        label: options.label,
+        instance_type_id: options.InstanceType,
+        resource_type: options.resourceType,
+        config_attributes: options.configAttributes,
+        parent_dom_ids: parent_dom_ids,
+        dom_id: dom_id
+      };
+      return attributes;
+    },
+    setConfigAttributes: function(configAttributes){
+      this.resource.setOutputAttributes(configAttributes);
     },
     getConfigurationDialogId: function(){
       return this.options.resourceType + '-configuration' ;

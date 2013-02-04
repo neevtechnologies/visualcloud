@@ -1,0 +1,28 @@
+var ResourceFactory = {
+  getResource : function(resourceType, options){
+    switch(resourceType){
+      case 'EC2':
+        return (new EC2Resource(options));
+      case 'ELB':
+        return (new ELBResource(options));
+      case 'RDS':
+        return (new RDSResource(options));
+      case 'S3':
+        return (new S3Resource(options));
+      case 'Rails':
+        return (new RailsResource(options));
+      case 'Java':
+        return (new JavaResource(options));
+      case 'PHP':
+        return (new PHPResource(options));
+      case 'Mysql':
+        return (new MysqlResource(options));
+      case 'Nginx':
+        return (new NginxResource(options));
+      case 'ElastiCache':
+        return (new ElastiCacheResource(options));
+      default:
+        return (null);
+    }
+  }
+}

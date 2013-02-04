@@ -1,6 +1,6 @@
 <div class = "pull-right">
   <ul class="nav nav-pills">
-    <li><a id="projects_list" href="<%= project_path(@project) %>" rel="tooltip" data-placement = "bottom" title="Click here to have details of the project."><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
+    <li><a id="projects_list" href="<%= project_path(@project) %>" rel="tooltip" data-placement = "bottom" title="Go back to the project page"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
     <li>
      <%if !@environment.id.to_s.empty? %>
         <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
