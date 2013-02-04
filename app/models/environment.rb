@@ -25,11 +25,11 @@ class Environment < ActiveRecord::Base
 
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key, region: region_name)
 
+    #TODO : Depend on the actual stack status, not on the provisioned boolean
     if self.provisioned
       provision_request = cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
     else
       provision_request = cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
-      #TODO This logic doesn't work in edge cases. Need to re-factor (Do not depend on provisioned boolean)
       self.provisioned = true
       self.save
     end
@@ -314,19 +314,19 @@ class Environment < ActiveRecord::Base
     update_rds_details(cloud)
   end
 
-  private
+    private
 
-  def modify_environment_data
-    logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
-    UpdateProjectDataBagWorker.perform_async(self.project)
-    logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
-  end
+    def modify_environment_data
+      logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
+      UpdateProjectDataBagWorker.perform_async(self.project)
+      logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
+    end
 
-  def set_aws_compatible_name
-    self.aws_name = aws_compatible_name(self.name)
-  end
+    def set_aws_compatible_name
+      self.aws_name = aws_compatible_name(self.name)
+    end
 
-  def region_name
-    region.name
-  end
+    def region_name
+      region.name
+    end
 end
