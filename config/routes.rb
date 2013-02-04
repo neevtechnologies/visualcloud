@@ -27,7 +27,7 @@ VisualCloud::Application.routes.draw do
     resources :instances
     post 'create_ec2' => 'instances#create_ec2'
     post 'create_rds' => 'instances#create_rds'
-    post 'provision_environment' => 'environments#provision'
+    post 'provision' => 'environments#provision'
     put 'update_environment' => 'environments#update_environment'
   end
   root :to => "home#index"

@@ -28,6 +28,8 @@ describe EnvironmentsController do
 
   describe "PUT #update" do
     def do_put(project_id,id)
+      DeleteNodeWorker.should_receive(:perform_async).exactly(2).times
+      DeleteDataBagWorker.should_receive(:perform_async).exactly(2).times
       put :update, project_id: project_id, id: id, instances: [{label:'WebServerEdited', xpos: 10, ypos: 20, instance_type_id:1,resource_type: 'Rails',config_attributes:{}},{label: 'MySQLEdited', xpos: 5, ypos: 15, instance_type_id:1,resource_type: 'Mysql',config_attributes:{}}]
     end
     
@@ -41,7 +43,7 @@ describe EnvironmentsController do
 
     it "should not increase the environment count" do
       sign_in(user)
-      expect do
+      expect do        
         do_put(project.id,environment.id)
       end.to change {Environment.count}.by(0)
     end
@@ -117,11 +119,19 @@ describe EnvironmentsController do
       environment.instances = [ec2_instance, rds_instance]
     end
 
+   def do_destroy(id,project_id)
+     UpdateProjectDataBagWorker.should_receive(:perform_async)
+     DeleteNodeWorker.should_receive(:perform_async).exactly(2).times
+     DeleteDataBagWorker.should_receive(:perform_async).exactly(2).times
+     delete :destroy, :id => id ,:project_id => project_id
+   end
+
+
     it "redirects back" do
       sign_in(user)
       Environment.should_receive(:find).and_return(environment)
       environment.should_receive(:delete_stack).with(user.aws_access_key, user.aws_secret_key)
-      delete :destroy, :id => environment.id ,:project_id => environment.project_id
+      delete :destroy , :project_id => environment.project_id , :id => environment.id
       response.should be_redirect
     end
 
@@ -130,7 +140,7 @@ describe EnvironmentsController do
       expect {
         Environment.should_receive(:find).and_return(environment)
         environment.should_receive(:delete_stack).with(user.aws_access_key, user.aws_secret_key).and_return(true)
-        delete :destroy, :id => environment.id ,:project_id => environment.project_id
+        do_destroy(environment.id,environment.project_id)
       }.to change { Environment.count }.by(-1)
     end
 
@@ -138,7 +148,7 @@ describe EnvironmentsController do
       sign_in(user)
       Environment.should_receive(:find).and_return(environment)
       environment.should_receive(:delete_stack).with(user.aws_access_key, user.aws_secret_key).and_return(true)
-      delete :destroy, :id => environment.id ,:project_id => environment.project_id
+      do_destroy(environment.id,environment.project_id)
       flash[:success].should == "Environment deleted successfully."
     end
 
@@ -155,6 +165,60 @@ describe EnvironmentsController do
       environment.should_receive(:delete_stack).with(user.aws_access_key, user.aws_secret_key).and_return(false)
       delete :destroy, :id => environment.id ,:project_id => environment.project_id
       flash[:error].should == "An error occured while trying to delete environment."
+    end
+  end
+
+
+ describe "#provision" do
+
+    let(:environment) {FactoryGirl.create(:environment , project: project)}
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment) }
+    let(:rds_instance) { FactoryGirl.create(:rds_instance, environment: environment) }
+
+    before(:each) do
+      environment.instances = [ec2_instance, rds_instance]
+    end
+
+    def do_provision(id)
+      DeleteNodeWorker.should_receive(:perform_async).exactly(2).times
+      DeleteDataBagWorker.should_receive(:perform_async).exactly(2).times
+      xhr :post, :provision , :id => id, environment: { db_migrate: true, branch: "testBranch" }
+    end
+
+    it "should not redirect" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(2).times.and_return(environment)
+      environment.should_receive(:provision).with(user.aws_access_key, user.aws_secret_key)
+      do_provision(environment.id)
+      response.should_not be_redirect
+    end
+
+    it "should give flash success message" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(2).times.and_return(environment)
+      environment.should_receive(:provision).with(user.aws_access_key, user.aws_secret_key).and_return(true)
+      RoleAssignmentWorker.should_receive(:perform_async)
+      do_provision(environment.id)
+      flash[:success].should == "Provision request initiated"
+    end
+
+    it "should give flash error message for not having the 'aws access' to the user" do
+      @user = FactoryGirl.create(:user,aws_secret_key: nil,aws_access_key: nil)
+      sign_in(@user)
+      do_provision(environment.id)
+      errors = []
+      errors << "You have not added your AWS access key"
+      flash[:error].should == errors
+    end
+
+    it "should give flash error message facing problem while provisioning the environment" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(2).times.and_return(environment)
+      environment.should_receive(:provision).with(user.aws_access_key, user.aws_secret_key).and_return(false)
+      do_provision(environment.id)
+      errors = []
+      errors << "This environment cannot be provisioned"
+      flash[:error].should == errors
     end
   end
 

@@ -14,10 +14,10 @@ describe Instance do
     it { should belong_to(:environment) }
     it { should belong_to(:resource_type) }
     it { should belong_to(:instance_type) }
-#    it { should have_many(:parents).through(:parent_child_relationships).source(:parent) }
-#    it { should have_many(:children).through(:parent_child_relationships).source(:child) }
-#    it { should have_many(:parent_child_relationships).class("InstanceRelationship").foreign_key(:child_id) }
-#    it { should have_many(:child_parent_relationships).class("InstanceRelationship").foreign_key(:parent_id) }
+    #    it { should have_many(:parents).through(:parent_child_relationships).source(:parent) }
+    #    it { should have_many(:children).through(:parent_child_relationships).source(:child) }
+    #    it { should have_many(:parent_child_relationships).class("InstanceRelationship").foreign_key(:child_id) }
+    #    it { should have_many(:child_parent_relationships).class("InstanceRelationship").foreign_key(:parent_id) }
   end
 
   describe "#ami" do
@@ -42,6 +42,40 @@ describe Instance do
       attributes = JSON.parse(ec2_instance.config_attributes)
       ec2_instance.should_receive(:add_role).with(ec2_instance.id,attributes['roles'])
       ec2_instance.apply_roles
+    end
+  end
+
+  describe "#update_output" do
+    let(:resource_type_ec2) { FactoryGirl.create(:resource_type,resource_class: "EC2") }
+    let(:resource_type_rds) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
+    it "should set the config attributes of an instance with the output values from stack" do
+      ec2_instance = FactoryGirl.create(:ec2_instance , resource_type: resource_type_ec2)
+      existing_config_attributes = JSON.parse(ec2_instance.config_attributes)
+      ec2_instance.should_receive(:add_elastic_ip).with({},{ip_address: '42.42.42.42',public_dns: 'ec2.public.dns'})
+      ec2_instance.update_output({},{ip_address: '42.42.42.42',public_dns: 'ec2.public.dns'})
+      ec2_instance.reload
+      ec2_instance.config_attributes.should == existing_config_attributes.merge({
+          ip_address: '42.42.42.42',
+          public_dns: 'ec2.public.dns'
+        }).to_json
+    end
+
+    it "should invoke add_elastic_ip for ec2 instance type" do
+      ec2_instance = FactoryGirl.create(:ec2_instance , resource_type: resource_type_ec2)
+      existing_config_attributes = JSON.parse(ec2_instance.config_attributes)
+      ec2_instance.should_receive(:add_elastic_ip)
+      ec2_instance.update_output({},{ip_address: '42.42.42.42',public_dns: 'ec2.public.dns'})
+    end
+
+    it "should not invoke add_elastic_ip for other instance types and update the config attributes" do
+      rds_instance = FactoryGirl.create(:rds_instance , resource_type: resource_type_rds)
+      existing_config_attributes = JSON.parse(rds_instance.config_attributes)
+      rds_instance.update_output({},{'ip_address' => '52.52.52.52','port' => '1234'})
+      rds_instance.reload
+      rds_instance.config_attributes.should == existing_config_attributes.merge({
+          'ip_address' => '52.52.52.52',
+          'port' => '1234'
+        }).to_json
     end
   end
 
