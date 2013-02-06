@@ -17,6 +17,7 @@ describe Project do
     let(:environment) {FactoryGirl.create(:environment,project: project)}
     it "should destroy associated environments" do
       environments = project.environments
+      DeleteDataBagWorker.should_receive(:perform_async)
       project.destroy
       environments.should be_empty
     end

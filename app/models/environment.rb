@@ -161,75 +161,7 @@ class Environment < ActiveRecord::Base
   rescue => e
     logger.error "Error while deleting environment: #{self.name}"
     return false
-  end
-
-  def update_ec2_details(cloud)
-    logger.info "INFO: Updating the ec2 instance details for stack #{self.aws_name}"
-    ec2_details = cloud.get_ec2_details(stack_name: self.aws_name)
-    logger.info "INFO: EC2 details for stack #{self.aws_name} : #{ec2_details.inspect}"
-    while ec2_details.nil?
-      sleep VisualCloudConfig[:status_check_interval]
-      ec2_details = cloud.get_ec2_details(stack_name: self.aws_name)
-    end
-    instances.where('aws_label in (?)', ec2_details.keys).each do |instance|
-      instance_details = ec2_details[instance.aws_label]
-      if instance_details.present?
-        existing_config_attributes = JSON.parse(instance_details.config_attributes)
-        existing_config_attributes = existing_config_attributes.merge({'dnsName' => instance_details['dnsName'],'ipAddress'=>instance_details['ipAddress']})
-        instance.update_attributes({
-            :aws_instance_id => instance_details['instanceId'],
-            :config_attributes =>  existing_config_attributes.to_json
-            #public_dns: instance_details['dnsName'],
-            #private_ip: instance_details['ipAddress']
-          })
-      end
-    end
-    logger.info "INFO: Updated the ec2 instance details for stack #{self.aws_name}"
-  end
-
-  def update_elb_details(cloud)
-    logger.info "INFO: Updating the elb instance details for stack #{self.aws_name}"
-    elb_details = cloud.get_elb_details(stack_name: self.aws_name)
-    logger.info "INFO: elb details for stack #{self.aws_name} : #{elb_details.inspect}"
-    while elb_details.nil?
-      sleep VisualCloudConfig[:status_check_interval]
-      elb_details = cloud.get_elb_details(stack_name: self.aws_name)
-    end
-    instances.where('aws_label in (?)', elb_details.keys).each do |instance|
-     instance_details = elb_details[instance.aws_label]
-     if instance_details.present?
-       existing_config_attributes = JSON.parse(instance_details.config_attributes)
-       existing_config_attributes = existing_config_attributes.merge({'DNSName' => instance_details['DNSName']})
-       instance.update_attributes({
-         :config_attributes =>  existing_config_attributes.to_json
-         #public_dns: instance_details['DNSName']
-       })
-     end
-    end
-    logger.info "INFO: Updated the elb instance details for stack #{self.aws_name}"
-  end
-
-  def update_rds_details(cloud)
-    logger.info "INFO: Updating the rds instance details for stack #{self.aws_name}"
-    rds_details = cloud.get_rds_details(stack_name: self.aws_name)
-    logger.info "INFO: rds details for stack #{aws_name} : #{rds_details.inspect}"
-    while rds_details.nil?
-      sleep VisualCloudConfig[:status_check_interval]
-      rds_details = cloud.get_rds_details(stack_name: self.aws_name)
-    end
-    instances.where('aws_label in (?)', rds_details.keys).each do |instance|
-     instance_details = rds_details[instance.aws_label]
-     if instance_details.present?
-       existing_config_attributes = JSON.parse(instance_details.config_attributes)
-       existing_config_attributes = existing_config_attributes.merge({'Endpoint' => instance_details['Endpoint']['Address']})
-       instance.update_attributes({
-         :config_attributes =>  existing_config_attributes.to_json
-         #public_dns: instance_details['Endpoint']['Address']
-       })
-     end
-    end
-    logger.info "INFO: Updated the rds instance details for stack #{self.aws_name}"
-  end
+  end  
 
   def set_meta_data(access_key_id, secret_access_key)
     logger.info("Setting Meta Data in DataBags before assigning roles for instances in environment : #{self.aws_name}")
@@ -299,34 +231,25 @@ class Environment < ActiveRecord::Base
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     outputs = cloud.outputs(stack_name: aws_name)
     outputs.each do |key, value|
-      instances.where(aws_label: key).each do |instance|
+      instances.where(aws_label: key).each do |instance|        
         instance.update_output(key, value)
       end
     end
+  end  
+
+  private
+
+  def modify_environment_data
+    logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
+    UpdateProjectDataBagWorker.perform_async(self.project)
+    logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
   end
 
-  #To be removed once all resource outputs are ported into cloudster ,
-  #so we can use update_instance_outputs in one shot instead of doing this
-  def update_instances(access_key_id, secret_access_key)
-    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
-    update_elb_details(cloud)
-    update_ec2_details(cloud)
-    update_rds_details(cloud)
+  def set_aws_compatible_name
+    self.aws_name = aws_compatible_name(self.name)
   end
 
-    private
-
-    def modify_environment_data
-      logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
-      UpdateProjectDataBagWorker.perform_async(self.project)
-      logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
-    end
-
-    def set_aws_compatible_name
-      self.aws_name = aws_compatible_name(self.name)
-    end
-
-    def region_name
-      region.name
-    end
+  def region_name
+    region.name
+  end
 end

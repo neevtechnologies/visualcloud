@@ -63,7 +63,7 @@ function requestProvision(){
   }
   showLoading();
   $.ajax({
-    url: '/provision_environment?id='+graphId,
+    url: '/provision?id='+graphId,
     type: 'POST',
     dataType: "script",
     contentType: 'application/json',
