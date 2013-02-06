@@ -85,3 +85,6 @@ Vagrantfile
 .vagrant
 cookbook*
 delete*
+
+#Secret token for session
+secret_token

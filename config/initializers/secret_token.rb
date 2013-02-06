@@ -4,4 +4,16 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-VisualCloud::Application.config.secret_token = '6cba7d28b43d04223fb986eb3aa17fb6d3b5c84c76e2a38515f7e69b5c5d0c6b0762c1053adf4e2516f826e0aa23997a7c8a108cd3111f4d3959266b19f3faa0'
+
+# Run `rake secret > secret_token` from RAILS_ROOT before you start the app
+
+begin
+    token_file = Rails.root.to_s + "/secret_token"
+    secret_token = open(token_file).read
+    VisualCloud::Application.configure do
+        config.secret_token = secret_token
+    end
+rescue LoadError, Errno::ENOENT => e
+    error = "\nSecret Token couldn't be loaded : #{e}\nGenerate secret_token by running `rake secret > secret_token`\n".red
+    raise error
+end
