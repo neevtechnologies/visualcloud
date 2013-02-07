@@ -37,14 +37,14 @@ ResourceType.create(resource_class: 'EC2', name: 'PHP', parents_list: "ELB,Nginx
 
 #Ami'S
 ubuntu_amis = {
-  'us-east-1' => 'ami-d726abbe',
-  'us-west-2' => 'ami-ca2ca4fa',
-  'us-west-1' => 'ami-827252c7',
-  'eu-west-1' => 'ami-3a0f034e',
-  'ap-southeast-1' => 'ami-15226047',
-  'ap-northeast-1' => 'ami-70a91271',
-  'ap-southeast-2' => 'ami-7f7ee945',
-  'sa-east-1' => 'ami-6beb3376'
+  'us-east-1' => 'ami-0145d268',
+  'us-west-2' => 'ami-e0941ed0',
+  'us-west-1' => 'ami-3ed8fb7b',
+  'eu-west-1' => 'ami-20414854',
+  'ap-southeast-1' => 'ami-7e2c612c',
+  'ap-northeast-1' => 'ami-57b03456',
+  'ap-southeast-2' => 'ami-6678ee5c',
+  'sa-east-1' => 'ami-6b805b76'
 }
 Ami.create(image_id: ubuntu_amis.to_yaml, architecture:'amd64', name:'Precise Pangolin', description:'Ubuntu 12.04 LTS instance-store')
 
