@@ -5,30 +5,28 @@
     <%= f.hidden_field :user_id, :value => current_user.id %>
     <%= f.input :name, input_html: { id: 'name'} %>
     <%= f.label :description %>
-    <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>    
+    <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
     <% if @environments.present? %>
-    <label>Environments:</label>
-    <div>
-      <table>
+      <label>Environments:</label>
+      <div>
+        <table class="table">
           <tr>
             <th>S.No</th>
             <th>Environment Name</th>
           </tr>
-      </table>
-      <% i = 0 %>
-      <%= f.fields_for :environments do |env| %>        
-        <% i +=  1 %>      
-        <table>          
-          <tr>
-            <td><%= i %></td>
-            <td>
-              <%=  env.input :name , :label => false ,:disabled=> true%>
-            </td>
-          </tr>
-        </table>      
-      <% end %>
-    </div>
-     <%end%>
+          <% i = 0 %>
+          <%= f.fields_for :environments do |env| %>
+            <% i +=  1 %>
+            <tr>
+              <td><%= i %></td>
+              <td>
+                <%=  env.input :name , :label => false ,:disabled=> true%>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    <%end%>
   </div>
   <div>
     <%= f.button :submit, 'Save Project' ,:class=>"btn btn-inverse"%>
