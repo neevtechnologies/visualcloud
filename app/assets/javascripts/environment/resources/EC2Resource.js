@@ -26,6 +26,9 @@ EC2Resource.prototype.showInstanceDialog = function(){
   this.baseResource.showInstanceDialog();
 };
 
+EC2Resource.prototype.saveConfigAttributes = function(configAttributes){
+  this.baseResource.instanceOptions.configAttributes = configAttributes;
+}
 
 EC2Resource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#' + this.baseResource.dialogId);

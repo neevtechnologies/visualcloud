@@ -13,6 +13,10 @@ ElastiCacheResource.prototype.showInstanceDialog = function(){
   this.baseResource.showInstanceDialog();
 };
 
+ElastiCacheResource.prototype.saveConfigAttributes = function(configAttributes){
+  this.baseResource.instanceOptions.configAttributes = configAttributes;
+}
+
 ElastiCacheResource.prototype.setOutputAttributes = function(configAttributes){
   /* ElastiCache Resources in Cloudformation don't support Output params
    * Need to find an alternative way to fetch outputs

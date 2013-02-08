@@ -82,6 +82,14 @@
         instanceAttributes.push(instances[i].instance("getAttributes"));
       return(JSON.stringify({environment: environmentAttributes, instances: instanceAttributes}));
     },
+    getInstanceElementByLabel: function(label){
+      var instances = this.instances;
+      var instanceAttributes = [];
+      for(var i = 0; i < instances.length; i++){
+        if(instances[i].instance('option', 'label') == label)
+          return instances[i];
+      }
+    },
     removeInstanceFromStage: function(instanceId){
       var instances = this.instances;
       for(var i = 0; i < instances.length; i++)

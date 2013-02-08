@@ -15,6 +15,10 @@ ELBResource.prototype.setOutputAttributes = function(configAttributes){
   dialog.find('#ELB_dns_name').html("DNS Name : <code class='fnt_size'>"+configAttributes.get('dns_name')+"</code>");
 }
 
+ELBResource.prototype.saveConfigAttributes = function(configAttributes){
+  this.baseResource.instanceOptions.configAttributes = configAttributes;
+}
+
 ELBResource.prototype.setLabelURL = function(configAttributes){
   if(configAttributes.dns_name != undefined){
     var url = "http://" + configAttributes.dns_name ;

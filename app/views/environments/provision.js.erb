@@ -1,1 +1,2 @@
 showFlashMessages($('#container'), '','<%= escape_javascript flash_messages %>');
+updateInstanceElementIds(JSON.parse('<%= raw @instance_ids.to_json %>'));
