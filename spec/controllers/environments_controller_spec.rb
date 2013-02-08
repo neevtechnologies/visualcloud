@@ -67,47 +67,6 @@ describe EnvironmentsController do
     end
   end
 
-  describe "PUT #update_environment" do
-
-    before(:each) do
-      @environment = FactoryGirl.create(:environment)
-    end
-
-    def do_put(id)
-      xhr :put , :update_environment, id: id, environment: { db_migrate: true, branch: "testBranch" }
-    end
-
-    it "response should be success" do
-      sign_in(user)
-      do_put(@environment.id)
-      response.should be_success
-    end
-
-    it "should update the enviornment attributes" do
-      sign_in(user)
-      expect{
-        do_put(@environment.id)
-        @environment.reload
-        @environment.db_migrate.should == true
-        @environment.branch.should == "testBranch"
-      }.to change {Environment.count}.by(0)
-    end
-
-    it "should give flash success message" do
-      sign_in(user)
-      do_put(@environment.id)
-      flash[:success].should == "Environment fields updated successfully."
-    end
-
-    it "should give flash error message" do
-      sign_in(user)
-      Environment.should_receive(:find).and_return(@environment)
-      @environment.should_receive(:update_attributes).and_return(false)
-      do_put(@environment.id)
-      flash[:error].should == "An error occured while trying to update environment fields."
-    end
-
-  end
 
   describe "DELETE #destory" do
 
