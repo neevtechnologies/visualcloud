@@ -19,16 +19,13 @@ VisualCloud::Application.routes.draw do
     match 'export_csv' => 'environments#export_csv'
     #Environment resource
     resources :projects do
-      resources :environments do
-        resources :deployments
-      end
+      resources :environments
     end
     #Instance resource
     resources :instances
     post 'create_ec2' => 'instances#create_ec2'
     post 'create_rds' => 'instances#create_rds'
-    post 'provision' => 'environments#provision'
-    put 'update_environment' => 'environments#update_environment'
+    post 'provision' => 'environments#provision'    
   end
   root :to => "home#index"
   devise_for :users

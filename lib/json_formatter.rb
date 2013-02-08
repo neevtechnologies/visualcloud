@@ -14,16 +14,13 @@ module JsonFormatter
       environments_json << " 
         \"#{environment.id}\": {
         #{options_json}
-        \"environment\": \"#{environment.name}\",
-        \"branch\": \"#{environment.branch}\",
-        \"migrate\": \"#{environment.db_migrate}\" 
+        \"environment\": \"#{environment.name}\" 
        }"
     end
 
     "{
       \"id\": \"#{project.id}\",
-      \"name\":\"#{project.name}\",
-      \"repo\": \"#{project.repo_url}\",
+      \"name\":\"#{project.name}\",      
       \"environments\": {#{environments_json.join(',')}}
     }"
   end

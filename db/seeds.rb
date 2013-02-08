@@ -77,6 +77,7 @@ InstanceType.create(api_name: 'db.m2.xlarge', name:'High-Memory Extra Large', si
 InstanceType.create(api_name: 'db.m2.2xlarge', name:'High-Memory Double Extra Large', size:'',resource_type_id:rds.id,description: '34 GB of memory, 13 ECUs (4 virtual cores with 3,25 ECUs each), 64-bit platform, High I/O Capacity',label:'2XL+')
 InstanceType.create(api_name: 'db.m2.4xlarge', name:'High-Memory Quadruple Extra Large', size:'',resource_type_id:rds.id,description: '68 GB of memory, 26 ECUs (8 virtual cores with 3.25 ECUs each), 64-bit platform, High I/O Capacity',label:'4XL+')
 
+#Instance Types for ElastiCache
 ec = ResourceType.find_by_name('ElastiCache')
 #  cache.m2.xlarge | cache.m2.2xlarge | cache.m2.4xlarge | cache.c1.xlarge
 InstanceType.create(api_name: 'cache.t1.micro', name:'Micro', size:'',resource_type_id:ec.id,description: '',label:'XS')

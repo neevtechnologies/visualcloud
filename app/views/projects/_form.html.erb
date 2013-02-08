@@ -5,47 +5,27 @@
     <%= f.hidden_field :user_id, :value => current_user.id %>
     <%= f.input :name, input_html: { id: 'name'} %>
     <%= f.label :description %>
-    <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>
-    <%= f.input :repo_type, input_html: { id: 'repo_type'}, :collection => ['Git'], :prompt => "Select repository" %>
-    <%= f.input :repo_url, input_html: { id: 'repo_url'} %>
+    <%= f.text_area :description, :rows=>5, :cols=>20 ,input_html: { id: 'description'} %>    
     <% if @environments.present? %>
     <label>Environments:</label>
     <div>
-      <%= f.fields_for :environments do |env| %>
-        <!-- TODO : remove styles and put them into a css class -->
-      <div class="environment_block_display">
-        <table>
+      <table>
           <tr>
-            <td>
-              <label> Name </label>
-            </td>
+            <th>S.No</th>
+            <th>Environment Name</th>
+          </tr>
+      </table>
+      <% i = 0 %>
+      <%= f.fields_for :environments do |env| %>        
+        <% i +=  1 %>      
+        <table>          
+          <tr>
+            <td><%= i %></td>
             <td>
               <%=  env.input :name , :label => false ,:disabled=> true%>
             </td>
           </tr>
-          <tr>
-            <td>
-              <label> Branch </label>
-            </td>
-            <td>
-              <%=env.input :branch , :label => false%>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label> DB migrate </label>
-            </td>
-            <td>
-              <%=env.input :db_migrate , :label => false%>
-            </td>
-          </tr>
-        </table>
-        <div class="set_margin_left_top">
-          <label>Priority</label>
-          <%=env.input :deploy_order , :label => false, collection: get_select_options_for_deploy_order(@project.id) , :input_html => {:style=> 'width: 80px;'}%>
-        </div>
-
-      </div>
+        </table>      
       <% end %>
     </div>
      <%end%>

@@ -49,25 +49,14 @@ function delete_instance(resource_type) {
   $('.graph-area').graphArea("removeInstanceFromStage", instance_id);
 }
 
-function requestProvision(){
-  var graphId = $('#graph_id').text();
-  var repo_url = $('#repo_url').text();
-  var environmentAttributes = {};
-  if(repo_url == "")
-    environmentAttributes = {branch: "master",db_migrate: true};
-  else
-  {
-    var branch = $('#graph-branch').val().trim();
-    var dbMigrate = $('#db_migrate')[0].checked;
-    environmentAttributes = {branch: branch,db_migrate: dbMigrate};
-  }
+function requestProvision(graphId){
   showLoading();
   $.ajax({
     url: '/provision?id='+graphId,
     type: 'POST',
     dataType: "script",
     contentType: 'application/json',
-    data : $('.graph-area').graphArea("getInstances", environmentAttributes),
+    data : $('.graph-area').graphArea("getInstances"),
     complete: function(){
       hideLoading();
     }

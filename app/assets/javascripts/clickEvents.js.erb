@@ -47,37 +47,9 @@ $(document).ready(function(){
   //On click event for "Provision" button on graph toolbar during edit
   $('#graph-provision').click(function(){
     var graphId = $(this).data("graphId");
-    $('#graph_id').text(graphId);
-    var repo_url = $('#repo_url').text();
-    if(repo_url == "")
-      requestProvision();
-    else
-      $('#deployment-config-modal').modal('show');
+    requestProvision(graphId);
   });
-
-  $('.deployment-config-submit').click(function(){
-    $('#deployment-config-modal').modal('hide');
-    requestProvision();
-  });
-
-
-  //On click of save environment, it should save respective environment
-  $(".save_env").live('click', function() {
-    var id = $(this).attr('id').split('_')[2];
-    var branch = $('#branch_'+id).val();
-    var db_migrate = $('#db_migrate_'+id)[0].checked
-    showLoading();
-      $.ajax({
-        url: '/update_environment?id='+id,
-        type: 'PUT',
-        dataType: "script",
-        contentType: 'application/json',
-        data: JSON.stringify({environment: {branch: branch ,db_migrate: db_migrate}}),
-        complete: function(){
-          hideLoading();
-        }
-      });
-  });
+  
 
 /* //Do not query resources one by one . Use the environment status check for this .
  if($("[id^=instance-label-]").length != 0)

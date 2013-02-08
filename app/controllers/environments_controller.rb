@@ -61,11 +61,11 @@ class EnvironmentsController < ApplicationController
     @instances = @environment.instances
     csv_string = CSV.generate do |csv|
       # Project details
-      csv << ["Id", "Project Name", "repositry Type","Repository URL"]
-      csv << [@project.id, @project.name, @project.repo_type,@project.repo_url]
+      csv << ["Id", "Project Name"]
+      csv << [@project.id, @project.name]
       # Environment details
-      csv << ["Id", "Environment Name", "Branch","Key Pair Name", "Security Group", "Name in AWS Console","Region"]
-      csv << [@environment.id, @environment.name, @environment.branch,@environment.key_pair_name, @environment.security_group, @environment.aws_name,@environment.region.name]
+      csv << ["Id", "Environment Name","Key Pair Name", "Security Group", "Name in AWS Console","Region"]
+      csv << [@environment.id, @environment.name,@environment.key_pair_name, @environment.security_group, @environment.aws_name,@environment.region.name]
       # Instances details
       csv << ["Id", "Instance Label", "Instance Type","Resource Type", "Config Attributes", "Name in AWS Console"]
       @instances.each do |instance|
@@ -146,20 +146,7 @@ class EnvironmentsController < ApplicationController
     respond_to do |format|
       format.js
     end
-  end
-
-  def update_environment
-    @environment = Environment.find(params[:id])
-    if @environment.update_attributes(params[:environment])
-      flash.now[:success] = "Environment fields updated successfully."
-    else
-      flash.now[:error] = "An error occured while trying to update environment fields."
-    end
-
-    respond_to do |format|
-      format.js
-    end
-  end
+  end  
 
   # DELETE /environments/1
   # DELETE /environments/1.json
