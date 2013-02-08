@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121219083733) do
+ActiveRecord::Schema.define(:version => 20130208061520) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -22,22 +22,11 @@ ActiveRecord::Schema.define(:version => 20121219083733) do
     t.datetime "updated_at",   :null => false
   end
 
-  create_table "deployments", :force => true do |t|
-    t.string   "revision"
-    t.string   "status"
-    t.integer  "environment_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
   create_table "environments", :force => true do |t|
     t.string   "name"
-    t.string   "branch",           :default => "master"
-    t.boolean  "db_migrate",       :default => true
-    t.integer  "deploy_order"
     t.integer  "project_id"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.boolean  "provisioned"
     t.string   "key_pair_name"
     t.string   "security_group"
@@ -80,8 +69,6 @@ ActiveRecord::Schema.define(:version => 20121219083733) do
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.string   "repo_type"
-    t.string   "repo_url"
     t.string   "frame_work"
     t.boolean  "managed",     :default => true
     t.integer  "user_id"

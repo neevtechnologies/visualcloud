@@ -3,9 +3,6 @@
 <!-- Save Environment -->
 <%= render 'save_environment', key_pairs: @key_pairs, security_groups: @security_groups, project: project %>
 
-<!-- Deployment Configuration dialog  -->
-<%= render 'deployment_configuration', branch: @environment.branch ,db_migrate: @environment.db_migrate %>
-
 <% ResourceType.find_all_by_resource_class('EC2').each do |resource_type|  %>
   <%= render 'ec2_type_resource_configuration', resource_type: resource_type %>
 <% end %>
