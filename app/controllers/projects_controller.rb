@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find(params[:id])    
-    @environments = Environment.where(:project_id=>@project.id).order('deploy_order')
+    @environments = Environment.where(:project_id=>@project.id)
     @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
     respond_to do |format|
       format.html # show.html.erb
