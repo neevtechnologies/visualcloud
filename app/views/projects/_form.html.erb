@@ -11,14 +11,10 @@
       <div>
         <table class="table">
           <tr>
-            <th>S.No</th>
             <th>Environment Name</th>
           </tr>
-          <% i = 0 %>
           <%= f.fields_for :environments do |env| %>
-            <% i +=  1 %>
             <tr>
-              <td><%= i %></td>
               <td>
                 <%=  env.input :name , :label => false ,:disabled=> true%>
               </td>
