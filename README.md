@@ -31,6 +31,7 @@ export RAILS_ENV=production
 cp config/database.yml.example config/database.yml (Make any changes to database.yml if required)
 bundle install
 bundle exec rake secret > secret_token
+Edit config/config.yml and set attr_encryption_salt to a random string
 bundle exec rake db:create
 bundle exec rake db:migrate:reset
 bundle exec rake db:seed
