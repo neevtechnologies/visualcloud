@@ -8,6 +8,7 @@ default: &defaults
   s3_access_control: ["Private","PublicRead","PublicReadWrite","AuthenticatedRead","BucketOwnerRead","BucketOwnerFullControl"]
   java_versions: ["6","7"]
   strings_max_length: 10
+  attr_encryption_salt: 'random string'
 
 development:
   <<: *defaults
@@ -16,6 +17,7 @@ development:
 production:
   <<: *defaults
   chef_server_url: 'http://ec2-184-73-196-133.compute-1.amazonaws.com:4000'
+  attr_encryption_salt: ''
 
 test:
   <<: *defaults

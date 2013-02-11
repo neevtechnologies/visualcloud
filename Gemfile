@@ -11,6 +11,7 @@ gem "thin", ">= 1.5.0"
 gem "mysql2", ">= 0.3.11"
 gem "devise", ">= 2.1.2"
 gem "cancan", ">= 1.6.8"
+gem "attr_encrypted", "~> 1.2.1"
 gem "rolify", ">= 3.2.0"
 gem 'bootstrap-sass'
 gem 'font-awesome-rails', :git => 'git://github.com/bokmann/font-awesome-rails.git'
@@ -20,6 +21,7 @@ gem "chef", path: './lib/chef'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+gem 'colorize'
 
 gem 'cloudster', "~> 2.19.3"
 
