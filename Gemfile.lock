@@ -70,7 +70,7 @@ GEM
     celluloid (0.12.4)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
-    cloudster (2.19.2)
+    cloudster (2.19.3)
       fog
       json
     coderay (1.0.8)
@@ -108,7 +108,7 @@ GEM
     factory_girl_rails (4.1.0)
       factory_girl (~> 4.1.0)
       railties (>= 3.0.0)
-    fog (1.8.0)
+    fog (1.9.0)
       builder
       excon (~> 0.14)
       formatador (~> 0.2.0)
@@ -280,7 +280,7 @@ DEPENDENCIES
   bootstrap-sass
   cancan (>= 1.6.8)
   chef!
-  cloudster (~> 2.19.1)
+  cloudster (~> 2.19.3)
   coffee-rails (~> 3.2.1)
   debugger
   devise (>= 2.1.2)

@@ -21,7 +21,7 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 
-gem 'cloudster', "~> 2.19.1"
+gem 'cloudster', "~> 2.19.3"
 
 group :development, :test do
   gem "awesome_print"

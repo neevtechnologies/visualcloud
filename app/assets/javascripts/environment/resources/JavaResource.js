@@ -10,6 +10,10 @@ JavaResource.prototype.showInstanceDialog = function(){
   this.EC2Resource.showInstanceDialog();
 };
 
+JavaResource.prototype.saveConfigAttributes = function(configAttributes){
+  this.EC2Resource.saveConfigAttributes(configAttributes);
+}
+
 JavaResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }

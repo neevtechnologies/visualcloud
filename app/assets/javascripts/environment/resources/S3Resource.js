@@ -11,6 +11,10 @@ S3Resource.prototype.showInstanceDialog = function(){
   this.baseResource.showInstanceDialog();
 };
 
+S3Resource.prototype.saveConfigAttributes = function(configAttributes){
+  this.baseResource.instanceOptions.configAttributes = configAttributes;
+}
+
 S3Resource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#'+this.baseResource.dialogId);
   dialog.find('#S3_bucket_name').html("Bucket Name : <code class='fnt_size'>"+configAttributes.get('bucket_name')+"</code>");

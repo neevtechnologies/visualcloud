@@ -173,6 +173,9 @@ function startStatusPoll(environmentId){
           for(var key in data.instanceAttributes){
             var configAttributes = data.instanceAttributes[key];
             //Adding get() for configattributes
+            //A better way to do this may be wrap configAttribute into another object
+            //wherever get() is called,
+            //which has a get() and returns Not Available when attribute doesn't exist
             injectConfigGetter(configAttributes);
             $('#instance-'+key).instance('setConfigAttributes', configAttributes);
           }
@@ -197,6 +200,16 @@ function addInstanceCloneToGraph(instanceId){
   graphArea.graphArea("addInstanceToStage", newElement, instanceId);
 
   return newElement ;
+};
+
+//Update the element id's of instances with actual ID's saved in DB
+//TODO: Remove hardcoded 'instance-' prefix for element id's
+function updateInstanceElementIds(instance_ids){
+  var instanceLabel;
+  for(instanceLabel in instance_ids){
+    var instanceElement = $('.graph-area').graphArea("getInstanceElementByLabel", instanceLabel );
+    instanceElement.attr("id", 'instance-' + instance_ids[instanceLabel]);
+  }
 };
 
 //Show dialog for creating new instances

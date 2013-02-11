@@ -176,6 +176,7 @@ class EnvironmentsController < ApplicationController
   def provision
     @environment = Environment.find(params[:id])
     @environment.update_attributes(params[:environment])
+    @instance_ids = {}
     @errors = []
     update_instances
     if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
@@ -188,6 +189,7 @@ class EnvironmentsController < ApplicationController
           secret_access_key: current_user.aws_secret_key,
           environment_id: @environment.id
         )
+        @environment.instances.each{|instance| @instance_ids[instance.label] = instance.id }
       else
         @errors << "This environment cannot be provisioned"
         flash.now[:error] = @errors

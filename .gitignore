@@ -27,6 +27,7 @@ db/*.sqlite3
 .redcar/
 .sass-cache
 /config/database.yml
+/config/environments/development.rb_mine
 /coverage.data
 /coverage/
 /db/*.javadb/
