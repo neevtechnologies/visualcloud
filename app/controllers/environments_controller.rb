@@ -175,7 +175,6 @@ class EnvironmentsController < ApplicationController
   # Provisions the stack
   def provision
     @environment = Environment.find(params[:id])
-    @environment.update_attributes(params[:environment])
     @instance_ids = {}
     @errors = []
     update_instances
