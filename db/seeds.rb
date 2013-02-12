@@ -59,13 +59,6 @@ ec2_instance_types << InstanceType.create(api_name: 'm1.xlarge',resource_type_id
 ec2_instance_types << InstanceType.create(api_name: 'm2.xlarge',resource_type_id:ec2.id, name:'High-Memory Extra Large', size:'17.1 GB',description: '17.1 GiB of memory,6.5 EC2 Compute Units (2 virtual cores with 3.25 EC2 Compute Units each),420 GB of instance storage,64-bit platform,I/O Performance: Moderate,EBS-Optimized Available: No',label:'XL+')
 ec2_instance_types << InstanceType.create(api_name: 'm2.2xlarge',resource_type_id:ec2.id, name:'High-Memory Double Extra Large', size:'34.2 GB',description: '34.2 GiB of memory,13 EC2 Compute Units (4 virtual cores with 3.25 EC2 Compute Units each),850 GB of instance storage,64-bit platform,I/O Performance: High,EBS-Optimized Available: No',label:'2XL+')
 ec2_instance_types << InstanceType.create(api_name: 'm2.4xlarge',resource_type_id:ec2.id, name:'High-Memory Quadruple Extra Large', size:'68.4 GB',description: '68.4 GiB of memory,26 EC2 Compute Units (8 virtual cores with 3.25 EC2 Compute Units each),1690 GB of instance storage,64-bit platform,I/O Performance: High,EBS-Optimized Available: 1000 Mbps',label:'4XL+')
-#ec2_instance_types << InstanceType.create(api_name: 'c1.meidum', name:'High-CPU Medium', size:'1.7 GB',description: '1.7 GiB of memory,5 EC2 Compute Units (2 virtual cores with 2.5 EC2 Compute Units each),350 GB of instance storage,32-bit or 64-bit platform,I/O Performance: Moderate,EBS-Optimized Available: No',label:'CM')
-#ec2_instance_types << InstanceType.create(api_name: 'c1.xlarge', name:'High-CPU Extra Large', size:'7 GB',description: '7 GiB of memory,20 EC2 Compute Units (8 virtual cores with 2.5 EC2 Compute Units each),1690 GB of instance storage,64-bit platform,I/O Performance: High,EBS-Optimized Available: No',label:'CX')
-#ec2_instance_types << InstanceType.create(api_name: 'cc1.4xlarge', name:'Cluster Compute Quadruple Extra Large', size:'23 GB',description: '23 GiB of memory,33.5 EC2 Compute Units (2 x Intel Xeon X5570, quad-core Nehalem architecture),1690 GB of instance storage,64-bit platform,I/O Performance: Very High (10 Gigabit Ethernet)',label:'CCQ')
-#ec2_instance_types << InstanceType.create(api_name: 'cc2.8xlarge', name:'Cluster Compute Eight Extra Large', size:'60.5 GB',description: '60.5 GiB of memory,88 EC2 Compute Units (2 x Intel Xeon E5-2670, eight-core Sandy Bridge architecture),3370 GB of instance storage,64-bit platform,I/O Performance: Very High (10 Gigabit Ethernet)',label:'CC8')
-#ec2_instance_types << InstanceType.create(api_name: 'cg1.4xlarge', name:'Cluster GPU Quadruple Extra Large', size:'22 GB',description: '22 GiB of memory,33.5 EC2 Compute Units (2 x Intel Xeon X5570, quad-core Nehalem architecture),2 x NVIDIA Tesla Fermi M2050 GPUs,1690 GB of instance storage,64-bit platform,I/O Performance: Very High (10 Gigabit Ethernet)',label:'CGQ')
-#ec2_instance_types << InstanceType.create(api_name: 'hi1.4xlarge', name:'High I/O Quadruple Extra Large', size:'60.5 GB',description: '60.5 GiB of memory,35 EC2 Compute Units (16 virtual cores [8 cores + 8 hyperthreads]),2 SSD-based volumes each with 1024 GB of instance storage,64-bit platform,I/O Performance: Very High (10 Gigabit Ethernet)',label:'IOQ')
-
 
 #Instance Types for rds
 rds = ResourceType.find_by_name('RDS')
@@ -79,14 +72,8 @@ InstanceType.create(api_name: 'db.m2.4xlarge', name:'High-Memory Quadruple Extra
 
 #Instance Types for ElastiCache
 ec = ResourceType.find_by_name('ElastiCache')
-#  cache.m2.xlarge | cache.m2.2xlarge | cache.m2.4xlarge | cache.c1.xlarge
 InstanceType.create(api_name: 'cache.t1.micro', name:'Micro', size:'',resource_type_id:ec.id,description: '',label:'XS')
 InstanceType.create(api_name: 'cache.m1.small', name:'Small', size:'',resource_type_id:ec.id,description: '',label:'S')
 InstanceType.create(api_name: 'cache.m1.medium', name:'Medium', size:'',resource_type_id:ec.id,description: '',label:'M')
 InstanceType.create(api_name: 'cache.m1.large', name:'Large', size:'',resource_type_id:ec.id,description: '',label:'L')
 InstanceType.create(api_name: 'cache.m1.xlarge', name:'Extra Large', size:'',resource_type_id:ec.id,description: '',label:'XL')
-#InstanceType.create(api_name: 'cache.m3.xlarge', name:'Memory Extra Large', size:'',resource_type_id:ec.id,description: '',label:'MXL')
-#InstanceType.create(api_name: 'cache.m3.2xlarge', name:'Memory Double Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M2XL')
-#InstanceType.create(api_name: 'cache.m2.xlarge', name:'M2 Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M2XL')
-#InstanceType.create(api_name: 'cache.m2.2xlarge', name:'M2 Double Extra Large', size:'',resource_type_id:ec.id,description: '',label:'M22XL')
-#InstanceType.create(api_name: 'cache.c1.xlarge', name:'C1 Extra Large', size:'',resource_type_id:ec.id,description: '',label:'C1XL')

@@ -1,14 +1,14 @@
 <div id="<%= resource_type.name %>-configuration" class="modal hide fade in" style="display: none; ">
-  <div class="modal-header">  
-    <a class="close" data-dismiss="modal">×</a>  
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
     <h3><%= resource_type.name %> instance configuration</h3>
-  </div>  
-  <div class="modal-body">  
+  </div>
+  <div class="modal-body">
     <div id="<%= resource_type.name %>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: "" , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
       <div id="<%= resource_type.name %>_instance_type_id" class="hide"></div>
-      <label>Instance Type</label>      
+      <label>Instance Type</label>
       <div id="<%= resource_type.name %>-slider">
         <%= render "slider" %>
       </div>
@@ -21,8 +21,6 @@
       <%= text_field_tag "#{resource_type.name}_master_user_name" %>
       <p>Master Password</p>
       <%= password_field_tag "#{resource_type.name}_master_password" %>
-      <p>Security Group</p>
-      <%= select_tag "#{resource_type.name}_security_group" , options_for_select(["default","test"]), :include_blank => false %>
       <div class="row">
         <div class="span0">
         <%= check_box_tag "#{resource_type.name}_multiAZ", value = "", checked = false%></div>
@@ -36,7 +34,7 @@
   </div>
   <div class="modal-footer">
     <%= f.button :submit, "Apply", class: "btn btn-success instance-config-submit" %>
-    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>  
+    <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
     <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="<%= resource_type.name %>_delete" onclick='delete_instance("<%= resource_type.name %>");' title="Delete the <%= resource_type.name %> resource">Delete</a>
   </div>
   <% end %>

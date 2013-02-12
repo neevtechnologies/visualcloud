@@ -3,7 +3,7 @@
   <!-- Modal header -->
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
-    <h3><%= resource_type.name %> Instance configuration</h3>
+    <h3><%= resource_type.name %> instance configuration</h3>
   </div>
 
   <!-- Modal content -->
@@ -15,10 +15,6 @@
       <% if  resource_type.name == "Java"%>
       <p>Java Version</p>
       <%= select_tag "#{resource_type.name}_version" , options_for_select(VisualCloudConfig[:java_versions]), :include_blank => false %>
-      <div class='hide'>
-        <p>Tomcat Version</p>
-          <%= select_tag "#{resource_type.name}_tomcat_version" , options_for_select(["default","test"]), :include_blank => false %>
-      </div>
       <%end%>
     <div id="<%=resource_type.name%>_instance_type_id" class="hide"></div>
     <label>Instance Type</label>
@@ -28,12 +24,6 @@
     <br />
     <br />
     <br />
-    <!-- p style="margin-top:25px;">Elastic IP</p>
-    <div>
-      <input type="radio"  name="<%= resource_type.name %>_elasticIp" id="<%= resource_type.name %>_elastic_ip_new" value="0" onclick = 'display_exist_elastic_ip_list("<%= resource_type.name %>",0);'>&nbsp;&nbsp;Create new</input>&nbsp;&nbsp;
-      <input type="radio"  name="<%= resource_type.name %>_elasticIp" id="<%= resource_type.name %>_elastic_ip_list" value="1" onclick = 'display_exist_elastic_ip_list("<%= resource_type.name %>",1);'>&nbsp;&nbsp;Select from exist list</input>
-    <div class="hide" style="margin-top:10px;"><%= select_tag "#{resource_type.name}_elastic_ip_dropdown" , options_for_select(["default","test"]), :include_blank => false %></div>
-    </div -->
     <div class="row">
       <div class="span0">
         <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%>

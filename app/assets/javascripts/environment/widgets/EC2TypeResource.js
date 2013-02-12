@@ -31,27 +31,17 @@
           var label = $('input#' + resourceName  + '_label').val().trim();
           var parents_list = $('#' + resourceName + '_parents_list').val();
           var amiId = parseInt($('#' + resourceName + '_ami_id').val());
-          var private_ip = $('#' + resourceName + '_private_ip').val();
-          var public_ip = $('#' + resourceName + '_public_ip').val();
-          var public_dns = $('#' + resourceName + '_public_dns').val();
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
           var elasticIp = $('input#'+ resourceName +'_elasticIp')[0].checked;
-          /*
-          var elasticIpCheck = $('input[name="'+resourceName+'_elasticIp"]:radio:checked').val();
-          var elasticIp = "";
-          if(elasticIpCheck == "1")
-              elasticIp = $('#' + resourceName + '_elastic_ip_dropdown').val();
-          */
           var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
           var config_attributes = {}
           //TODO: Use JavaResourceType instead of the conditional below
           if(resourceName == "Java") {
             var java_version = $('#' + resourceName + '_version').val();
-            var tomcat_version = $('#' + resourceName + '_tomcat_version').val();
-            config_attributes = {private_ip:private_ip,public_ip:public_ip,public_dns:public_dns,elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId,tomcat_version:tomcat_version,java_version:java_version};
+            config_attributes = {elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId,java_version:java_version};
           }
           else
-           config_attributes = {private_ip:private_ip,public_ip:public_ip,public_dns:public_dns,elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId};
+           config_attributes = {elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();
