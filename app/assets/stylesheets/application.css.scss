@@ -43,7 +43,7 @@ div.graph-draggables-dock {
   height: 25px;
   cursor: pointer;
   background: url('handle.png') no-repeat 50% 50%;
-  font-weight: bold;  
+  font-weight: bold;
   outline: none;
   border: none;
   top: -6px;
@@ -61,7 +61,7 @@ div.graph-draggables-dock {
 }
 
 .ui-slider-range {
-  background: #ffffff; /* Old browsers */
+  //background: #ffffff; /* code behind the slider*/
   height: 100%;
   position: absolute;
   border-radius: 25px;
@@ -138,16 +138,4 @@ div.graph-draggables-dock {
 .set_display_width{
   display: inline-block;
   width: 115px;
-}
-
-.set_margin_left_top{
-  margin-left: 370px;
-  margin-top:-70px;
-}
-
-.environment_block_display{
-  border: 1px solid;
-  padding:5px;
-  margin:0px 0px 5px 10px;
-  width:550px;
 }

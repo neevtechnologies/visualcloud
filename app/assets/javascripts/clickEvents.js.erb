@@ -49,22 +49,5 @@ $(document).ready(function(){
     var graphId = $(this).data("graphId");
     requestProvision(graphId);
   });
-  
-
-/* //Do not query resources one by one . Use the environment status check for this .
- if($("[id^=instance-label-]").length != 0)
- {
-    $("[id^=instance-label-]").each(function(){
-    var instance_label = $(this).text();
-    var environment_id = $("[id^=stack-status-image-]").attr('id').split('-')[3];
-    var label_id = $(this).attr('id');
-      $.ajax({
-        type: 'GET',
-        url: '/instance_status',
-        data: {name: instance_label, environment_id: environment_id, instance_label_id: label_id}
-      });
-  });
- }
-*/
 
 });

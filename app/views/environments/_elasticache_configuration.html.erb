@@ -8,10 +8,8 @@
     <%= simple_form_for Instance.new, url: "" , html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: "instance_label"} %>
       <div class="hide">
-      <%= select_tag "#{resource_type.name}_cache_security_group_names" , options_for_select([["default"]]), :include_blank => false %>
+      <%= select_tag "#{resource_type.name}_cache_security_group_names" , options_for_select(["default"]), :include_blank => false %>
       </div>
-      <p>Security Group</p>
-      <%= select_tag "#{resource_type.name}_security_group" , options_for_select(["default","test"]), :include_blank => false %>
       <div id="<%= resource_type.name %>_instance_type_id" class="hide"></div>
       <br />
       <label>Node Type</label>

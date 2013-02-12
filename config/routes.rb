@@ -15,7 +15,6 @@ VisualCloud::Application.routes.draw do
     get 'stack_status' => 'environments#stack_status'
     get 'project_status' => 'projects#status'
     get 'get_key_pairs_and_security_groups' => 'environments#get_key_pairs_and_security_groups'
-    get 'instance_status' => 'instances#status'
     match 'export_csv' => 'environments#export_csv'
     #Environment resource
     resources :projects do
@@ -23,9 +22,7 @@ VisualCloud::Application.routes.draw do
     end
     #Instance resource
     resources :instances
-    post 'create_ec2' => 'instances#create_ec2'
-    post 'create_rds' => 'instances#create_rds'
-    post 'provision' => 'environments#provision'    
+    post 'provision' => 'environments#provision'
   end
   root :to => "home#index"
   devise_for :users
