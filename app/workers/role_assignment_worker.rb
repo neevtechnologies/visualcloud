@@ -6,7 +6,7 @@ class RoleAssignmentWorker
 
   #Set databag item "master_db_address"
   ##If RDS, keep on polling for Address.
-  ##If no RDS , 
+  ##If no RDS ,
   #If address available , continue
   #Run role of App Instances, recipe should increment data bag item by 1 for "app_servers_deployed"
   #If number of app_servers_deployed = Number of app instances , continue

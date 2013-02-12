@@ -6,12 +6,12 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => 'user_id'
   has_many :environments, :dependent => :destroy
   accepts_nested_attributes_for :environments
-  
+
   before_save :set_aws_compatible_name
   after_destroy :modify_project_data
-  
-  private 
- 
+
+  private
+
   def modify_project_data
     logger.info "INFO: Started deleting data bag entry for Project #{self.id}"
     DeleteDataBagWorker.perform_async({data_bag_name: "projects", item_id: self.id})

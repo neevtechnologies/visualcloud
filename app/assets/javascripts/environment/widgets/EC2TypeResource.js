@@ -68,6 +68,3 @@
     }
   });
 })(jQuery);
-
-//JAVA configuration submit -- Move this to setDialog
-

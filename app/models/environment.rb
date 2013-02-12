@@ -5,8 +5,8 @@ class Environment < ActiveRecord::Base
 
   has_many :instances, :dependent => :destroy
   belongs_to :project
-  belongs_to :region  
-  validates :name, presence: true  
+  belongs_to :region
+  validates :name, presence: true
 
   before_create :set_aws_compatible_name
   before_destroy :modify_environment_data
@@ -159,7 +159,7 @@ class Environment < ActiveRecord::Base
   rescue => e
     logger.error "Error while deleting environment: #{self.name}"
     return false
-  end  
+  end
 
   def set_meta_data(access_key_id, secret_access_key)
     logger.info("Setting Meta Data in DataBags before assigning roles for instances in environment : #{self.aws_name}")
@@ -199,7 +199,7 @@ class Environment < ActiveRecord::Base
   end
 
   def has_rds?
-    instances.each do |instance| 
+    instances.each do |instance|
       return true if instance.resource_type.resource_class == "RDS"
     end
     return false
@@ -229,11 +229,11 @@ class Environment < ActiveRecord::Base
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     outputs = cloud.outputs(stack_name: aws_name)
     outputs.each do |key, value|
-      instances.where(aws_label: key).each do |instance|        
+      instances.where(aws_label: key).each do |instance|
         instance.update_output(key, value)
       end
     end
-  end  
+  end
 
   private
 

@@ -18,7 +18,7 @@
       {
         addMessagesToDiv($('#'+ this.options.resourceName +'-config-error-messages'), getErrorMessage('Label cannot be empty'));
         return false;
-      }      
+      }
       else
        return true;
     },
@@ -53,6 +53,3 @@
     }
   });
 })(jQuery);
-
-
-

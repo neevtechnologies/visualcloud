@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
   include ServerMetaData
-  include AwsCompatibleName 
+  include AwsCompatibleName
   before_filter :authenticate
   # GET /projects
   # GET /projects.json
-  def index    
+  def index
     @projects = current_user.projects
     respond_to do |format|
       format.html # index.html.erb
@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
-    @project = Project.find(params[:id])    
+    @project = Project.find(params[:id])
     @environments = Environment.where(:project_id=>@project.id)
     @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
     respond_to do |format|
