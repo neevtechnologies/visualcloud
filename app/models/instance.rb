@@ -24,14 +24,14 @@ class Instance < ActiveRecord::Base
   has_many     :children,
                :through               => :child_parent_relationships,
                :source                => :child
-  
+
   validates :label , presence: true, uniqueness: { scope: :environment_id }
   validates :xpos , numericality: true
   validates :ypos , numericality: true
-  
+
   before_save :set_aws_compatible_name
   after_destroy :modify_node_data
-  
+
   def apply_roles(roles = nil)
     if roles.nil?
       attributes = JSON.parse(self.config_attributes)

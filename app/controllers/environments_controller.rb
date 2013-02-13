@@ -1,6 +1,6 @@
 class EnvironmentsController < ApplicationController
   include ServerMetaData
-  include AwsCompatibleName 
+  include AwsCompatibleName
   before_filter :authenticate
   require "csv"
   # GET /environments
@@ -107,7 +107,6 @@ class EnvironmentsController < ApplicationController
           errors += instance.errors.full_messages
         else
           saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-          #update_node_data_bag(instance)
         end
       end
     end
@@ -146,7 +145,7 @@ class EnvironmentsController < ApplicationController
     respond_to do |format|
       format.js
     end
-  end  
+  end
 
   # DELETE /environments/1
   # DELETE /environments/1.json
@@ -195,7 +194,7 @@ class EnvironmentsController < ApplicationController
       end
     end
   end
-  
+
   # Get the status of the Environment from DB
   def environment_status
     unless params[:id].blank?
@@ -252,7 +251,7 @@ class EnvironmentsController < ApplicationController
  end
 
   private
-    
+
   def save_connections(saved_doms)
     return if saved_doms.empty?
     saved_doms.each do |dom_id , instance|
@@ -289,7 +288,6 @@ class EnvironmentsController < ApplicationController
           @errors += instance.errors.full_messages
         else
           saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
-          #update_node_data_bag(instance)
         end
       end
     end

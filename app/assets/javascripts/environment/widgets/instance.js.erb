@@ -45,8 +45,8 @@
       element.find($('.instance-label')).html('<a id=instance-label-' + instanceDivId + ' href="#" >' + label + '</a>');
 
       //Set instance Type if it exists
-      if(options.InstanceType){         
-         element.find($('.instance-type-label')).attr('id', 'instance-type-label-' + instanceDivId);         
+      if(options.InstanceType){
+         element.find($('.instance-type-label')).attr('id', 'instance-type-label-' + instanceDivId);
          $('#instance-type-label-'+ instanceDivId).html(options.configAttributes.label);
       }
      //Align the element on the stage
@@ -61,10 +61,10 @@
       jsPlumb.draggable(element, {containment: element.parent()});
 
       //Enable Source and Destination for connections in the instance element
-      //Checking instance is S3 type or not
       makeSourceAndTarget(element);
 
       //TODO: This logic should be derived and not hardcoded
+      //Checking instance is not S3,ElastiCache type or not
       if(options.resourceType != "S3" && options.resourceType != "ElastiCache")
         $('#connection-source-'+instanceDivId).show();
       else
@@ -84,7 +84,7 @@
 
       //Listen to global onElementDrop event. Expecting the droppable widget to trigger this event
       //element.bind('onElementDrop', $.proxy(self, 'onElementDrop') );
-      
+
       self._trigger('onCreate');
     },
     getAttributes: function(){

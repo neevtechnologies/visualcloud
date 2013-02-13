@@ -6,7 +6,6 @@ var BaseResource = function(options){
 };
 
 BaseResource.prototype.showInstanceDialog = function(){
-  //var instanceOptions = $('#'+editElement).instance("option") ;
   var editElement = this.element.attr('id');
   var dialogId = this.dialogId;
   var instanceOptions = this.instanceOptions;

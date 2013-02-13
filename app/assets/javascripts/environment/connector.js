@@ -12,7 +12,6 @@ function makeSourceAndTarget(element){
   });
 
   jsPlumb.makeTarget(element, {
-    //dropOptions:{ hoverClass:"dragHover" },
     anchor:"Continuous",
     endpoint: "Blank",
     beforeDrop:function(connection){

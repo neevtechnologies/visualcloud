@@ -29,7 +29,7 @@ $(document).ready(function(){
      selected: {
       fill: '#58FA58'
      }
-   }, 
+   },
    markers: markers,
    onMarkerClick: function(event, index){
      $('.regionmap').vectorMap('get', 'mapObject').clearSelectedMarkers();
@@ -38,7 +38,7 @@ $(document).ready(function(){
      var child = children[i];
       child.setAttribute('fill','yellow');
      }
-     $('#current_region').html(''+ markers[index].display_name + ' ( ' + markers[index].name + ' ) ');     
+     $('#current_region').html(''+ markers[index].display_name + ' ( ' + markers[index].name + ' ) ');
      $('#graph-region-id').val(markers[index].id);
      if( $('.load_image').length <= 1 ){
       $('<img src="/assets/ajax-loader-small.gif" class="load_image" alt="Please wait..">').insertAfter('#graph-key-pair-name');
@@ -49,7 +49,7 @@ $(document).ready(function(){
      $('svg').children('g')[1].childNodes[index].setAttribute('fill','green');
    },
    onRegionLabelShow: function(event, label, code){
-     event.preventDefault();     
+     event.preventDefault();
    },
    onMarkerOver: function(event, index){
      event.preventDefault();
@@ -75,6 +75,6 @@ $(document).ready(function(){
    child.setAttribute('cx',cxs[i]);
    child.setAttribute('cy',cys[i]);
   }
- } 
-// } 
+ }
+// }
 });

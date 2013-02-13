@@ -1,12 +1,8 @@
 //Graph area
-
 (function($) {
   $.widget("environment.graphArea", {
     options: {
       onElementDrop: function(event, params){
-        //Triggers global event for any subscribers listening to this event globally
-        //$.event.trigger('onElementDrop', params);
-
         //Triggers onElementDrop event on draggable that was dropped on this droppable
         params.args.draggable.trigger('onElementDrop', params);
       }
@@ -84,7 +80,6 @@
     },
     getInstanceElementByLabel: function(label){
       var instances = this.instances;
-      var instanceAttributes = [];
       for(var i = 0; i < instances.length; i++){
         if(instances[i].instance('option', 'label') == label)
           return instances[i];
