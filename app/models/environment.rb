@@ -25,9 +25,9 @@ class Environment < ActiveRecord::Base
 
     #TODO : Depend on the actual stack status, not on the provisioned boolean
     if self.provisioned
-      provision_request = cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
+      cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
     else
-      provision_request = cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
+      cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
       self.provisioned = true
       self.save
     end
