@@ -33,7 +33,7 @@ class Environment < ActiveRecord::Base
     end
     return true
   rescue Exception => e
-    logger.error "Error while provisioning environment: #{self.name}"
+    logger.error "Error while provisioning environment: #{self.name}: #{e.inspect}"
     return false
   end
 
@@ -71,7 +71,8 @@ class Environment < ActiveRecord::Base
           validation_key: File.read(VisualCloudConfig[:validation_key_path]),
           server_url: VisualCloudConfig[:chef_server_url],
           node_name: instance.id.to_s,
-          interval: VisualCloudConfig[:chef_client_interval]
+          interval: VisualCloudConfig[:chef_client_interval],
+          validation_client_name: VisualCloudConfig[:chef_validation_client_name]
         )
         chef_client.add_to ec2
         config_attributes = JSON.parse(instance.config_attributes)

@@ -21,11 +21,13 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-      $('#environments_list').live('change', function () {
-          var environment_id = $(this).val();
-          window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
+      $('#environments_list').change(function () {
+        var environment_id = $(this).val();
+        window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
       });
     });
+    //TODO: Can't we get the id from @environment.id?
+    //Why do this split ?
     var value = document.location.href.split('/')[6];
   $("#environments_list option[value='" + value + "']").attr("selected","selected");
 </script>

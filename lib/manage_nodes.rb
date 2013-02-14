@@ -1,7 +1,7 @@
 module ManageNodes
  def delete_client(client)
   begin
-    system("knife client delete #{client} -y") if client.present? && client.to_i != 0  
+    system("knife client delete #{client} -y") if client.present? && client.to_i != 0
   rescue => e
     puts "ERROR: Exception deleting client #{client}"
     puts e.backtrace

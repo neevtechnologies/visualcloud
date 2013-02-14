@@ -1,6 +1,7 @@
 default: &defaults
   validation_key_path: 'config/validation.pem'
-  chef_client_interval: 20
+  chef_client_interval: 180
+  chef_validation_client_name: 'chef-validator'
   webserver_port: 80
   application_port: 80
   load_balancer_protocol: 'HTTP'
@@ -12,7 +13,8 @@ default: &defaults
 
 development:
   <<: *defaults
-  chef_server_url: 'localhost:4000'
+  chef_server_url: 'https://api.opscode.com/organizations/neevtech-test'
+  chef_validation_client_name: 'neevtech-test-validator'
 
 production:
   <<: *defaults
