@@ -23,7 +23,7 @@ gem 'sinatra', require: false
 gem 'slim'
 gem 'colorize'
 
-gem 'cloudster', "~> 2.19.5"
+gem 'cloudster', "~> 2.19.6"
 
 group :development, :test do
   gem "awesome_print"
