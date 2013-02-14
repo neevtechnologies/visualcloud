@@ -77,3 +77,7 @@ InstanceType.create(api_name: 'cache.m1.small', name:'Small', size:'',resource_t
 InstanceType.create(api_name: 'cache.m1.medium', name:'Medium', size:'',resource_type_id:ec.id,description: '',label:'M')
 InstanceType.create(api_name: 'cache.m1.large', name:'Large', size:'',resource_type_id:ec.id,description: '',label:'L')
 InstanceType.create(api_name: 'cache.m1.xlarge', name:'Extra Large', size:'',resource_type_id:ec.id,description: '',label:'XL')
+
+#Create default data bags
+system("knife data bag create nodes")
+system("knife data bag create projects")
