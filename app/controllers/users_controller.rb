@@ -8,6 +8,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    authorize! :show, User, :message => 'Not authorized as an administrator.'
   end
 
 end
