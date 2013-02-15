@@ -57,6 +57,7 @@ class Instance < ActiveRecord::Base
 
   private
 
+    # TODO: Code Review: add comments
     def modify_node_data
       logger.info "INFO: Started deleting node and client for Instance with id #{self.id}"
       DeleteNodeWorker.perform_async(self.id)

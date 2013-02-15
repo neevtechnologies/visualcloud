@@ -27,6 +27,7 @@ class EnvironmentsController < ApplicationController
 
   # GET /environments/new
   # GET /environments/new.json
+  # TODO : Code Review : duplciate block in new and edit. refactor it
   def new
     @project = Project.find(params[:project_id])
     @environments = @project.environments
@@ -91,6 +92,7 @@ class EnvironmentsController < ApplicationController
     end
 
     saved_doms = {}
+    # TODO : Code Review :  use a transaction for multiple  dmls
     params[:instances].to_a.each do |instance|
       if instance.length > 2 #delete instance has length 2
         resouce_type_name = instance.delete(:resource_type)
@@ -130,6 +132,7 @@ class EnvironmentsController < ApplicationController
   end
 
   # PUT /environments/1
+  #  TODO : Code Review : do object level access check for view/edit/delete/update
   def update
     @project = Project.find(params[:project_id])
     @environment = Environment.find(params[:id])

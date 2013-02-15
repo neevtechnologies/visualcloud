@@ -1,3 +1,4 @@
+# TODO : Code Review: add permission check in edit/view/update/delete
 class ProjectsController < ApplicationController
   include ServerMetaData
   include AwsCompatibleName

@@ -51,6 +51,7 @@ class Environment < ActiveRecord::Base
     cloud.get_database_endpoints(stack_name: aws_name)
   end
 
+  # TODO : Code Review : write comment on the methods
   def events(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     return cloud.events(stack_name: aws_name)
@@ -111,6 +112,7 @@ class Environment < ActiveRecord::Base
     instances.each do |instance|
       if instance.resource_type.resource_class == 'RDS'
         config_attributes = JSON.parse(instance.config_attributes)
+        # TODO : Code Review : Store whole json as encrypted 
         stack_resources << Cloudster::Rds.new(name: instance.aws_label,
           instance_class: instance.instance_type.api_name,
           storage_size: config_attributes['size'],

@@ -1,3 +1,4 @@
+# TODO : Code Review : Add comments here
 module ManageNodes
  def delete_client(client)
   begin
