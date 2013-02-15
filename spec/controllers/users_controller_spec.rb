@@ -10,6 +10,7 @@ describe UsersController do
   describe "GET 'show'" do
     
     it "should be successful" do
+      @user.add_role 'admin'
       get :show, :id => @user.id
       response.should be_success
     end
