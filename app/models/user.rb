@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :aws_access_key, :aws_secret_key
   # TODO : Code Review : Maybe this should be moved to project level ?
-  attr_encrypted :aws_secret_key, :key => 'a secret key'
+  attr_encrypted :aws_secret_key, :key => VisualCloudConfig[:attr_encryption_salt]
   has_and_belongs_to_many :projects
 
   def get_key_pair_and_security_groups(region = nil)
