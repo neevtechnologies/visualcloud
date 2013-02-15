@@ -16,8 +16,8 @@ class RoleAssignmentWorker
     environment = Environment.find(options[:environment_id])
     provision_status = environment.wait_till_provisioned(options[:access_key_id], options[:secret_access_key])
     if provision_status
-      environment.set_meta_data(options[:access_key_id], options[:secret_access_key])
       environment.update_instance_outputs(options[:access_key_id], options[:secret_access_key])
+      environment.set_meta_data(options[:access_key_id], options[:secret_access_key])
       environment.set_roles
     end
 

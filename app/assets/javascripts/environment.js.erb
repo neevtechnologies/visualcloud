@@ -255,7 +255,7 @@ function shortenLongStrings(string, maxLength){
 
 //Getter for config attributes which returns Not Available if attr doesn't exist
 function getConfigAttribute(configAttributes, attr){
-  return this[attr] == undefined ? "Not Available" : this[attr] ;
+  return ((configAttributes[attr] == undefined) ? "Not Available" : configAttributes[attr] );
 }
 
 //Enable Bootstrap Tooltips for dialog box
