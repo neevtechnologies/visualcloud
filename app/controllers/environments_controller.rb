@@ -184,8 +184,8 @@ class EnvironmentsController < ApplicationController
       @errors << "You have not added your AWS access key"
       flash.now[:error] = @errors
     else
-      if @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
-        flash.now[:success] = "Provision request initiated"
+      if @errors.blank? && @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
+        flash[:success] = "Provision request initiated"
         RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
           secret_access_key: current_user.aws_secret_key,
           environment_id: @environment.id

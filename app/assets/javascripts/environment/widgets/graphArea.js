@@ -48,10 +48,7 @@
         type: 'POST',
         dataType: "script",
         contentType: 'application/json',
-        data: JSON.stringify({environment: environmentAttributes, instances: instanceAttributes}),
-        complete: function(){
-          hideLoading();
-        }
+        data: JSON.stringify({environment: environmentAttributes, instances: instanceAttributes})
       });
     },
     update: function(graphId){

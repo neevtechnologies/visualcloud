@@ -26,10 +26,6 @@
       var options = self.options;
       var element = self.element;
 
-      //Getter for config attributes which returns Not Available if attr doesn't exist
-      injectConfigGetter(options.configAttributes);
-
-
       //Add the inner HTML template
       element.html($('.' + options.resourceType + '-instance').html());
 

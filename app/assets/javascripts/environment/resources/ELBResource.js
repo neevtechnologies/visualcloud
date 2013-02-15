@@ -12,7 +12,7 @@ ELBResource.prototype.showInstanceDialog = function(){
 ELBResource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#'+this.baseResource.dialogId);
   this.setLabelURL(configAttributes);
-  dialog.find('#ELB_dns_name').html("DNS Name : <code class='fnt_size'>"+configAttributes.get('dns_name')+"</code>");
+  dialog.find('#ELB_dns_name').html("DNS Name : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'dns_name')+"</code>");
 }
 
 ELBResource.prototype.saveConfigAttributes = function(configAttributes){

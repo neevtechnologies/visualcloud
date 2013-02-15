@@ -13,6 +13,7 @@ class Environment < ActiveRecord::Base
 
 
   def provision(access_key_id, secret_access_key)
+    return true if access_key_id == 'demo'
     stack_resources = []
 
     instance_names = add_ec2_resources(stack_resources)
@@ -154,6 +155,7 @@ class Environment < ActiveRecord::Base
   end
 
   def delete_stack(access_key_id, secret_access_key)
+    return true if access_key_id == 'demo'
     logger.info "INFO: Calling cloudster to delete environment #{self.name}"
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     cloud.delete(stack_name: self.aws_name)
@@ -211,7 +213,11 @@ class Environment < ActiveRecord::Base
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{self.aws_name}")
     update_attribute(:provision_status, "CREATE_IN_PROGRESS")
-    stack_status = self.status(access_key_id, secret_access_key)
+    if access_key_id == 'demo'
+      stack_status = 'CREATE_COMPLETE'
+    else
+      stack_status = self.status(access_key_id, secret_access_key)
+    end
     while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
       logger.info("Stack status = #{stack_status}")
       sleep sleep_interval
@@ -229,6 +235,7 @@ class Environment < ActiveRecord::Base
   end
 
   def update_instance_outputs(access_key_id, secret_access_key)
+    return if access_key_id == 'demo'
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     outputs = cloud.outputs(stack_name: aws_name)
     outputs.each do |key, value|

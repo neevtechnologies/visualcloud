@@ -24,6 +24,7 @@ function makeSourceAndTarget(element){
 
 //Makes connections between instances
 function makeNodes(instances){
+  jsPlumb.deleteEveryEndpoint();
     for(var key in instances){
         var element = 'instance-'+key;
         makeSourceAndTarget(element);

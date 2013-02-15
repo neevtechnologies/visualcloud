@@ -42,10 +42,7 @@ function requestProvision(graphId){
     type: 'POST',
     dataType: "script",
     contentType: 'application/json',
-    data : $('.graph-area').graphArea("getInstances"),
-    complete: function(){
-      hideLoading();
-    }
+    data : $('.graph-area').graphArea("getInstances")
   });
 }
 
@@ -158,11 +155,6 @@ function startStatusPoll(environmentId){
           //Set the output values for each instance
           for(var key in data.instanceAttributes){
             var configAttributes = data.instanceAttributes[key];
-            //Adding get() for configattributes
-            //A better way to do this may be wrap configAttribute into another object
-            //wherever get() is called,
-            //which has a get() and returns Not Available when attribute doesn't exist
-            injectConfigGetter(configAttributes);
             $('#instance-'+key).instance('setConfigAttributes', configAttributes);
           }
         });
@@ -261,11 +253,9 @@ function shortenLongStrings(string, maxLength){
   return shortString;
 }
 
-//Inject Getter for config attributes which returns Not Available if attr doesn't exist
-function injectConfigGetter(configAttributes){
-  configAttributes.get = function(attr){
-    return this[attr] == undefined ? "Not Available" : this[attr] ;
-  }
+//Getter for config attributes which returns Not Available if attr doesn't exist
+function getConfigAttribute(configAttributes, attr){
+  return this[attr] == undefined ? "Not Available" : this[attr] ;
 }
 
 //Enable Bootstrap Tooltips for dialog box

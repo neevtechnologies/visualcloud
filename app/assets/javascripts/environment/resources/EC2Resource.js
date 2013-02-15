@@ -33,9 +33,9 @@ EC2Resource.prototype.saveConfigAttributes = function(configAttributes){
 EC2Resource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#' + this.baseResource.dialogId);
   this.setLabelURL(configAttributes);
-  dialog.find('#' + this.baseResource.resourceType + '_private_ip').html("Private IP : <code class='fnt_size'>"+configAttributes.get('private_ip')+"</code>");
-  dialog.find('#' + this.baseResource.resourceType + '_public_ip').html("Public IP : <code class='fnt_size'>"+configAttributes.get('public_ip')+"</code>");
-  dialog.find('#' + this.baseResource.resourceType + '_public_dns').html("Public DNS : <code class='fnt_size'>"+configAttributes.get('public_dns_name')+"</code>");
+  dialog.find('#' + this.baseResource.resourceType + '_private_ip').html("Private IP : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'private_ip')+"</code>");
+  dialog.find('#' + this.baseResource.resourceType + '_public_ip').html("Public IP : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'public_ip')+"</code>");
+  dialog.find('#' + this.baseResource.resourceType + '_public_dns').html("Public DNS : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'public_dns_name')+"</code>");
 }
 
 EC2Resource.prototype.setLabelURL = function(configAttributes){

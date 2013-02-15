@@ -22,6 +22,6 @@ RDSResource.prototype.saveConfigAttributes = function(configAttributes){
 
 RDSResource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#'+this.baseResource.dialogId);
-  dialog.find('#RDS_endpoint_ip').html("Endpoint IP : <code class='fnt_size'>"+configAttributes.get('endpoint_address')+"</code>");
-  dialog.find('#RDS_endpoint_port').html("Endpoint Port : <code class='fnt_size'>"+configAttributes.get('endpoint_port')+"</code>");
+  dialog.find('#RDS_endpoint_ip').html("Endpoint IP : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'endpoint_address')+"</code>");
+  dialog.find('#RDS_endpoint_port').html("Endpoint Port : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'endpoint_port')+"</code>");
 }

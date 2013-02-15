@@ -34,7 +34,7 @@
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
           var elasticIp = $('input#'+ resourceName +'_elasticIp')[0].checked;
           var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
-          var config_attributes = {}
+          var config_attributes = {};
           //TODO: Use JavaResourceType instead of the conditional below
           if(resourceName == "Java") {
             var java_version = $('#' + resourceName + '_version').val();

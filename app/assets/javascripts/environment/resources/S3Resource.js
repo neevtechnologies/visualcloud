@@ -17,6 +17,6 @@ S3Resource.prototype.saveConfigAttributes = function(configAttributes){
 
 S3Resource.prototype.setOutputAttributes = function(configAttributes){
   var dialog = $('#'+this.baseResource.dialogId);
-  dialog.find('#S3_bucket_name').html("Bucket Name : <code class='fnt_size'>"+configAttributes.get('bucket_name')+"</code>");
-  dialog.find('#S3_dns_name').html("DNS Name : <code class='fnt_size'>"+configAttributes.get('dns_name')+"</code>");
+  dialog.find('#S3_bucket_name').html("Bucket Name : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'bucket_name')+"</code>");
+  dialog.find('#S3_dns_name').html("DNS Name : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'dns_name')+"</code>");
 }
