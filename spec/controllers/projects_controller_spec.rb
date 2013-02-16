@@ -5,7 +5,7 @@ describe ProjectsController do
   before (:each) do
     @user = FactoryGirl.create(:user)
     sign_in @user
-    @rails_project = FactoryGirl.create(:project)
+    @rails_project = FactoryGirl.create(:project , users: [@user])
     @rails_dev_env = FactoryGirl.create(:environment, name: 'RailsDevEnv', project: @rails_project, provision_status: 'CREATE_COMPLETE')
     @rails_test_env = FactoryGirl.create(:environment, name: 'RailsTestEnv', project: @rails_project, provision_status: 'CREATE_IN_PROGRESS')
     @java_project = FactoryGirl.create(:project, name: 'JavaProject')
@@ -82,6 +82,7 @@ describe ProjectsController do
 
   describe 'GET #edit' do
     it 'does not redirect' do
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
       Project.should_receive(:find).and_return(@rails_project)
       get :edit , id: @rails_project.id
       response.should_not be_redirect
@@ -90,6 +91,7 @@ describe ProjectsController do
 
   describe "PUT #update" do
     def do_put(id)
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
       controller.stub(:update_project_data_bag)
       put :update, id: id , project: {name: 'testProjectUpdate'}
     end
@@ -124,8 +126,9 @@ describe ProjectsController do
       #      cloud.stub(:get_key_pairs).and_return(key_pairs)
       #      cloud.stub(:get_security_groups).and_return(security_groups)
       #      Cloudster::Cloud.stub(:new).and_return(cloud)
-      controller.should_receive(:current_user).exactly(2).times.and_return(@user)
-      @user.should_receive(:get_key_pair_and_security_groups)
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
+      #controller.should_receive(:authorize).and_return(@rails_project)
+      #@user.should_receive(:get_key_pair_and_security_groups)
       get :show , id: @rails_project.id
       response.should_not be_redirect
     end
@@ -134,6 +137,7 @@ describe ProjectsController do
   describe "DELETE #destroy" do
 
     def to_destroy(id)
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
       DeleteDataBagWorker.should_receive(:perform_async)
       UpdateProjectDataBagWorker.should_receive(:perform_async).exactly(2).times
       delete :destroy, :id => id
@@ -156,6 +160,7 @@ describe ProjectsController do
     end
 
     it "should give flash error message" do
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
       Project.should_receive(:find).and_return(@rails_project)
       @rails_project.should_receive(:destroy).and_return(false)
       delete :destroy, :id => @rails_project.id

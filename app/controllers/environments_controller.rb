@@ -2,34 +2,15 @@ class EnvironmentsController < ApplicationController
   include ServerMetaData
   include AwsCompatibleName
   before_filter :authenticate
+  before_filter :authorize, :except => [:get_key_pairs_and_security_groups]
   require "csv"
-  # GET /environments
-  # GET /environments.json
-  def index
-    @environments = Environment.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @environments }
-    end
-  end
-
-  # GET /environments/1
-  # GET /environments/1.json
-  def show
-    @environment = Environment.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @environment }
-    end
-  end
 
   # GET /environments/new
   # GET /environments/new.json
   # TODO : Code Review : duplciate block in new and edit. refactor it
   def new
     @project = Project.find(params[:project_id])
+    #TODO: Can this be removed ? Are we showing environments list in new page
     @environments = @project.environments
     @environment = Environment.new(params[:environment])
     @resource_types = RESOURCE_TYPES
@@ -46,7 +27,6 @@ class EnvironmentsController < ApplicationController
 
   # GET /environments/1/edit
   def edit
-    @project = Project.find(params[:project_id])
     @environments = @project.environments
     @environment = Environment.find(params[:id])
     @resource_types = RESOURCE_TYPES
@@ -135,7 +115,6 @@ class EnvironmentsController < ApplicationController
   #  TODO : Code Review : do object level access check for view/edit/delete/update
   def update
     @project = Project.find(params[:project_id])
-    @environment = Environment.find(params[:id])
     @errors = []
     update_instances
 
@@ -153,8 +132,6 @@ class EnvironmentsController < ApplicationController
   # DELETE /environments/1
   # DELETE /environments/1.json
   def destroy
-    @project = Project.find(params[:project_id])
-    @environment = Environment.find(params[:id])
     if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
       flash[:error] = "You have not added your AWS access key"
     else
@@ -176,7 +153,6 @@ class EnvironmentsController < ApplicationController
 
   # Provisions the stack
   def provision
-    @environment = Environment.find(params[:id])
     @instance_ids = {}
     @errors = []
     update_instances
@@ -225,77 +201,74 @@ class EnvironmentsController < ApplicationController
     render json: status_hash.to_json
   end
 
-  # Get the original status of the Stack from Amazon
-  def stack_status
-    unless params[:id].blank?
-      @environment = Environment.find(params[:id])
-      @status = @environment.status(current_user.aws_access_key, current_user.aws_secret_key)
-      @environment.update_column("provision_status", @status)
+  # Fetch Key Pair and security group based on region
+  def get_key_pairs_and_security_groups
+    unless params[:region].blank?
+      key_pairs, security_groups = current_user.get_key_pair_and_security_groups(params[:region])
+      @key_pairs = key_pairs.collect {|kp| kp["keyName"]}.to_json
+      @security_groups = security_groups.collect {|sg| sg["groupName"]}.to_json
       respond_to do |format|
         format.js
       end
     else
-      render :nothing => true
+      render nothing: true
     end
   end
-
- # Fetch Key Pair and security group based on region
- def get_key_pairs_and_security_groups
-  unless params[:region].blank?
-   key_pairs, security_groups = current_user.get_key_pair_and_security_groups(params[:region])
-   @key_pairs = key_pairs.collect {|kp| kp["keyName"]}.to_json
-   @security_groups = security_groups.collect {|sg| sg["groupName"]}.to_json
-   respond_to do |format|
-     format.js
-   end
-  else
-    render nothing: true
-  end
- end
 
   private
 
-  def save_connections(saved_doms)
-    return if saved_doms.empty?
-    saved_doms.each do |dom_id , instance|
-      record = instance[:instance]
-      parents = []
-      instance[:parent_dom_ids].to_a.each do |parent_dom_id|
-        parents << saved_doms[parent_dom_id][:instance]
+    def save_connections(saved_doms)
+      return if saved_doms.empty?
+      saved_doms.each do |dom_id , instance|
+        record = instance[:instance]
+        parents = []
+        instance[:parent_dom_ids].to_a.each do |parent_dom_id|
+          parents << saved_doms[parent_dom_id][:instance]
+        end
+        record.parents = parents
+        record.save!
       end
-      record.parents = parents
-      record.save!
     end
-  end
 
-  def update_instances
-    #Remove all instances and start with a clean slate. It's not easy to track edited instances
-    #Think about x, y positions
-    @environment.instances.destroy_all
+    def update_instances
+      #Remove all instances and start with a clean slate. It's not easy to track edited instances
+      #Think about x, y positions
+      @environment.instances.destroy_all
 
-    saved_doms = {}
-    params[:instances].to_a.each do |instance|
-      #TODO This logic is obscure . Need to refactor this
-      if instance.length > 2 #delete instance has length 2
-        resouce_type_name = instance.delete(:resource_type)
-        dom_id = instance.delete(:dom_id)
-        parent_dom_ids = instance.delete(:parent_dom_ids)
-        config_attributes = instance.delete(:config_attributes).to_json
-        resource_type = ResourceType.where(name: resouce_type_name).first
-        instance = Instance.new(instance)
-        instance.config_attributes = config_attributes
-        instance.environment = @environment
-        instance.resource_type = resource_type
-        if !instance.save
-          @errors << "#{instance.label} has the following error(s) :"
-          @errors += instance.errors.full_messages
-        else
-          saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+      saved_doms = {}
+      params[:instances].to_a.each do |instance|
+        #TODO This logic is obscure . Need to refactor this
+        if instance.length > 2 #delete instance has length 2
+          resouce_type_name = instance.delete(:resource_type)
+          dom_id = instance.delete(:dom_id)
+          parent_dom_ids = instance.delete(:parent_dom_ids)
+          config_attributes = instance.delete(:config_attributes).to_json
+          resource_type = ResourceType.where(name: resouce_type_name).first
+          instance = Instance.new(instance)
+          instance.config_attributes = config_attributes
+          instance.environment = @environment
+          instance.resource_type = resource_type
+          if !instance.save
+            @errors << "#{instance.label} has the following error(s) :"
+            @errors += instance.errors.full_messages
+          else
+            saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+          end
         end
       end
+      @environment.reload
+      save_connections(saved_doms)
     end
-    @environment.reload
-    save_connections(saved_doms)
-  end
+
+    #Project should belong to the user
+    def authorize
+      if params[:id].present?
+        @environment = Environment.find(params[:id])
+        @project = Project.find_by_user_id_and_id(current_user.id,@environment.project_id) rescue nil
+      else
+        @project = Project.find_by_user_id_and_id(current_user.id,params[:project_id]) rescue nil
+      end
+      raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil?
+    end
 
 end

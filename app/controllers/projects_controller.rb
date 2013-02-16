@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   include ServerMetaData
   include AwsCompatibleName
   before_filter :authenticate
+  before_filter :authorize, :only => [:show, :update, :edit, :destroy]
   # GET /projects
   # GET /projects.json
   def index
@@ -17,12 +18,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find(params[:id])
-    @environments = Environment.where(:project_id=>@project.id)
-    @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @project }
-    end
+    @environments = @project.environments
   end
 
   # GET /projects/new
@@ -95,12 +91,21 @@ class ProjectsController < ApplicationController
   #Get the status of all environments belonging to the project
   #TODO: Use this to set the status of environments in project show page
   def status
-    project = Project.find(params[:id])
-    environments = project.environments
+    @project = Project.find(params[:id])
+    environments = @project.environments
     status = {}
     environments.each do |env|
       status[env.id] = env.provision_status
     end
     render json: status
   end
+
+  private
+
+    #Project should belong to the user
+    def authorize
+      @project = Project.find_by_user_id_and_id(current_user.id,params[:id])
+      raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil?
+    end
+
 end
