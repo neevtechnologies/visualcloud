@@ -268,7 +268,7 @@ class EnvironmentsController < ApplicationController
       else
         @project = Project.find_by_user_id_and_id(current_user.id,params[:project_id]) rescue nil
       end
-      raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil? || params[:project_id] != @project.id.to_s
+      raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil?
     end
 
 end
