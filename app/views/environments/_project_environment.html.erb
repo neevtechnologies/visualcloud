@@ -8,7 +8,7 @@
         <a id="environments" href="javascript:void(0);"><%= @environment.name.present? ? @environment.name : params[:environment]['name']%> &nbsp;&nbsp;</a>
      <%end%>
     </li>
-    
+
      <li class="dropdown">
        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Details<b class="caret"></b></a>
        <ul class="dropdown-menu">
@@ -26,8 +26,5 @@
         window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
       });
     });
-    //TODO: Can't we get the id from @environment.id?
-    //Why do this split ?
-    var value = document.location.href.split('/')[6];
-  $("#environments_list option[value='" + value + "']").attr("selected","selected");
+  $("#environments_list option[value='" + <%= @environment.id %> + "']").attr("selected","selected");
 </script>
