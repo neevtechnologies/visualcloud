@@ -247,8 +247,8 @@ function getErrorMessage(message){
 
 //Replace reallylongstrings with reallylo...
 function shortenLongStrings(string, maxLength){
-  var shortString = string.substring(0, (maxLength-4));
-  if (string.length > maxLength)
+  var shortString = string.substring(0, (maxLength-3));
+  if (string.length >= (maxLength-2))
     shortString += '...';
   return shortString;
 }

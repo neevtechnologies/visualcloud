@@ -18,7 +18,7 @@ VisualCloud::Application.routes.draw do
     match 'export_csv' => 'environments#export_csv'
     #Environment resource
     resources :projects do
-      resources :environments
+      resources :environments, except: [:index, :show]
     end
     #Instance resource
     resources :instances
