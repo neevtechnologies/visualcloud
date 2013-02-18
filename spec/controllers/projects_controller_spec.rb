@@ -120,15 +120,7 @@ describe ProjectsController do
   describe 'GET #show' do
 
     it 'does not redirect' do
-      #      cloud = double(:cloud)
-      #      key_pairs = ['kp1', 'kp2']
-      #      security_groups = ['sg1', 'sg2']
-      #      cloud.stub(:get_key_pairs).and_return(key_pairs)
-      #      cloud.stub(:get_security_groups).and_return(security_groups)
-      #      Cloudster::Cloud.stub(:new).and_return(cloud)
       Project.should_receive(:find_by_user_id_and_id).with(@user.id,@rails_project.id.to_s).and_return(@rails_project)
-      #controller.should_receive(:authorize).and_return(@rails_project)
-      #@user.should_receive(:get_key_pair_and_security_groups)
       get :show , id: @rails_project.id
       response.should_not be_redirect
     end
