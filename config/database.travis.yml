@@ -1,0 +1,6 @@
+# Used by travis-ci
+mysql: &mysql
+  adapter: mysql2
+  username: root
+  password:
+  database: visualcloud_test
