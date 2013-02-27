@@ -1,6 +1,6 @@
 Visual Cloud
 ============
-[![Build Status](https://travis-ci.org/neevtechnologies/visualcloud.png)](https://travis-ci.org/neevtechnologies/visualcloud)
+[![Build Status](https://travis-ci.org/neevtechnologies/visualcloud.png?branch=master)](https://travis-ci.org/neevtechnologies/visualcloud)
 
 VisualCloud makes creating your environments' stacks in the cloud as easy as :
 
