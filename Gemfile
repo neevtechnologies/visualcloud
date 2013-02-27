@@ -27,13 +27,13 @@ gem 'cloudster', "~> 2.19.6"
 
 group :development, :test do
   gem "awesome_print"
-  gem "debugger"
   gem "spork"
 end
 
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
+  gem "debugger"
   gem 'foreman'
 end
 
