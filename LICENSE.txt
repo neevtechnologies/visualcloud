@@ -1,0 +1,9 @@
+Visual Cloud software is 100% GPL (General Public License) for non-commercial or internal use.
+A commercial entity using the software for it's internal consumption is considered as internal use.
+Over years we have benefitted a lot from open source software and are very happy to contribute back
+to the ecosystem.The actual terms of the GPL license are on this page of the GNU Project :
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Please note that the General Public License can be restrictive and you can only use it as part of
+other GPL software. If you want to use this software without such restrictions, please contact us
+for a commercial license.
