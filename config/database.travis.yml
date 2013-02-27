@@ -1,5 +1,5 @@
 # Used by travis-ci
-mysql: &mysql
+test:
   adapter: mysql2
   username: root
   password:
