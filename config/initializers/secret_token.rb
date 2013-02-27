@@ -8,10 +8,12 @@
 # Run `rake secret > secret_token` from RAILS_ROOT before you start the app
 
 begin
-    token_file = Rails.root.to_s + "/secret_token"
-    secret_token = open(token_file).read
-    VisualCloud::Application.configure do
-        config.secret_token = secret_token
+    unless Rails.env.test?
+      token_file = Rails.root.to_s + "/secret_token"
+      secret_token = open(token_file).read
+      VisualCloud::Application.configure do
+          config.secret_token = secret_token
+      end
     end
 rescue LoadError, Errno::ENOENT => e
     error = "\nSecret Token couldn't be loaded : #{e}\nGenerate secret_token by running `rake secret > secret_token`\n".red
