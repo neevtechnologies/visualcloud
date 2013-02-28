@@ -76,7 +76,7 @@ send a pull request.
 
 It doesn't matter if you are not a Rubyist. You can still contribute.
 If you would like to share some love and send some pull requests, you may want
-to refer [this Wiki page]() to see how you can help.
+to refer [this Wiki page](https://github.com/neevtechnologies/visualcloud/wiki/Contributing-to-VisualCloud) to see how you can help.
 
 ## Found a bug?
 
