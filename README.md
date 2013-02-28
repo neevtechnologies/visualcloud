@@ -1,4 +1,4 @@
-Visual Cloud
+VisualCloud
 ============
 [![Build Status](https://travis-ci.org/neevtechnologies/visualcloud.png?branch=master)](https://travis-ci.org/neevtechnologies/visualcloud)
 
@@ -18,7 +18,7 @@ VisualCloud makes creating your environments' stacks in the cloud as easy as :
 4. Click "Provision"
 5. Grab a coffee while your cloud is provisioned and your software gets installed
 
-## Screenshots
+# Screenshots
 Create a new environment:
 ![Configure your environment](/screenshots/environment-config.PNG?raw=true)
 
@@ -28,14 +28,15 @@ Add your resources:
 Get the instance details:
 ![Instance details](/screenshots/instance.PNG?raw=true)
 
-## Getting Started
+# Getting Started
 
-VisualCloud uses Sidekiq for background jobs and MySQL for database.
+VisualCloud is a Rails application which uses Sidekiq for
+background jobs and MySQL for database.
 So you need redis-server and mysql-server.
 
 Clone the repository and follow these steps.
 
-### 'development' environment
+## 'development' environment
 
 ```shell
 cp config/database.yml.example config/database.yml
@@ -50,7 +51,7 @@ foreman start
 
 foreman should start thin, sidekiq and spork.
 
-### 'production' environment
+## 'production' environment
 ```shell
 export RAILS_ENV=production
 cp config/database.yml.example config/database.yml
@@ -65,3 +66,57 @@ bundle exec rake assets:precompile
 bundle exec sidekiq -e producion
 bundle exec rails s -e production
 ```
+
+# Contribute
+
+VisualCloud started off as a rough prototype with a lot of hacking. It has
+evolved from that into a stable application. But there's still a LOT to do.
+
+If you would like to share some love and send some pull requests, you may want
+to refer [this Wiki page]() to see how you can help.
+
+## Found a bug?
+
+Log the bug in the [issue tracker](https://github.com/neevtechnologies/visualcloud/issues). Be sure to include all relevant information, like
+the versions of Ruby you're using. A [gist](http://gist.github.com/)
+of the code that caused the issue as well as any error messages are also very
+helpful.
+
+## Need help?
+
+You can use the [Issues](https://github.com/neevtechnologies/visualcloud/issues) page to ask a new question for now. This is how you do it:
+1. Click on New Issue.
+2. Type in your question and submit.
+
+## Have a patch?
+
+Bugs and feature requests that include patches will be big help.
+Here are some guidelines that will help ensure your patch
+can be applied as quickly as possible:
+
+1. **Use [Git](http://git-scm.com) and [GitHub](http://github.com):**
+   The easiest way to get setup is to fork the
+   [visualcloud repo](http://github.com/neevtechnologies/visualcloud/).
+
+2. **Write unit tests:** If you add or modify functionality, it must
+   include unit tests. VisualCloud uses RSpec for its tests. If you are not an
+   RSpec expert, if you let me know, I can help you write the specs.
+
+3. **Update the `README`:** If the patch adds or modifies a major feature,
+   modify the `README.md` file to reflect that. Again if you're not an
+   expert with Markdown syntax, it's really easy to learn. Check out [Prose.io](http://prose.io/) to
+   try it out.
+
+4. **Push it:** Once you're ready, push your changes to a topic branch
+   and add a note to the ticket with the URL to your branch. Or, say
+   something like, "you can find the patch on johndoe/foobranch". I also
+   gladly accept Github [pull requests](http://help.github.com/pull-requests/).
+
+__NOTE:__ _We will take in whatever we can get._ If you prefer to
+attach diffs in comments on issues, that's fine; but do know
+that _someone_ will need to take the diff through the process described
+above and this can hold things up considerably.
+
+
+##License
+Read the License [here](https://github.com/neevtechnologies/visualcloud/blob/master/LICENSE.txt)
