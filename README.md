@@ -40,7 +40,7 @@ Clone the repository and follow these steps.
 
 ```shell
 cp config/database.yml.example config/database.yml
-# Make any changes to database.yml if required
+# Make changes to database.yml if required
 bundle install
 bundle exec rake secret > secret_token
 bundle exec rake db:create
@@ -55,7 +55,7 @@ foreman should start thin, sidekiq and spork.
 ```shell
 export RAILS_ENV=production
 cp config/database.yml.example config/database.yml
-#Make any changes to database.yml if required
+#Make changes to database.yml if required
 bundle install
 bundle exec rake secret > secret_token
 Edit config/config.yml and set attr_encryption_salt to a random string
@@ -69,9 +69,12 @@ bundle exec rails s -e production
 
 # Contribute
 
-VisualCloud started off as a rough prototype with a lot of hacking. It has
-evolved from that into a stable application. But there's still a LOT to do.
+VisualCloud started off as a rough prototype and it took a lot of hacking
+before it evolved into a stable application. Needless to say, you may find
+places where things can be done better/differently. Please do not hesitate to
+send a pull request.
 
+It doesn't matter if you are not a Rubyist. You can still contribute.
 If you would like to share some love and send some pull requests, you may want
 to refer [this Wiki page]() to see how you can help.
 
