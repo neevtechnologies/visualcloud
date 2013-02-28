@@ -2,6 +2,14 @@ Visual Cloud
 ============
 [![Build Status](https://travis-ci.org/neevtechnologies/visualcloud.png?branch=master)](https://travis-ci.org/neevtechnologies/visualcloud)
 
+VisualCloud was designed as a tool to ease the provisioning of a server architecture for
+hosting applications on the cloud. Without the use of VisualCloud, deploying a typical
+server environment for app hosting on AWS would mean wading through half a dozen screens
+with over two dozen different options. VisualCloud makes it easy to draw a deployment
+architecture & then provision the servers with the click of a button, all from within a
+single screen. Picking a platform (such as Java) will also ensure that the required software
+for that platform is automatically setup as well.
+
 VisualCloud makes creating your environments' stacks in the cloud as easy as :
 
 1. Drag and drop the resources you need in your stack. Load balancer ? Rails/Java App Server ? DB ? You got it.
