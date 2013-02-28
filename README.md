@@ -19,7 +19,14 @@ VisualCloud makes creating your environments' stacks in the cloud as easy as :
 5. Grab a coffee while your cloud is provisioned and your software gets installed
 
 ## Screenshots
--Add screenshots here-
+Create a new environment:
+![Configure your environment](/screenshots/environment-config.PNG?raw=true)
+
+Add your resources:
+![Add resources](/screenshots/environment.JPG?raw=true)
+
+Get the instance details:
+![Instance details](/screenshots/instance.PNG?raw=true)
 
 ## Getting Started
 
