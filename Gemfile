@@ -44,4 +44,5 @@ group :test do
   gem 'shoulda'
   gem "mock_redis"
   gem 'shoulda-matchers'
+  gem 'coveralls', require: false
 end
