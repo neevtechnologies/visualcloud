@@ -2,13 +2,6 @@ VisualCloud
 ============
 [![Build Status](https://travis-ci.org/neevtechnologies/visualcloud.png?branch=master)](https://travis-ci.org/neevtechnologies/visualcloud)
 
-VisualCloud was designed as a tool to ease the provisioning of a server architecture for
-hosting applications on the cloud. Without the use of VisualCloud, deploying a typical
-server environment for app hosting on AWS would mean wading through half a dozen screens
-with over two dozen different options. VisualCloud makes it easy to draw a deployment
-architecture & then provision the servers with the click of a button, all from within a
-single screen. Picking a platform (such as Java) will also ensure that the required software
-for that platform is automatically setup as well.
 
 VisualCloud makes creating your environments' stacks in the cloud as easy as :
 
@@ -18,14 +11,21 @@ VisualCloud makes creating your environments' stacks in the cloud as easy as :
 4. Click "Provision"
 5. Grab a coffee while your cloud is provisioned and your software gets installed
 
+Without the use of VisualCloud, deploying a typical
+server environment for app hosting on AWS would mean wading through half a dozen screens
+with over two dozen different options. VisualCloud makes it easy to draw a deployment
+architecture & then provision the servers with the click of a button, all from within a
+single screen. Picking a platform (such as Java) will also ensure that the required software
+for that platform is automatically setup as well.
+
 # Screenshots
 Create a new environment:
 ![Configure your environment](/screenshots/environment-config.PNG?raw=true)
 
-Add your resources:
+Provision after adding your resources:
 ![Add resources](/screenshots/environment.JPG?raw=true)
 
-Get the instance details:
+Get instance details:
 ![Instance details](/screenshots/instance.PNG?raw=true)
 
 # Getting Started
