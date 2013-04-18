@@ -59,17 +59,13 @@
       //Enable Source and Destination for connections in the instance element
       makeSourceAndTarget(element);
 
-      //TODO: This logic should be derived and not hardcoded
-      //Checking instance is not S3,ElastiCache type or not
-      if(options.resourceType != "S3" && options.resourceType != "ElastiCache")
-        $('#connection-source-'+instanceDivId).show();
-      else
-        $('#connection-source-'+instanceDivId).hide();
-
       //Set the resource object of instance based on resourceType
       var resourceOptions = options;
       resourceOptions.element = element
       this.resource = ResourceFactory.getResource(options.resourceType, resourceOptions);
+
+      //show or hide the connector point for the instance
+      this.resource.visibilityOfConnectorPoint(instanceDivId);
 
       //Show edit config modal on click
       element.click(function(){
