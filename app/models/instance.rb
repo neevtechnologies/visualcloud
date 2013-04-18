@@ -4,10 +4,12 @@ class Instance < ActiveRecord::Base
   attr_accessible :aws_instance_id, :label, :aws_label, :size, :url, :xpos, :ypos,
                   :instance_type_id, :config_attributes, :aws_instance_id
 
+  attr_encrypted :config_attributes, :key => VisualCloudConfig[:attr_encryption_salt]
+
   belongs_to :environment
   belongs_to :resource_type
   belongs_to :instance_type
-  belongs_to :ami
+  #belongs_to :ami
 
   has_many     :parent_child_relationships,
                :class_name            => "InstanceRelationship",
@@ -32,6 +34,8 @@ class Instance < ActiveRecord::Base
   before_save :set_aws_compatible_name
   after_destroy :modify_node_data
 
+  # Applies roles to instance
+  # Returns true after instance roles got set
   def apply_roles(roles = nil)
     if roles.nil?
       attributes = JSON.parse(self.config_attributes)
@@ -41,11 +45,13 @@ class Instance < ActiveRecord::Base
     return add_role(id, roles)
   end
 
+  # Gets the ami corresponding to instance if present
   def ami
     attributes = JSON.parse(config_attributes)
     Ami.find(attributes['ami_id']) rescue nil
   end
 
+  # Updates the instance config attributes after provisioned successfully
   def update_output(environment_output, instance_output)
     existing_config_attributes = JSON.parse(config_attributes)
     if ec2?
@@ -57,7 +63,8 @@ class Instance < ActiveRecord::Base
 
   private
 
-    # TODO: Code Review: add comments
+    # Deletes the specific item node object and the its client
+    # Deletes the specific item object details from the data bag of nodes
     def modify_node_data
       logger.info "INFO: Started deleting node and client for Instance with id #{self.id}"
       DeleteNodeWorker.perform_async(self.id)
@@ -67,16 +74,19 @@ class Instance < ActiveRecord::Base
       logger.info "INFO: Finished deleting data bag entry for node #{self.id}"
     end
 
+    # Checks the instance belongs to ec2 type or not
     def ec2?
       self.resource_type.resource_class == 'EC2'
     end
 
+    # Updates the elastic ip field of the instance after successful provision if elastic ip attribute present
     def add_elastic_ip(environment_output, instance_output)
       unless environment_output["ElasticIp#{aws_label}"].nil?
         instance_output.merge!(environment_output["ElasticIp#{aws_label}"])
       end
     end
 
+    # Sets aws compatible name for the given instance name
     def set_aws_compatible_name
        self.aws_label = aws_compatible_name(self.label)
     end
