@@ -1,5 +1,5 @@
 (function($) {
-  $.widget("environment.EC2TypeResource", {
+  $.widget("environment.JavaResource", {
     options: {
       resourceName: null,
       roles: []
@@ -13,8 +13,13 @@
       var resourceName = this.options.resourceName ;
       droppedPosition.top = droppedElement.position().top - stage.position().top ;
       droppedPosition.left = droppedElement.position().left - stage.position().left ;
+      if(!document.getElementById("Java_version"))
+        this.addDropDownForJavaVersion();
       addSlider(resourceName+"-slider");
       showConfigurationForm(resourceName+ '-configuration', droppedPosition);
+    },
+    addDropDownForJavaVersion: function(){
+        addJavaVersionDropDown();
     },
     _create: function(){
       this.setDialog();
@@ -35,8 +40,9 @@
           var InstanceTypeId = parseInt($('#' + resourceName + '_instance_type_id').html());
           var elasticIp = $('input#'+ resourceName +'_elasticIp')[0].checked;
           var labelIcon = getInstanceTypeLabel(ec2InstanceTypes,InstanceTypeId);
+          var java_version = $('#' + resourceName + '_version').val();
           var config_attributes = {};
-           config_attributes = {elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId};
+          config_attributes = {elasticIp:elasticIp,roles:roles, parents_list:parents_list, label:labelIcon,ami_id:amiId,java_version:java_version};
           if ( self.validate(label) ){
             if (editElement == null) {
               var newInstance = addInstanceCloneToGraph();

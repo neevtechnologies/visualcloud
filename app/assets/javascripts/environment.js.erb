@@ -64,14 +64,22 @@ $(function() {
 
 });
 
-
+function getInstanceTypesOfResourceType(resourceType){
+  switch(resourceType){
+    case "RDS" : return rdsInstanceTypes;
+    case "ElastiCache" : return elastiCacheInstanceTypes;
+    default : return ec2InstanceTypes;
+  }
+}
 
 
 //Displaying the slider for the select options, displaying the selected value
-function addSlider(sliderDiv, instanceTypes, selectedIndex, elementId){
+function addSlider(sliderDiv, selectedIndex, elementId){
+  var resourceType = sliderDiv.split('-')[0];
+  instanceTypes = getInstanceTypesOfResourceType(resourceType);
   if (typeof(selectedIndex) == 'undefined')
     selectedIndex = 0 ;
-  else if(sliderDiv.split('-')[0] != "RDS" && sliderDiv.split('-')[0] != "ElastiCache")
+  else if(resourceType != "RDS" && resourceType != "ElastiCache")
     selectedIndex -= 1; // as slider position starts with 0 and ends with length - 1
   else
     //re-setting index if the id value is not starting from '1'
@@ -82,8 +90,7 @@ function addSlider(sliderDiv, instanceTypes, selectedIndex, elementId){
       }
   //setting the instance type id in the dialog box
   var instance_type_id =   instanceTypes[selectedIndex].id;
-  $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instance_type_id);
-
+  $("#"+resourceType+"_instance_type_id").html(instance_type_id);
   placeLabelsOnSlider($('#' +sliderDiv + ' .slider'), instanceTypes);
   // displaying the white background for the slider movement
   $('.ui-slider-range').css('width',(selectedIndex) * 100/(instanceTypes.length - 1) + '%');
@@ -95,21 +102,12 @@ function addSlider(sliderDiv, instanceTypes, selectedIndex, elementId){
       // displaying the white background for the slider movement
       $('.ui-slider-range').css('width',(ui.value) * 100/(instanceTypes.length - 1) + '%');
       //setting the instance type id in the dialog box
-      $("#"+sliderDiv.split('-')[0]+"_instance_type_id").html(instanceTypes[ui.value].id);
+      $("#"+resourceType+"_instance_type_id").html(instanceTypes[ui.value].id);
       var labelIcon = getInstanceTypeLabel(instanceTypes,instanceTypes[ui.value].id);
-      $('#instance-type-label-'+ elementId).html(labelIcon);
+      if(elementId != undefined)
+        $('#instance-type-label-'+ elementId.split('-')[1]).html(labelIcon);
     }
   });
-
-  //Populating the tooltip for the first time
-  var selectedInstanceType = {};
-  for(var i = 0;i < instanceTypes.length; i++)
-    if(instanceTypes[i].id == selectedIndex ) {
-      selectedInstanceType = instanceTypes[i] ;
-      break;
-    }
-  var newHandlePosition = $('.ui-slider-handle').css('left');
-  setTooltipForSilder(selectedInstanceType, newHandlePosition);
 }
 
 function placeLabelsOnSlider(jSliderDiv, instanceTypes){
@@ -127,20 +125,6 @@ function placeLabelsOnSlider(jSliderDiv, instanceTypes){
   }
 }
 
-function setTooltipForSilder(instanceType, newSliderPosition){
-  var tooltipText = getInstanceDescription(instanceType);
-  $('.slider_tooltip').css('left', newSliderPosition);
-  $('.slider_tooltip').html(tooltipText);
-}
-
-function getInstanceDescription(instanceType){
-
-  var instanceName = instanceType.name ;
-  var instanceDescription = instanceType.description ;
-  var tooltipText = instanceName + '</br>' + instanceDescription ;
-  return tooltipText ;
-}
-
 function startStatusPoll(environmentId){
   $(document).ready(function(){
     if($('.stack-status-icon').length != 0){
@@ -151,6 +135,7 @@ function startStatusPoll(environmentId){
         }).done(function(data){
           var stackStatus = data.status;
           setStatusIcon(stackStatus);
+          changeCursorAndTooltipTitleForProvisionIcon(stackStatus);
 
           //Set the output values for each instance
           for(var key in data.instanceAttributes){
@@ -163,9 +148,35 @@ function startStatusPoll(environmentId){
   });
 }
 
+function getStatusOfEnvironmentsByProject(projectId){
+  $(document).ready(function(){
+      $.ajax({
+          url: '/project_status?id=' + projectId,
+          type: 'GET'
+        }).done(function(data){
+          for(var key in data){
+            if(data[key] == undefined)
+              data[key] = "DEFAULT";
+            $('#'+key+'_status-icon-'+data[key]).removeClass('hide');
+          }
+        });
+  });
+}
+
 function setStatusIcon(stackStatus){
   $(".stack-status-icon").hide();
   $('#status-icon-'+stackStatus).show();
+}
+
+function changeCursorAndTooltipTitleForProvisionIcon(stackStatus){
+  if(stackStatus == "CREATE_IN_PROGRESS" || stackStatus == "UPDATE_IN_PROGRESS"){
+    document.getElementById("graph-provision").style.cursor = 'default';
+    $('#graph-provision').attr('data-original-title','provisioning is in progress');
+  }
+  else{
+    document.getElementById("graph-provision").style.cursor = 'pointer';
+    $('#graph-provision').attr('data-original-title','provision');
+  }
 }
 
 function prepareStage(){
@@ -180,21 +191,33 @@ function addInstanceCloneToGraph(instanceId){
   return newElement ;
 };
 
-//Update the element id's of instances with actual ID's saved in DB
-//TODO: Remove hardcoded 'instance-' prefix for element id's
-function updateInstanceElementIds(instance_ids){
-  var instanceLabel;
-  for(instanceLabel in instance_ids){
-    var instanceElement = $('.graph-area').graphArea("getInstanceElementByLabel", instanceLabel );
-    instanceElement.attr("id", 'instance-' + instance_ids[instanceLabel]);
+//adds java version drop down for java instance dialog box
+function addJavaVersionDropDown(){
+  var simpleJavaForm = document.getElementById("Java-config-frm");
+  var selectLabel = document.createElement('p');
+  selectLabel.setAttribute('id', 'Java_version_label');
+  var selectLabelText = document.createTextNode("Java Version");
+  selectLabel.appendChild(selectLabelText);
+  var javaVersionSelect = document.createElement('select');
+  javaVersionSelect.setAttribute('id', 'Java_version');
+  javaVersionSelect.setAttribute('name', 'Java_version');
+  javaVersionSelect.setAttribute("class","drop_down_width");
+  var input = <%= VisualCloudConfig[:java_versions] %>;
+  for(var i = 0;i < input.length;i++){
+    var option = document.createElement("option");
+    option.setAttribute("value", input[i]);
+    option.innerHTML = input[i];
+    javaVersionSelect.appendChild(option);
   }
-};
+  $('input#Java_label').after(selectLabel);
+  $('p#Java_version_label').after(javaVersionSelect);
+}
+
 
 //Show dialog for creating new instances
 function showConfigurationForm(dialogId, droppedPosition){
   var dialog = $('#'+dialogId);
   var resource_type = dialogId.split('-')[0];
-  callToAddSlider(resource_type);
   //Start with a clean sheet for new instances
   //editElement is the domID of element used while editing it
   //xpos and ypos will not be available when the new instance
@@ -203,27 +226,7 @@ function showConfigurationForm(dialogId, droppedPosition){
   dialog.data('xpos', droppedPosition.left);
   dialog.data('ypos', droppedPosition.top);
   dialog.find('#' + resource_type + '_delete').hide();
-  /*//TODO:Configuration Dialog shouldn't know about the instance specific fields
-  dialog.find('#' + resource_type + '_ip_address').hide();
-  dialog.find('#' + resource_type + '_public_dns').hide();
-  dialog.find('#' + resource_type + '_bucket_name').hide();
-  dialog.find('#' + resource_type + '_dns_name').hide();
-  */
   dialog.modal('show');
-};
-
-//TODO: Logic is totally hardcoded here.
-//TODO: Please choose a better name than "callToAddSlider"
-function callToAddSlider(resource_type, selectedIndex, elementId){
-  var id = '';
-  if(elementId)
-    id = elementId.split('-')[1];
-  if (resource_type == "RDS")
-    addSlider(resource_type+"-slider", rdsInstanceTypes, selectedIndex, id);
-  else if(resource_type == "ElastiCache")
-    addSlider(resource_type+"-slider", elastiCacheInstanceTypes, selectedIndex, id);
-  else if(resource_type != "ELB" && resource_type != "S3")
-    addSlider(resource_type+"-slider", ec2InstanceTypes, selectedIndex, id);
 }
 
 function addMessagesToDiv(jDiv, content){

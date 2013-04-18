@@ -11,6 +11,7 @@
       var droppedPosition = {} ;
       droppedPosition.top = droppedElement.position().top - stage.position().top ;
       droppedPosition.left = droppedElement.position().left - stage.position().left ;
+      addSlider(this.options.resourceName+"-slider");
       showConfigurationForm(this.options.resourceName +'-configuration', droppedPosition);
     },
     validate: function(label,node_count){
