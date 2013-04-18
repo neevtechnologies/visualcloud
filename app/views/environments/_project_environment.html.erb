@@ -26,5 +26,7 @@
         window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
       });
     });
+  <% if !@environment.id.to_s.empty? %>
   $("#environments_list option[value='" + <%= @environment.id %> + "']").attr("selected","selected");
+  <%end%>
 </script>

@@ -11,31 +11,27 @@
     <div id="<%=resource_type.name%>-config-error-messages"></div>
     <%= simple_form_for Instance.new, url: '', html: { id: "#{resource_type.name}-config-frm"} do |f|%>
       <%= f.input :label, input_html: { id: "#{resource_type.name}_label", class: 'instance_label'} %>
-      <!--TODO: remove the following Java attributes out from here.Whats the point in our early refactoring if all this is brought back in ?-->
-      <% if  resource_type.name == "Java"%>
-      <p>Java Version</p>
-      <%= select_tag "#{resource_type.name}_version" , options_for_select(VisualCloudConfig[:java_versions]), :include_blank => false %>
-      <%end%>
-    <div id="<%=resource_type.name%>_instance_type_id" class="hide"></div>
-    <label>Instance Type</label>
+      <div id="<%=resource_type.name%>_instance_type_id" class="hide"></div>
+      <label>Instance Type</label>
       <div id="<%=resource_type.name%>-slider" class="relative_position">
         <%= render 'slider' %>
       </div>
-    <br />
-    <br />
-    <br />
-    <div class="row">
-      <div class="span0">
-        <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%>
+      <br />
+      <br />
+      <br />
+      <div class="row">
+        <div class="span0">
+          <%= check_box_tag "#{resource_type.name}_elasticIp", value = "", checked = false%>
+        </div>
+        <div class="span3">Elastic IP </div>
       </div>
-      <div class="span3">Elastic IP </div>
-    </div>
-    <br />
-    <div id="<%=resource_type.name%>_private_ip"></div>
-    <br />
-    <div id="<%=resource_type.name%>_public_ip"></div>
-    <br />
-    <div id="<%=resource_type.name%>_public_dns"></div>
+      <br />
+      <div id="<%=resource_type.name%>_private_ip"></div>
+      <br />
+      <div id="<%=resource_type.name%>_public_ip"></div>
+      <br />
+      <div id="<%=resource_type.name%>_public_dns"></div>
+      <br />
       <%= hidden_field_tag :ami_id, Ami.first.id, :id => "#{resource_type.name}_ami_id"%>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>
