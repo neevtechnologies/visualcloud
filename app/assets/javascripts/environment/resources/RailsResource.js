@@ -13,3 +13,7 @@ RailsResource.prototype.saveConfigAttributes = function(configAttributes){
 RailsResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }
+
+RailsResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).show();
+}

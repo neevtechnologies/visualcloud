@@ -20,3 +20,7 @@ S3Resource.prototype.setOutputAttributes = function(configAttributes){
   dialog.find('#S3_bucket_name').html("Bucket Name : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'bucket_name')+"</code>");
   dialog.find('#S3_dns_name').html("DNS Name : <code class='fnt_size'>"+getConfigAttribute(configAttributes,'dns_name')+"</code>");
 }
+
+S3Resource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).hide();
+}

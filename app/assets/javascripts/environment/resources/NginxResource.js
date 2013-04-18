@@ -13,3 +13,7 @@ NginxResource.prototype.saveConfigAttributes = function(configAttributes){
 NginxResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }
+
+NginxResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).show();
+}
