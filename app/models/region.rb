@@ -2,6 +2,7 @@ class Region < ActiveRecord::Base
   attr_accessible :name, :latitude, :longitude, :display_name
   has_many :environments
 
+ #Gives all regions as a json object
  def self.region_list
    results = []
    self.all.each do |r|

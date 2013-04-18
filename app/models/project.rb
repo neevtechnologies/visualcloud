@@ -12,12 +12,14 @@ class Project < ActiveRecord::Base
 
   private
 
+  # Updates the projects data bag when project is deleted
   def modify_project_data
     logger.info "INFO: Started deleting data bag entry for Project #{self.id}"
     DeleteDataBagWorker.perform_async({data_bag_name: "projects", item_id: self.id})
     logger.info "INFO: Finished deleting data bag entry for Project #{self.id}"
   end
 
+  # Setting aws compatible name for the given project name
   def set_aws_compatible_name
     self.aws_name = aws_compatible_name(self.name)
   end

@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :projects
   before_create :set_demo_aws_creds
 
+  # Returns key pairs and security groups, specific to given region from aws servers
   def get_key_pair_and_security_groups(region = nil)
     return [['keyName' => 'demo_key_pair'],['groupName' => 'demo_security_group']] if (aws_access_key == 'demo')
     cloud = Cloudster::Cloud.new(access_key_id: aws_access_key, secret_access_key: aws_secret_key, region: region)

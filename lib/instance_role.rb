@@ -1,4 +1,6 @@
 module InstanceRole
+
+  #Adds roles to the specific node(instance) object in the data bag of nodes
   def add_role(instance_id, roles)
     role_list = []
     return true if roles.blank?

@@ -5,26 +5,27 @@ module JsonFormatter
   #   {<ENVIRONMENT_ID>: {:master_db_address => "<IP_ADDRESS_OF_MASTER_DB>"}}
   def projects_json(project, options={})
     environments_json = []
-    project.environments.each do |environment| 
+    project.environments.each do |environment|
       options_json = ""
       options_for_environment = options[environment.id] || {}
       options_for_environment.each do |key, value|
          options_json += "  \"#{key.to_s}\": \"#{value.to_s}\",\n"
       end
-      environments_json << " 
+      environments_json << "
         \"#{environment.id}\": {
         #{options_json}
-        \"environment\": \"#{environment.name}\" 
+        \"environment\": \"#{environment.name}\"
        }"
     end
 
     "{
       \"id\": \"#{project.id}\",
-      \"name\":\"#{project.name}\",      
+      \"name\":\"#{project.name}\",
       \"environments\": {#{environments_json.join(',')}}
     }"
   end
-  
+
+  #Creates a JSON for nodes databag (for each instance)
   def nodes_json(node)
     "{
       \"id\": \"#{node.id}\",
@@ -33,5 +34,5 @@ module JsonFormatter
       \"config_attributes\":#{node.config_attributes}
     }"
   end
-    
+
 end
