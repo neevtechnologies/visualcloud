@@ -5,7 +5,6 @@ describe Environment do
   context "Validations" do
     subject { FactoryGirl.create(:environment) }
     it { should validate_presence_of  :name }
-    #it { should validate_uniqueness_of(:deploy_order).scoped_to(:project_id) }
   end
 
   context "Associations" do
@@ -17,7 +16,7 @@ describe Environment do
     let(:rds_instance) {FactoryGirl.create(:rds_instance,environment: environment)}
     it "should destroy associated instances" do
       instances = environment.instances
-      UpdateProjectDataBagWorker.should_receive(:perform_async)      
+      UpdateProjectDataBagWorker.should_receive(:perform_async)
       environment.destroy
       instances.should be_empty
     end
@@ -30,9 +29,9 @@ describe Environment do
       environment = FactoryGirl.create(:environment)
       rds_instance = FactoryGirl.create(:rds_instance)
       ec2_instance = FactoryGirl.create(:ec2_instance)
+      environment.instances = [rds_instance, ec2_instance]
       rds_instance.should_receive(:apply_roles)
       ec2_instance.should_receive(:apply_roles)
-      environment.instances += [rds_instance, ec2_instance]
       environment.set_roles
     end
   end
@@ -188,7 +187,7 @@ describe Environment do
     end
   end
 
-  describe "#wait_till_provisioned" do      
+  describe "#wait_till_provisioned" do
 
     let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel')}
     it "should have stack status to be CREATE_COMPLETE" do
@@ -221,10 +220,11 @@ describe Environment do
     let(:resource_type) { FactoryGirl.create(:resource_type , name: "Rails" ,resource_class: "EC2") }
     let(:instance_type) { FactoryGirl.create(:instance_type) }
     let(:ec2_instance){ FactoryGirl.create(:ec2_instance, label: "testec2",
-        environment: environment, resource_type: resource_type,
+        resource_type: resource_type,
         instance_type: instance_type,
         config_attributes: ({key1: 'value1', key2: 'value2', roles: ['app', 'java'],ami_id: ami.id}.to_json))}
     before(:each) do
+      environment.instances = [ec2_instance]
       input = {
         name: ec2_instance.aws_label,
         key_name: environment.key_pair_name,
@@ -279,10 +279,11 @@ describe Environment do
     let(:resource_type) { FactoryGirl.create(:resource_type) }
     let(:instance_type) { FactoryGirl.create(:instance_type) }
     let(:rds_instance){ FactoryGirl.create(:rds_instance, label: "testrds",
-        environment: environment, resource_type: resource_type,
+        resource_type: resource_type,
         instance_type: instance_type,
         config_attributes: ({size: '10', master_user_name: 'username', master_password: 'password',multiAZ: true}.to_json))}
     before(:each) do
+      environment.instances = [rds_instance]
       input = {
         name: rds_instance.aws_label,
         storage_size: rds_instance.config_attributes['size'],
@@ -313,8 +314,9 @@ describe Environment do
     let(:resource_type) { FactoryGirl.create(:resource_type) }
     let(:instance_type) { FactoryGirl.create(:instance_type) }
     let(:s3_instance){ FactoryGirl.create(:s3_instance, label: "tests3",
-        environment: environment, resource_type: resource_type)}
+        resource_type: resource_type)}
     before(:each) do
+      environment.instances = [s3_instance]
       input = {
         name: s3_instance.aws_label,
         access_control: s3_instance.config_attributes["access_control"]
@@ -353,9 +355,9 @@ describe Environment do
     let(:resource_type2) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
     let(:instance_type) { FactoryGirl.create(:instance_type) }
     let(:elb_instance1){ FactoryGirl.create(:elb_instance, label: "testelb",
-        environment: environment, resource_type: resource_type1)}
+        resource_type: resource_type1)}
     let(:elb_instance2){ FactoryGirl.create(:elb_instance, label: "testelb",
-        environment: environment, resource_type: resource_type2)}
+        resource_type: resource_type2)}
     it "should add the instance to stack" do
       environment.instances = [elb_instance1]
       stack_resources = []
@@ -398,11 +400,11 @@ describe Environment do
     let(:resource_type_RDS) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
     let(:instance_type) { FactoryGirl.create(:instance_type) }
     let(:elasticache_instance1){ FactoryGirl.create(:elasticache_instance, label: "testec",
-        environment: environment, resource_type: resource_type_EC,
+        resource_type: resource_type_EC,
         instance_type: instance_type,
         config_attributes: ({key1: 'value1', key2: 'value2',cache_security_group_names: ['default'], node_count: 3}.to_json))}
     let(:elasticache_instance2){ FactoryGirl.create(:elasticache_instance, label: "testec",
-        environment: environment, resource_type: resource_type_RDS,
+        resource_type: resource_type_RDS,
         instance_type: instance_type,
         config_attributes: ({key1: 'value1', key2: 'value2',cache_security_group_names: ['default'], node_count: 3}.to_json))}
     it "should add the instance to stack" do
@@ -433,38 +435,27 @@ describe Environment do
   describe "#update_instance_outputs" do
     let(:resource_type_ec2) { FactoryGirl.create(:resource_type,resource_class: "EC2") }
     let(:resource_type_rds) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
+    let(:environment) { FactoryGirl.create(:environment, aws_name: 'TestAwsLabel') }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, resource_type: resource_type_ec2) }
+    let(:rds_instance) { FactoryGirl.create(:rds_instance, resource_type: resource_type_rds) }
     it "should set the config attributes of all instances with the output values from stack" do
-      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel')
-      ec2_instance = FactoryGirl.create(:ec2_instance, environment: environment, resource_type: resource_type_ec2)
-      rds_instance = FactoryGirl.create(:rds_instance, environment: environment, resource_type: resource_type_rds)
       environment.instances = [ec2_instance, rds_instance]
       aws_access_id = 'test_id'
       aws_secret_key = 'test_key'
       cloud = cloud_should_be_initialized(aws_access_id, aws_secret_key)
-      cloud.should_receive(:outputs).with({stack_name: environment.aws_name}).and_return( {
-          ec2_instance.aws_label => {
-            'ip_address' => '42.42.42.42',
-            'public_dns' => 'ec2.public.dns',
-          },
+      cloud.should_receive(:outputs).with({stack_name: environment.aws_name}).and_return({
           rds_instance.aws_label => {
             'ip_address' => '52.52.52.52',
             'port' => '1234'
+          },
+          ec2_instance.aws_label => {
+            'ip_address' => '42.42.42.42',
+            'public_dns' => 'ec2.public.dns'
           }
         })
-      ec2_instance_existing_attributes = JSON.parse(ec2_instance.config_attributes)
-      rds_instance_existing_attributes = JSON.parse(rds_instance.config_attributes)
-
+      environment.instances.should_receive(:where).with(aws_label: ec2_instance.aws_label).and_return([ec2_instance])
+      environment.instances.should_receive(:where).with(aws_label: rds_instance.aws_label).and_return([rds_instance])
       environment.update_instance_outputs(aws_access_id, aws_secret_key)
-      ec2_instance.reload
-      rds_instance.reload
-      ec2_instance.config_attributes.should == ec2_instance_existing_attributes.merge({
-          ip_address: '42.42.42.42',
-          public_dns: 'ec2.public.dns'
-        }).to_json
-      rds_instance.config_attributes.should == rds_instance_existing_attributes.merge({
-          ip_address: '52.52.52.52',
-          port: '1234'
-        }).to_json
     end
   end
 
