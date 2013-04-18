@@ -1,13 +1,13 @@
-<table class="table table-striped"> 
+<table class="table table-striped">
   <tr>
-    <th style="text-align: center;">Status</th>
+    <th style="text-align: center;width:150px;">Status</th>
     <th>Name</th>
     <th style="text-align: center;">Actions</th>
   </tr>
   <%if @environments.present? %>
     <% @environments.each do |environment| %>
       <tr>
-        <td style="text-align: center;"><div class="stack-status" data-graph-id="<%=environment.id%>"><%= image_tag(status_image(environment.provision_status)["img_src"], title: "#{status_image(environment.provision_status)["img_title"]}", rel: 'tooltip', id: "stack-status-image-#{environment.id}", size: '20x20') %></div></td>
+        <td><%= render 'environment_status_icon', environment: environment %></td>
         <td><%= environment.name %></td>
         <td style="text-align: center;">
           <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn btn-inverse' %>&nbsp;&nbsp;&nbsp;&nbsp;

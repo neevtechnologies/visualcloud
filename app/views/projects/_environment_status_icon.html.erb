@@ -1,0 +1,7 @@
+<ul class="nav modified-nav">
+  <% ["DEFAULT", "CREATE_COMPLETE", "CREATE_IN_PROGRESS", "CREATE_FAILED", "UPDATE_COMPLETE", "UPDATE_IN_PROGRESS"].each do |status| %>
+    <li class="stack-status-icon-new <%= environment.provision_status == status ? '' : 'hide' %>" id='<%= environment.id %>_status-icon-<%= status %>'>
+      <%= image_tag(status_image(status)["img_src"], title: "#{status_image(status)["img_title"]}", rel: 'tooltip', size: '20x20' ) %>
+    </li>
+  <% end %>
+</ul>

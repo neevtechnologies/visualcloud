@@ -14,7 +14,7 @@
     <span class="set_display_width">Description</span>:
     &nbsp;&nbsp;<span><%= @project.description %></span>
   </div>
-  <%end%>  
+  <%end%>
  </div>
 </div>
 <h4 class="span2">Environments</h4>
@@ -23,3 +23,6 @@
   </button>
 
 <%= render 'project_environments' %>
+<script type="text/javascript">
+  getStatusOfEnvironmentsByProject(<%= @project.id%>);
+</script>
