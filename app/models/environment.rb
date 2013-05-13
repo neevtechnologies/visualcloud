@@ -11,7 +11,9 @@ class Environment < ActiveRecord::Base
   before_create :set_aws_compatible_name
   before_destroy :modify_environment_data
 
-
+  # provisioning the environment
+  # return true if it is successfully provisioned
+  # returns false in case of any failure while provisioning
   def provision(access_key_id, secret_access_key)
     return true if access_key_id == 'demo'
     stack_resources = []
@@ -24,13 +26,13 @@ class Environment < ActiveRecord::Base
 
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key, region: region_name)
 
-    #TODO : Depend on the actual stack status, not on the provisioned boolean
-    if self.provisioned
-      cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
-    else
+    #provision_status will hold the actual stack status
+    if self.provision_status == nil
       cloud.provision(resources: stack_resources, stack_name: aws_name, description: 'Provisioned by VisualCloud')
       self.provisioned = true
       self.save
+    else
+      cloud.update(resources: stack_resources, stack_name: aws_name, description: 'Updated by VisualCloud')
     end
     return true
   rescue Exception => e
@@ -38,6 +40,7 @@ class Environment < ActiveRecord::Base
     return false
   end
 
+  # Returns the status of the given environment
   def status(access_key_id, secret_access_key)
     if access_key_id.present? && secret_access_key.present?
       cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
@@ -47,17 +50,22 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Returns all RDS(database) endpoints in a stack
   def get_rds_endpoints(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     cloud.get_database_endpoints(stack_name: aws_name)
   end
 
-  # TODO : Code Review : write comment on the methods
+  #Returns all the stack related events for the AWS account.
+  #Returns events related to all the stacks with the given name.
   def events(access_key_id, secret_access_key)
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
     return cloud.events(stack_name: aws_name)
   end
 
+  #Collects all the ec2 type elements of the environment into stack_resources array
+  #Returns collection of ec2 type resource names
+  #If elastic ip option provided, adds an ElasticIp to an ec2 type instance
   def add_ec2_resources(stack_resources)
     instance_names = []
     key_pair = self.key_pair_name.blank? ? 'default' : self.key_pair_name
@@ -89,10 +97,11 @@ class Environment < ActiveRecord::Base
     return instance_names
   end
 
+  #Adds elb resource with ec2 resource names in it, to stack_resources array
   def add_elb_resource(stack_resources, instance_names)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'ELB'
-        # Choose the children EC2 instances, which have been created succesfully.
+        # Choose the children EC2 instances, which have been created successfully.
         instance_names = (instance_names & instance.children.collect(&:aws_label))
         stack_resources << Cloudster::Elb.new(
           name: instance.aws_label,
@@ -109,11 +118,11 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Adds rds resources to stack_resources array
   def add_rds_resources(stack_resources)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'RDS'
         config_attributes = JSON.parse(instance.config_attributes)
-        # TODO : Code Review : Store whole json as encrypted 
         stack_resources << Cloudster::Rds.new(name: instance.aws_label,
           instance_class: instance.instance_type.api_name,
           storage_size: config_attributes['size'],
@@ -125,6 +134,7 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Adds s3 resources to stack_resources array
   def add_s3_resources(stack_resources)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'S3'
@@ -139,6 +149,7 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Adds elasticache resources to stack_resources array
   def add_elasticache_resources(stack_resources)
     instances.each do |instance|
       if instance.resource_type.resource_class == 'ElastiCache'
@@ -154,6 +165,7 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Deletes stack and the attached resources
   def delete_stack(access_key_id, secret_access_key)
     return true if access_key_id == 'demo'
     logger.info "INFO: Calling cloudster to delete environment #{self.name}"
@@ -166,6 +178,9 @@ class Environment < ActiveRecord::Base
     return false
   end
 
+  #Setting Meta Data in DataBags before assigning roles for instances in environment
+  #check for the database role is present for instances present in the environment
+  #Updates the data bags of nodes for instances and projects for environment
   def set_meta_data(access_key_id, secret_access_key)
     logger.info("Setting Meta Data in DataBags before assigning roles for instances in environment : #{self.aws_name}")
     db_instance_present = false
@@ -181,7 +196,6 @@ class Environment < ActiveRecord::Base
       logger.info("Found RDS instance with IP : #{db_ip_addr} for environment : #{self.aws_name}")
       options.merge!({:rds_ip_address => db_ip_addr})
     else
-      db_instance = nil
       instances.each do |instance|
         config_attributes = JSON.parse(instance.config_attributes)
         instance_roles = config_attributes['roles'] || []
@@ -197,12 +211,14 @@ class Environment < ActiveRecord::Base
     update_project_data_bag(self.project, { self.id => options })
   end
 
+  #Sets roles for each instance element
   def set_roles
     instances.each do |instance|
       instance.apply_roles
     end
   end
 
+  #Check for rds resource element in the instances
   def has_rds?
     instances.each do |instance|
       return true if instance.resource_type.resource_class == "RDS"
@@ -210,6 +226,8 @@ class Environment < ActiveRecord::Base
     return false
   end
 
+  #Waits till the provision process is completed
+  # for demo case it will not contact aws api's
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{self.aws_name}")
     update_attribute(:provision_status, "CREATE_IN_PROGRESS")
@@ -234,6 +252,8 @@ class Environment < ActiveRecord::Base
     end
   end
 
+  #Updating all instances of the environment with the output values,
+  # after the stack provision process gets completed
   def update_instance_outputs(access_key_id, secret_access_key)
     return if access_key_id == 'demo'
     cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
@@ -247,16 +267,19 @@ class Environment < ActiveRecord::Base
 
   private
 
+  # Updates the projects data bag when deleting the environment belongs to a project item
   def modify_environment_data
     logger.info "INFO: Started updating project data bag to delete the environment #{self.id} entry"
     UpdateProjectDataBagWorker.perform_async(self.project)
     logger.info "INFO: Finished updating project data bag to delete the environment #{self.id} entry"
   end
 
+  # Sets aws compatible name for the given environment name
   def set_aws_compatible_name
     self.aws_name = aws_compatible_name(self.name)
   end
 
+  # Returns the region name
   def region_name
     region.name
   end

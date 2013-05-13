@@ -1,4 +1,3 @@
-# TODO : Code Review: add permission check in edit/view/update/delete
 class ProjectsController < ApplicationController
   include ServerMetaData
   include AwsCompatibleName
@@ -89,7 +88,6 @@ class ProjectsController < ApplicationController
 
 
   #Get the status of all environments belonging to the project
-  #TODO: Use this to set the status of environments in project show page
   def status
     @project = Project.find(params[:id])
     environments = @project.environments
@@ -102,7 +100,7 @@ class ProjectsController < ApplicationController
 
   private
 
-    #Project should belong to the user
+    # Checking whether the user is authorized to see this project related details or not
     def authorize
       @project = Project.find_by_user_id_and_id(current_user.id,params[:id])
       raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil?

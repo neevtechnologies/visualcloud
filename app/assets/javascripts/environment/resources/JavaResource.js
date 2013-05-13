@@ -1,5 +1,6 @@
 var JavaResource = function(options){
   this.EC2Resource = new EC2Resource(options);
+  this.addJavaVersionSelectElement();
 };
 
 JavaResource.prototype.showInstanceDialog = function(){
@@ -15,4 +16,13 @@ JavaResource.prototype.saveConfigAttributes = function(configAttributes){
 
 JavaResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
+}
+
+JavaResource.prototype.addJavaVersionSelectElement = function(){
+  if(!$('#Java_version').val())
+    addJavaVersionDropDown();
+}
+
+JavaResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).show();
 }

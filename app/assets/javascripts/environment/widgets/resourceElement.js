@@ -41,7 +41,7 @@
       self._trigger('onCreate');
     },
     getWidgetType: function(){
-      if (this.options.resourceClass == 'EC2')
+      if (this.options.resourceClass == 'EC2' && this.options.name != 'Java')
         return 'EC2TypeResource' ;
       else
         return this.options.name + 'Resource' ;

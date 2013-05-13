@@ -18,8 +18,8 @@ EC2Resource.prototype.showInstanceDialog = function(){
   var dialog = $('#'+dialogId);
 
   dialog.find('#' + this.baseResource.resourceType + '_ami_id').val(instanceOptions.configAttributes.ami_id);
-  //TODO: Refactor 'callToAddSlider'. It should take instanceType and sliderDiv as params
-  callToAddSlider(this.baseResource.resourceType , instanceOptions.InstanceType, editElementId);
+  //third parameter, element id is required for setting the label on the icon
+  addSlider(this.baseResource.resourceType +"-slider", instanceOptions.InstanceType, editElementId);
   $('#' + this.baseResource.resourceType + '_instance_type_id').html(instanceOptions.InstanceType);
   dialog.find('#' + this.baseResource.resourceType + '_elasticIp').prop("checked",instanceOptions.configAttributes.elasticIp);
   this.setOutputAttributes(instanceOptions.configAttributes);

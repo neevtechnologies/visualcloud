@@ -13,3 +13,7 @@ PHPResource.prototype.saveConfigAttributes = function(configAttributes){
 PHPResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }
+
+PHPResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).show();
+}

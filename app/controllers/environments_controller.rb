@@ -5,37 +5,22 @@ class EnvironmentsController < ApplicationController
   before_filter :authorize, :except => [:get_key_pairs_and_security_groups]
   require "csv"
 
-  # GET /environments/new
-  # GET /environments/new.json
-  # TODO : Code Review : duplciate block in new and edit. refactor it
+  # GET /projects/1/environments/new
+  # GET /projects/1/environments/new.json
   def new
     @project = Project.find(params[:project_id])
-    #TODO: Can this be removed ? Are we showing environments list in new page
-    @environments = @project.environments
     @environment = Environment.new(params[:environment])
-    @resource_types = RESOURCE_TYPES
-    @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
-    @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
-    @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
-    @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @environment }
-    end
+    get_resourcetypes_instancetypes_keypairs_securitygroups
   end
 
-  # GET /environments/1/edit
+  # GET /projects/1/environments/1/edit
   def edit
     @environments = @project.environments
     @environment = Environment.find(params[:id])
-    @resource_types = RESOURCE_TYPES
-    @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
-    @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
-    @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
-    @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
+    get_resourcetypes_instancetypes_keypairs_securitygroups
   end
 
+  # Exporting the details of environment to a csv file, "environment_details.csv"
   def export_csv
     @environment = Environment.find(params[:id])
     @project = Project.find(@environment.project_id)
@@ -55,73 +40,79 @@ class EnvironmentsController < ApplicationController
       end
     end
 
-    # send csv file(users.csv) to browser
+    # send csv file(environment_details.csv) to browser
     send_data(csv_string, :type => 'text/csv; charset=utf-8; header=present', :filename => "environment_details.csv")
   end
 
-  # POST /environments
+  # POST /projects/1/environments
   def create
     errors = []
     @project = Project.find(params[:project_id])
     @environment = Environment.new(params[:environment])
     logger.info "Environment: #{@environment.inspect}"
     @environment.project = @project
-    if !@environment.save
-      errors << "Environment has the following errors :"
-      errors += @environment.errors.full_messages
-    end
+    begin
+      Environment.transaction do
+        if !@environment.save!
+          errors << "Environment has the following errors :"
+          errors += @environment.errors.full_messages
+        end
 
-    saved_doms = {}
-    # TODO : Code Review :  use a transaction for multiple  dmls
-    params[:instances].to_a.each do |instance|
-      if instance.length > 2 #delete instance has length 2
-        resouce_type_name = instance.delete(:resource_type)
-        dom_id = instance.delete(:dom_id)
-        parent_dom_ids = instance.delete(:parent_dom_ids)
-        config_attributes = instance.delete(:config_attributes).to_json
-        resource_type = ResourceType.where(name: resouce_type_name).first
-        instance = Instance.new(instance)
-        instance.config_attributes = config_attributes
-        instance.environment = @environment
-        instance.resource_type = resource_type
-        if !instance.save
-          errors << "#{instance.label} has the following error(s) :"
-          errors += instance.errors.full_messages
+        saved_doms = {}
+
+        params[:instances].to_a.each do |instance|
+          resouce_type_name = instance.delete(:resource_type)
+          dom_id = instance.delete(:dom_id)
+          parent_dom_ids = instance.delete(:parent_dom_ids)
+          config_attributes = instance.delete(:config_attributes).to_json
+          resource_type = ResourceType.where(name: resouce_type_name).first
+          instance = Instance.new(instance)
+          instance.config_attributes = config_attributes
+          instance.environment = @environment
+          instance.resource_type = resource_type
+          if !instance.save!
+            errors << "#{instance.label} has the following error(s) :"
+            errors += instance.errors.full_messages
+          else
+            saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+          end
+        end
+
+        save_connections(saved_doms)
+
+        if errors.blank?
+          flash[:success] = "Environment saved successfully."
         else
-          saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
+          flash.now[:error] = errors
         end
       end
+    rescue => e
+      logger.error("Error occured while saving the environment : #{e.inspect}")
+      flash.now[:error] = "Error occured while saving the Environment. #{e.message}"
     end
-
-    save_connections(saved_doms)
-
-    if errors.blank?
-      flash[:success] = "Environment saved successfully."
-    else
-      flash.now[:error] = errors
-    end
-
-  rescue Exception => e
-    logger.error("Error occured while saving the environment : #{e.inspect}")
-    flash.now[:error] = "Error occured while saving the Environment."
-    errors << "Error occured while saving the Environment"
-  ensure
     respond_to do |format|
       format.js
     end
   end
 
-  # PUT /environments/1
-  #  TODO : Code Review : do object level access check for view/edit/delete/update
+  # PUT /projects/1/environments/1
   def update
     @project = Project.find(params[:project_id])
     @errors = []
-    update_instances
+    begin
+      Environment.transaction do
+        update_instances
 
-    if @errors.blank?
-      flash.now[:success] = "Environment updated successfully."
-    else
-      flash.now[:error] = @errors
+        if @errors.blank?
+          flash.now[:success] = "Environment updated successfully."
+        else
+          flash.now[:error] = @errors
+          raise ActiveRecord::Rollback
+        end
+      end
+    rescue  => e
+      logger.error("Error occured while updating the environment : #{e.inspect}")
+      flash.now[:error] = "Error occured while updating the Environment. #{e.message}"
     end
 
     respond_to do |format|
@@ -129,8 +120,8 @@ class EnvironmentsController < ApplicationController
     end
   end
 
-  # DELETE /environments/1
-  # DELETE /environments/1.json
+  # DELETE /projects/1/environments/1
+  # DELETE /projects/1/environments/1.json
   def destroy
     if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
       flash[:error] = "You have not added your AWS access key"
@@ -155,24 +146,36 @@ class EnvironmentsController < ApplicationController
   def provision
     @instance_ids = {}
     @errors = []
-    update_instances
-    if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
-      @errors << "You have not added your AWS access key"
-      flash.now[:error] = @errors
-    else
-      if @errors.blank? && @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
-        flash[:success] = "Provision request initiated"
-        RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
-          secret_access_key: current_user.aws_secret_key,
-          environment_id: @environment.id
-        )
-        @environment.instances.each{|instance| @instance_ids[instance.label] = instance.id }
+    if @environment.provision_status != "CREATE_IN_PROGRESS" && @environment.provision_status != "UPDATE_IN_PROGRESS"
+      begin
+        Environment.transaction do
+          update_instances
+          if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+            @errors << "You have not added your AWS access key"
+            flash.now[:error] = @errors
+          else
+            if @errors.blank? && @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
+              flash[:success] = "Provision request initiated"
+              RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
+                secret_access_key: current_user.aws_secret_key,
+                environment_id: @environment.id
+              )
+              @environment.instances.each{|instance| @instance_ids[instance.label] = instance.id }
+            else
+              @errors << "This environment cannot be provisioned"
+              flash.now[:error] = @errors
+            end
+          end
+        end
+        rescue  => e
+          logger.error("Error occured while updating the environment : #{e.inspect}")
+          flash.now[:error] = "Error occured while updating the Environment. #{e.message}"
+        end
       else
-        @errors << "This environment cannot be provisioned"
+        @errors << "Provisioning process is in progress"
         flash.now[:error] = @errors
       end
     end
-  end
 
   # Get the status of the Environment from DB
   def environment_status
@@ -217,6 +220,7 @@ class EnvironmentsController < ApplicationController
 
   private
 
+  # Save the parent child relationship for the instances, by storing the instances id's
     def save_connections(saved_doms)
       return if saved_doms.empty?
       saved_doms.each do |dom_id , instance|
@@ -230,6 +234,9 @@ class EnvironmentsController < ApplicationController
       end
     end
 
+    # Updates the instances for the given environment
+    # Deletes all the instances of the environment
+    # re-creates the instances for the environment
     def update_instances
       #Remove all instances and start with a clean slate. It's not easy to track edited instances
       #Think about x, y positions
@@ -237,8 +244,6 @@ class EnvironmentsController < ApplicationController
 
       saved_doms = {}
       params[:instances].to_a.each do |instance|
-        #TODO This logic is obscure . Need to refactor this
-        if instance.length > 2 #delete instance has length 2
           resouce_type_name = instance.delete(:resource_type)
           dom_id = instance.delete(:dom_id)
           parent_dom_ids = instance.delete(:parent_dom_ids)
@@ -248,19 +253,18 @@ class EnvironmentsController < ApplicationController
           instance.config_attributes = config_attributes
           instance.environment = @environment
           instance.resource_type = resource_type
-          if !instance.save
+          if !instance.save!
             @errors << "#{instance.label} has the following error(s) :"
             @errors += instance.errors.full_messages
           else
             saved_doms[dom_id] = { instance: instance, parent_dom_ids: parent_dom_ids }
           end
-        end
       end
       @environment.reload
       save_connections(saved_doms)
     end
 
-    #Project should belong to the user
+    # Checking whether the user is authorized to see this environment related details or not
     def authorize
       if params[:id].present?
         @environment = Environment.find(params[:id])
@@ -271,4 +275,12 @@ class EnvironmentsController < ApplicationController
       raise CanCan::AccessDenied, "Nothing to see here, move on" if @project.nil?
     end
 
+    # Initializing the resource types, instance types and key pairs and security groups
+    def get_resourcetypes_instancetypes_keypairs_securitygroups
+      @resource_types = RESOURCE_TYPES
+      @ec2_instance_types = ResourceType.find_by_name('EC2').instance_types
+      @rds_instance_types = ResourceType.find_by_name('RDS').instance_types
+      @elasticache_instance_types = ResourceType.find_by_name('ElastiCache').instance_types
+      @key_pairs, @security_groups = current_user.get_key_pair_and_security_groups
+    end
 end

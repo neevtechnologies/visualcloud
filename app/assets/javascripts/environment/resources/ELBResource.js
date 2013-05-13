@@ -26,3 +26,7 @@ ELBResource.prototype.setLabelURL = function(configAttributes){
     this.baseResource.element.find('.instance-label').find('a').attr("target", "_blank");
   }
 }
+
+ELBResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).show();
+}

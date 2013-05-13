@@ -1,10 +1,11 @@
-# TODO : Code Review : Add comments here
 module ServerMetaData
-  include JsonFormatter  
+  include JsonFormatter
 
+ # Creates nodes data bag for the given object or
+ # Updates nodes data bag for the given object
   def update_node_data_bag(obj)
     begin
-      file = File.open("/tmp/nodes.json","w+") 
+      file = File.open("/tmp/nodes.json","w+")
       file.puts nodes_json(obj)
       file.close
       system("knife data bag from file nodes /tmp/nodes.json")
@@ -15,6 +16,8 @@ module ServerMetaData
     end
   end
 
+ # Creates projects data bag for the given object or
+ # Updates projects data bag for the given object
   def update_project_data_bag(obj, options={})
     begin
       file = File.open("/tmp/projects.json","w+")
@@ -29,6 +32,7 @@ module ServerMetaData
     end
   end
 
+ # Deletes specific data bag item object from the specific data bag
   def delete_data_bag_item(data_bag_name, obj_id)
     begin
       system("knife data bag delete #{data_bag_name} #{obj_id} -y")

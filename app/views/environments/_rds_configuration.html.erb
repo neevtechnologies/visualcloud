@@ -26,7 +26,9 @@
         <%= check_box_tag "#{resource_type.name}_multiAZ", value = "", checked = false%></div>
         <div class="span3">Multi AZ</div>
       </div>
+      <br />
       <div id="<%= resource_type.name %>_endpoint_ip"></div>
+      <br />
       <div id="<%= resource_type.name %>_endpoint_port"></div>
       <%= hidden_field_tag "#{resource_type.name}_parents_list", resource_type.parents_list, :id => "#{resource_type.name}_parents_list"%>
       <%= f.hidden_field(:xpos, id: "#{resource_type.name}_xpos")%>

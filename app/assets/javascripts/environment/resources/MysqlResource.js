@@ -13,3 +13,7 @@ MysqlResource.prototype.saveConfigAttributes = function(configAttributes){
 MysqlResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }
+
+MysqlResource.prototype.visibilityOfConnectorPoint = function(instanceDivId){
+  $('#connection-source-'+instanceDivId).hide();
+}

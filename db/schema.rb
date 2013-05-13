@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130211113456) do
+ActiveRecord::Schema.define(:version => 20130305064131) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -60,10 +60,10 @@ ActiveRecord::Schema.define(:version => 20130211113456) do
     t.integer  "resource_type_id"
     t.string   "url"
     t.string   "aws_instance_id"
-    t.text     "config_attributes"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "aws_label"
+    t.text     "encrypted_config_attributes"
   end
 
   create_table "projects", :force => true do |t|

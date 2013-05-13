@@ -189,4 +189,23 @@ describe EnvironmentsController do
     end
   end
 
+  describe "#export_csv" do
+    let(:region) {FactoryGirl.create(:region)}
+    let(:resource_type_ec2) { FactoryGirl.create(:resource_type,resource_class: "EC2") }
+    let(:resource_type_rds) { FactoryGirl.create(:resource_type,resource_class: "RDS") }
+    let(:environment) {FactoryGirl.create(:environment , project: project , region: region)}
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment, resource_type: resource_type_ec2) }
+    let(:rds_instance) { FactoryGirl.create(:rds_instance, environment: environment, resource_type: resource_type_rds) }
+
+    before(:each) do
+      environment.instances = [ec2_instance, rds_instance]
+    end
+
+    it "should be success" do
+      sign_in(user)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      get :export_csv, :id => environment.id
+      response.should be_success
+    end
+  end
 end

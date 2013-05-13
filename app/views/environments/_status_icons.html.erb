@@ -1,4 +1,4 @@
-<% ["DEFAULT", "CREATE_COMPLETE", "CREATE_IN_PROGRESS", "CREATE_FAILED"].each do |status| %>
+<% ["DEFAULT", "CREATE_COMPLETE", "CREATE_IN_PROGRESS", "CREATE_FAILED", "UPDATE_COMPLETE", "UPDATE_IN_PROGRESS"].each do |status| %>
   <li class="stack-status-icon <%= environment.provision_status == status ? '' : 'hide' %>" id='status-icon-<%= status %>'>
     <a title='<%= status_image(status)["img_title"] %>' rel='tooltip' data-placement='bottom' href="javascript:void(0);">
       <%= image_tag(status_image(status)["img_src"], size: '20x20') %>

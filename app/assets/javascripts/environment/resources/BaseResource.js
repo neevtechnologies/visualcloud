@@ -10,9 +10,6 @@ BaseResource.prototype.showInstanceDialog = function(){
   var dialogId = this.dialogId;
   var instanceOptions = this.instanceOptions;
   var dialog = $('#'+dialogId);
-
-  //TODO: Can this be removed ?
-  dialog.removeData(['editElement', 'xpos', 'ypos']);
   dialog.data('editElement', editElement);
 
   dialog.find('.instance_label').val(instanceOptions.label);
