@@ -146,36 +146,90 @@ class EnvironmentsController < ApplicationController
   def provision
     @instance_ids = {}
     @errors = []
-    if @environment.provision_status != "CREATE_IN_PROGRESS" && @environment.provision_status != "UPDATE_IN_PROGRESS"
-      begin
-        Environment.transaction do
-          update_instances
-          if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
-            @errors << "You have not added your AWS access key"
-            flash.now[:error] = @errors
-          else
-            if @errors.blank? && @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
-              flash[:success] = "Provision request initiated"
-              RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
-                secret_access_key: current_user.aws_secret_key,
-                environment_id: @environment.id
-              )
-              @environment.instances.each{|instance| @instance_ids[instance.label] = instance.id }
-            else
-              @errors << "This environment cannot be provisioned"
+    if @environment.provision_status == "CREATE_FAILED" || @environment.provision_status == "ROLLBACK_IN_PROGRESS" ||
+       @environment.provision_status == "ROLLBACK_FAILED" || @environment.provision_status == "DELETE_IN_PROGRESS" ||
+       @environment.provision_status == "DELETE_FAILED"
+      @errors << "This environment cannot be provisioned"
+    else
+      if @environment.provision_status != "CREATE_IN_PROGRESS" && @environment.provision_status != "UPDATE_IN_PROGRESS"
+        begin
+          Environment.transaction do
+            update_instances
+            if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+              @errors << "You have not added your AWS access key"
               flash.now[:error] = @errors
+            else
+              if @errors.blank? && @environment.provision(current_user.aws_access_key, current_user.aws_secret_key)
+                flash[:success] = "Provision request initiated"
+                RoleAssignmentWorker.perform_async(access_key_id: current_user.aws_access_key,
+                  secret_access_key: current_user.aws_secret_key,
+                  environment_id: @environment.id
+                )
+                @environment.instances.each{|instance| @instance_ids[instance.label] = instance.id }
+              else
+                @errors << "This environment cannot be provisioned"
+                flash.now[:error] = @errors
+              end
             end
           end
-        end
         rescue  => e
           logger.error("Error occured while updating the environment : #{e.inspect}")
           flash.now[:error] = "Error occured while updating the Environment. #{e.message}"
         end
       else
-        @errors << "Provisioning process is in progress"
+        @errors << "Provisioning is in progress"
+      end
+    end
+    flash.now[:error] = @errors
+  end
+
+  #starts all ec2 instances of an environment if they are in stopped state
+  def start_ec2_instances
+    @errors = []
+    if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+      @errors << "You have not added your AWS access key"
+      flash.now[:error] = @errors
+    else
+      if @errors.blank? && @environment.check_status_of_ec2_elements("running")
+        flash[:success] = "Start request of ec2 instances initiated"
+        StartEc2InstancesWorker.perform_async(access_key_id: current_user.aws_access_key,
+          secret_access_key: current_user.aws_secret_key,
+          environment_id: @environment.id
+        )
+      else
+        if @environment.provision_status == nil
+          @errors << "Environment is not yet provisioned"
+        else
+          @errors << "Ec2 instances of this environment are already started"
+        end
         flash.now[:error] = @errors
       end
     end
+  end
+
+  #stops all ec2 instances of an environment if they are in running state
+  def stop_ec2_instances
+    @errors = []
+    if current_user.aws_access_key.nil? || current_user.aws_secret_key.nil?
+      @errors << "You have not added your AWS access key"
+      flash.now[:error] = @errors
+    else
+      if @errors.blank? && @environment.check_status_of_ec2_elements("stopped")
+        flash[:success] = "Stop request of ec2 instances initiated"
+        StopEc2InstancesWorker.perform_async(access_key_id: current_user.aws_access_key,
+          secret_access_key: current_user.aws_secret_key,
+          environment_id: @environment.id
+        )
+      else
+        if @environment.provision_status == nil
+          @errors << "Environment is not yet provisioned"
+        else
+          @errors << "Ec2 instances of this environment are already stopped"
+        end
+        flash.now[:error] = @errors
+      end
+    end
+  end
 
   # Get the status of the Environment from DB
   def environment_status
@@ -196,10 +250,12 @@ class EnvironmentsController < ApplicationController
     status_code = environment.provision_status
     status_hash = {
       status: status_code,
-      instanceAttributes: {}
+      instanceAttributes: {},
+      instanceStatus: {}
     }
     environment.instances.each do |instance|
       status_hash[:instanceAttributes][instance.id] = JSON.parse(instance.config_attributes)
+      status_hash[:instanceStatus][instance.id] = instance.instance_status
     end
     render json: status_hash.to_json
   end

@@ -18,8 +18,9 @@
     var instanceId= <%= instance.id %>
     var instanceType = <%= instance.instance_type_id.nil? ? 'null' : instance.instance_type_id %>;
     var configAttributes = JSON.parse('<%= instance.config_attributes.html_safe %>');
+    var status = '<%= instance.instance_status %>';
     var newInstance = addInstanceCloneToGraph(instanceId);
-    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes});
+    newInstance.instance({xpos: xpos, ypos: ypos, label: label, resourceType: resourceType, InstanceType:instanceType, instanceId: instanceId,configAttributes:configAttributes, status: status});
     instances[instanceId] = { instance: newInstance, parents: parents,configAttributes:configAttributes };
   <% end %>
   //Loads saved connections

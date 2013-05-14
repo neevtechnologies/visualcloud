@@ -4,8 +4,8 @@
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3><%= resource_type.name %> instance configuration</h3>
+    <div id="<%=resource_type.name%>_status" class="display_status"></div>
   </div>
-
   <!-- Modal content -->
   <div class="modal-body">
     <div id="<%=resource_type.name%>-config-error-messages"></div>
@@ -41,6 +41,8 @@
   <!-- Modal Footer Buttons -->
   <div class="modal-footer">
     <%= f.button :submit, 'Apply', class: "btn btn-success instance-config-submit" %>
+    <a href="javascript:void(0);" class="btn btn-inverse hide" id="<%=resource_type.name%>_start" onclick ='start_ec2_instance("<%=resource_type.name%>");' data-dismiss="modal">Start</a>
+    <a href="javascript:void(0);" class="btn btn-inverse hide" id="<%=resource_type.name%>_stop" onclick ='stop_ec2_instance("<%=resource_type.name%>");' data-dismiss="modal">Stop</a>
     <a href="#" class="btn btn-inverse" data-dismiss="modal">Close</a>
     <a class="btn btn-danger hide pull-left" data-dismiss="modal" id="<%=resource_type.name%>_delete" onclick='delete_instance("<%=resource_type.name%>");' title="Delete this <%= resource_type.name %>resource">Delete</a>
   </div>
