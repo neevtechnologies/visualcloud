@@ -1,7 +1,7 @@
 class Environment < ActiveRecord::Base
   include ServerMetaData
   include AwsCompatibleName
-  attr_accessible :name, :aws_name, :project_id, :key_pair_name, :security_group, :region_id
+  attr_accessible :name, :aws_name, :project_id, :key_pair_name, :security_group, :region_id , :status_of_ec2_elements
 
   has_many :instances, :dependent => :destroy
   belongs_to :project
@@ -230,20 +230,25 @@ class Environment < ActiveRecord::Base
   # for demo case it will not contact aws api's
   def wait_till_provisioned(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
     logger.info("Waiting till stack is provisioned : environment: #{self.aws_name}")
-    update_attribute(:provision_status, "CREATE_IN_PROGRESS")
+    if self.provision_status == "CREATE_COMPLETE"
+      update_attribute(:provision_status, "UPDATE_IN_PROGRESS")
+    else
+      update_attribute(:provision_status, "CREATE_IN_PROGRESS")
+    end
     if access_key_id == 'demo'
       stack_status = 'CREATE_COMPLETE'
     else
       stack_status = self.status(access_key_id, secret_access_key)
     end
-    while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) )
+    while ( (stack_status == 'CREATE_IN_PROGRESS') || (stack_status.blank?) || (stack_status == 'UPDATE_IN_PROGRESS') || (stack_status == 'UPDATE_COMPLETE_CLEANUP_IN_PROGRESS'))
       logger.info("Stack status = #{stack_status}")
       sleep sleep_interval
       stack_status = self.status(access_key_id, secret_access_key)
     end
-    if stack_status == 'CREATE_COMPLETE'
+    if stack_status == 'CREATE_COMPLETE' || stack_status == 'UPDATE_COMPLETE'
       logger.info("Environment #{self.aws_name} was provisioned successfully.")
       update_attribute(:provision_status, stack_status)
+      update_attribute(:status_of_ec2_elements, "running")
       return true
     else
       logger.error("Environment #{self.aws_name} was not provisioned: status - #{stack_status}")
@@ -263,6 +268,117 @@ class Environment < ActiveRecord::Base
         instance.update_output(key, value)
       end
     end
+  end
+
+  #returns true if the attribute status_of_ec2_elements of environment is stopped and the parameter passed is start else return false
+  #returns false if the environment is not yet provisioned
+  def check_status_of_ec2_elements(status)
+    return_value = false
+    if self.provision_status == "CREATE_COMPLETE" || self.provision_status == "UPDATE_COMPLETE"
+      return_value = (self.status_of_ec2_elements == status) ? false : true
+    end
+    return return_value
+  end
+
+  #waits till all the ec2 instances of the given environment are started
+  def wait_till_started(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
+    logger.info("Waiting till ec2 instances in stack are running : environment: #{self.aws_name}")
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+    return_value = false
+    if !ec2_instances.blank?
+      update_attribute(:status_of_ec2_elements, "pending")
+      instances_status = {}
+      while(self.status_of_ec2_elements == 'pending')
+        ec2_instances.each do |key, value|
+          instances_status[key] = value['instanceState']['name']
+        end
+        check_status = check_all_ec2_instances_status(instances_status,"running")
+        if check_status
+          update_attribute(:status_of_ec2_elements, "running")
+        else
+          sleep sleep_interval
+          ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+        end
+      end
+      return_value = (self.status_of_ec2_elements == 'running') ? true : false
+    end
+    return return_value
+  end
+
+  #updates config_attributes and instance_status attributes for all ec2 instances of the given environment
+  def update_ec2_instances_config_attributes(task, access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+    ec2_instances.each do |key, value|
+      instances.where(aws_label: key).each do |instance|
+        instance.update_status_and_config_attributes(task, access_key_id, secret_access_key)
+      end
+    end
+  end
+
+  #starts all ec2 instances of the given environment
+  def start_ec2_instances(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+    unless ec2_instances.blank?
+      ec2_instances.each do |key, value|
+        instances.where(aws_label: key).each do |instance|
+          instance.start_ec2_instance(access_key_id, secret_access_key)
+        end
+      end
+    end
+  end
+
+  #stops all ec2 instances of the given environment
+  def stop_ec2_instances(access_key_id, secret_access_key)
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+    unless ec2_instances.blank?
+      ec2_instances.each do |key, value|
+        instances.where(aws_label: key).each do |instance|
+          instance.stop_ec2_instance(access_key_id, secret_access_key)
+        end
+      end
+    end
+  end
+
+  #waits till all the ec2 instances of the given environment are stopped
+  def wait_till_stopped(access_key_id, secret_access_key, sleep_interval = VisualCloudConfig[:status_check_interval])
+    logger.info("Waiting till ec2 instances in stack are stopped : environment: #{self.aws_name}")
+    cloud = Cloudster::Cloud.new(access_key_id: access_key_id, secret_access_key: secret_access_key)
+    ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+    return_value = false
+    if !ec2_instances.blank?
+      update_attribute(:status_of_ec2_elements, "stopping")
+      instances_status = {}
+      while(self.status_of_ec2_elements == 'stopping')
+        ec2_instances.each do |key, value|
+          instances_status[key] = value['instanceState']['name']
+        end
+        check_status = check_all_ec2_instances_status(instances_status,"stopped")
+        if check_status
+          update_attribute(:status_of_ec2_elements, "stopped")
+        else
+          sleep sleep_interval
+          ec2_instances = cloud.get_ec2_details(stack_name: aws_name)
+        end
+      end
+      return_value = (self.status_of_ec2_elements == 'stopped') ? true : false
+    end
+    return return_value
+  end
+
+  #checks for all the ec2 instances of an environment are either stopped or running based on the parameter passed
+  def check_all_ec2_instances_status(instances_status, status)
+    iterator_count = 0
+    instances_status.each do |key, value|
+      if value == status
+        iterator_count += 1
+      end
+    end
+    result = (instances_status.count ==  iterator_count) ? true : false
+    return result
   end
 
   private
