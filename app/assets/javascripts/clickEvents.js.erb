@@ -42,6 +42,18 @@ $(document).ready(function(){
     $('.graph-area').graphArea("update", graphId);
   });
 
+  //On click event for "Start" button on show page of project
+  $('.start_all_ec2_instances_of_the_stack').click(function(){
+    var graphId = $(this).data("graphId");
+    start_all_ec2_instances_of_environment(graphId);
+  });
+
+  //On click event for "Stop" button on show page of project
+  $('.stop_all_ec2_instances_of_the_stack').click(function(){
+    var graphId = $(this).data("graphId");
+    stop_all_ec2_instances_of_environment(graphId);
+  });
+
   //On click event for "Provision" button on graph toolbar during edit
   $('#graph-provision').click(function(){
     var graphId = $(this).data("graphId");
