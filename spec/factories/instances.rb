@@ -10,7 +10,7 @@ end
 FactoryGirl.define do
   factory :ec2_instance, class: :instance  do
     label "WebServer"
-    config_attributes ({key1: 'value1', key2: 'value2', roles: ['app', 'java']}.to_json)
+    config_attributes ({key1: 'value1', key2: 'value2', instance_id: "1", roles: ['app', 'java']}.to_json)
     xpos 300
     ypos 400
   end

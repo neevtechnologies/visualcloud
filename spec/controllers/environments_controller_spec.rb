@@ -82,14 +82,13 @@ describe EnvironmentsController do
       environment.instances = [ec2_instance, rds_instance]
     end
 
-   def do_destroy(id,project_id)
-     Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
-     UpdateProjectDataBagWorker.should_receive(:perform_async)
-     DeleteNodeWorker.should_receive(:perform_async).exactly(2).times
-     DeleteDataBagWorker.should_receive(:perform_async).exactly(2).times
-     delete :destroy, :id => id ,:project_id => project_id
-   end
-
+    def do_destroy(id,project_id)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      UpdateProjectDataBagWorker.should_receive(:perform_async)
+      DeleteNodeWorker.should_receive(:perform_async).exactly(2).times
+      DeleteDataBagWorker.should_receive(:perform_async).exactly(2).times
+      delete :destroy, :id => id ,:project_id => project_id
+    end
 
     it "redirects back" do
       sign_in(user)
@@ -132,7 +131,7 @@ describe EnvironmentsController do
   end
 
 
- describe "#provision" do
+  describe "#provision" do
 
     let(:environment) {FactoryGirl.create(:environment , project: project)}
     let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment) }
@@ -197,10 +196,6 @@ describe EnvironmentsController do
     let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment, resource_type: resource_type_ec2) }
     let(:rds_instance) { FactoryGirl.create(:rds_instance, environment: environment, resource_type: resource_type_rds) }
 
-    before(:each) do
-      environment.instances = [ec2_instance, rds_instance]
-    end
-
     it "should be success" do
       sign_in(user)
       Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
@@ -208,4 +203,140 @@ describe EnvironmentsController do
       response.should be_success
     end
   end
+
+
+  describe "#start_ec2_instances" do
+
+    let(:environment) {FactoryGirl.create(:environment , project: project, provision_status: nil)}
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment) }
+    let(:rds_instance) { FactoryGirl.create(:rds_instance, environment: environment) }
+
+    before(:each) do
+      environment.instances = [ec2_instance, rds_instance]
+    end
+
+    def do_start_ec2_instances(id)
+      xhr :get, :start_ec2_instances , :id => id
+    end
+
+    it "should not redirect" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("running")
+      do_start_ec2_instances(environment.id)
+      response.should_not be_redirect
+    end
+
+    it "should give flash success message" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("running").and_return(true)
+      StartEc2InstancesWorker.should_receive(:perform_async)
+      do_start_ec2_instances(environment.id)
+      flash[:success].should == "Start request of ec2 instances initiated"
+    end
+
+    it "should give flash error message for not having the 'aws access' to the user" do
+      @user = FactoryGirl.create(:user,email: "xyz@gmail.com",aws_secret_key: nil,aws_access_key: nil)
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,environment.project_id).and_return(project)
+      sign_in(@user)
+      do_start_ec2_instances(environment.id)
+      errors = []
+      errors << "You have not added your AWS access key"
+      flash[:error].should == errors
+    end
+
+    it "should give flash error message facing problem while provisioning the environment" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("running").and_return(false)
+      do_start_ec2_instances(environment.id)
+      errors = []
+      errors << "Environment is not yet provisioned"
+      flash[:error].should == errors
+    end
+
+    it "should give flash error message facing problem while provisioning the environment" do
+      sign_in(user)
+      @environment = FactoryGirl.create(:environment , project: project, provision_status: "CREATE_COMPLETE")
+      Environment.should_receive(:find).exactly(1).times.and_return(@environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,@environment.project_id).and_return(project)
+      @environment.should_receive(:check_status_of_ec2_elements).with("running").and_return(false)
+      do_start_ec2_instances(@environment.id)
+      errors = []
+      errors << "Ec2 instances of this environment are already started"
+      flash[:error].should == errors
+    end
+  end
+
+  describe "#stop_ec2_instances" do
+
+    let(:environment) {FactoryGirl.create(:environment , project: project, provision_status: nil)}
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, environment: environment) }
+    let(:rds_instance) { FactoryGirl.create(:rds_instance, environment: environment) }
+
+    before(:each) do
+      environment.instances = [ec2_instance, rds_instance]
+    end
+
+    def do_stop_ec2_instances(id)
+      xhr :get, :stop_ec2_instances , :id => id
+    end
+
+    it "should not redirect" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("stopped")
+      do_stop_ec2_instances(environment.id)
+      response.should_not be_redirect
+    end
+
+    it "should give flash success message" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("stopped").and_return(true)
+      StopEc2InstancesWorker.should_receive(:perform_async)
+      do_stop_ec2_instances(environment.id)
+      flash[:success].should == "Stop request of ec2 instances initiated"
+    end
+
+    it "should give flash error message for not having the 'aws access' to the user" do
+      @user = FactoryGirl.create(:user,email: "xyz@gmail.com",aws_secret_key: nil,aws_access_key: nil)
+      Project.should_receive(:find_by_user_id_and_id).with(@user.id,environment.project_id).and_return(project)
+      sign_in(@user)
+      do_stop_ec2_instances(environment.id)
+      errors = []
+      errors << "You have not added your AWS access key"
+      flash[:error].should == errors
+    end
+
+    it "should give flash error message facing problem while stopping ec2 instances of the environment, for environment not provisioned" do
+      sign_in(user)
+      Environment.should_receive(:find).exactly(1).times.and_return(environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,environment.project_id).and_return(project)
+      environment.should_receive(:check_status_of_ec2_elements).with("stopped").and_return(false)
+      do_stop_ec2_instances(environment.id)
+      errors = []
+      errors << "Environment is not yet provisioned"
+      flash[:error].should == errors
+    end
+
+    it "should give flash error message facing problem while stopping ec2 instances of the environment" do
+      sign_in(user)
+      @environment = FactoryGirl.create(:environment , project: project, provision_status: "CREATE_COMPLETE")
+      Environment.should_receive(:find).exactly(1).times.and_return(@environment)
+      Project.should_receive(:find_by_user_id_and_id).with(user.id,@environment.project_id).and_return(project)
+      @environment.should_receive(:check_status_of_ec2_elements).with("stopped").and_return(false)
+      do_stop_ec2_instances(@environment.id)
+      errors = []
+      errors << "Ec2 instances of this environment are already stopped"
+      flash[:error].should == errors
+    end
+  end
+
 end
