@@ -7,7 +7,8 @@
       instanceId: null,
       resourceType: '',
       configAttributes:{},
-      label: ''
+      label: '',
+      status: ''
     },
     resource: null,
     _setOption: function(key, value){
@@ -35,6 +36,9 @@
       //setting id to connection element
       element.find($('.connection-source')).attr('id', 'connection-source-' + instanceDivId);
 
+      //setting id to instance status
+      element.find($('.instance-status')).attr('id', 'instance-status-' + instanceDivId);
+
       //Set label of the instance
       var label = shortenLongStrings(options.label, <%= VisualCloudConfig[:strings_max_length] %>);
       element.find($('.instance-label')).attr('data-original-title',options.label);
@@ -58,6 +62,10 @@
 
       //Enable Source and Destination for connections in the instance element
       makeSourceAndTarget(element);
+
+      //Set the instance status icon
+      if(options.status != '')
+        setInstanceStatusIcon(options.status,instanceDivId);
 
       //Set the resource object of instance based on resourceType
       var resourceOptions = options;
@@ -101,6 +109,9 @@
     },
     setConfigAttributes: function(configAttributes){
       this.resource.saveConfigAttributes(configAttributes);
+    },
+    setStatus: function(status){
+      this.resource.saveStatus(status);
     },
     getConfigurationDialogId: function(){
       return this.options.resourceType + '-configuration' ;

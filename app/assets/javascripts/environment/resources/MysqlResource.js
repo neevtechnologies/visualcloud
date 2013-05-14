@@ -10,6 +10,10 @@ MysqlResource.prototype.saveConfigAttributes = function(configAttributes){
   this.EC2Resource.saveConfigAttributes(configAttributes);
 }
 
+MysqlResource.prototype.saveStatus = function(status){
+  this.EC2Resource.saveStatus(status);
+}
+
 MysqlResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }

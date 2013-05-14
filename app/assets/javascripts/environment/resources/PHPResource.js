@@ -10,6 +10,10 @@ PHPResource.prototype.saveConfigAttributes = function(configAttributes){
   this.EC2Resource.saveConfigAttributes(configAttributes);
 }
 
+PHPResource.prototype.saveStatus = function(status){
+  this.EC2Resource.saveStatus(status);
+}
+
 PHPResource.prototype.setOutputAttributes = function(configAttributes){
   this.EC2Resource.setOutputAttributes(configAttributes);
 }
