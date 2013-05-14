@@ -10,6 +10,8 @@
         <td><%= render 'environment_status_icon', environment: environment %></td>
         <td><%= environment.name %></td>
         <td style="text-align: center;">
+          <a href="javascript:void(0);" class="btn btn-inverse start_all_ec2_instances_of_the_stack" data-graph-id="<%=environment.id%>" data-dismiss="modal">Start</a>&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="javascript:void(0);" class="btn btn-inverse stop_all_ec2_instances_of_the_stack" data-graph-id="<%=environment.id%>" data-dismiss="modal">Stop</a>&nbsp;&nbsp;&nbsp;&nbsp;
           <%= link_to 'Edit', edit_project_environment_path(@project,environment),:class=>'btn btn-inverse' %>&nbsp;&nbsp;&nbsp;&nbsp;
           <%= link_to 'Delete', project_environment_path(@project,environment),:class=>'btn btn-inverse', method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>

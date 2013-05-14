@@ -16,4 +16,5 @@ module InstanceRole
     end
     return true
   end
+
 end

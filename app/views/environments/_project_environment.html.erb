@@ -1,8 +1,9 @@
 <div class = "pull-right">
   <ul class="nav nav-pills">
+    <%= render 'status_icons', environment: @environment %>
     <li><a id="projects_list" href="<%= project_path(@project) %>" rel="tooltip" data-placement = "bottom" title="Go back to the project page"><%= @project.name.present? ? @project.name : ''%> &nbsp;&nbsp;:</a></li>
     <li>
-     <%if !@environment.id.to_s.empty? %>
+     <%if !@environment.new_record? %>
         <%= select_tag "environments_list", options_from_collection_for_select(@environments, "id", "name",@environment),:style=>"width:120px;margin-top:5px;"%>
      <%else%>
         <a id="environments" href="javascript:void(0);"><%= @environment.name.present? ? @environment.name : params[:environment]['name']%> &nbsp;&nbsp;</a>
@@ -26,7 +27,7 @@
         window.location = "/projects/"+<%=@project.id%>+"/environments/"+environment_id+"/edit";
       });
     });
-  <% if !@environment.id.to_s.empty? %>
+  <% if !@environment.new_record? %>
   $("#environments_list option[value='" + <%= @environment.id %> + "']").attr("selected","selected");
   <%end%>
 </script>
