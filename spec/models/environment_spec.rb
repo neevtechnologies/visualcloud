@@ -187,6 +187,25 @@ describe Environment do
     end
   end
 
+  describe "#check_status_of_ec2_elements" do
+
+    it "should return false if provision_status is not CREATE_COMPLETE or UPDATE_COMPLETE" do
+      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', provision_status: '')
+      environment.check_status_of_ec2_elements("running").should == false
+    end
+
+    it "should return false if status_of_ec2_elements is running" do
+      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', provision_status: 'CREATE_COMPLETE', status_of_ec2_elements: 'running')
+      environment.check_status_of_ec2_elements("running").should == false
+    end
+
+    it "should return true if status_of_ec2_elements is not stopped" do
+      environment = FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', provision_status: 'CREATE_COMPLETE', status_of_ec2_elements: 'stopped')
+      environment.check_status_of_ec2_elements("running").should == true
+    end
+
+  end
+
   describe "#wait_till_provisioned" do
 
     let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel')}
@@ -206,6 +225,87 @@ describe Environment do
       environment.should_receive(:status).with('test_id','test_key').and_return("CREATE_INCOMPLETE")
       environment.wait_till_provisioned('test_id','test_key',1).should == false
     end
+  end
+
+  describe "#wait_till_started" do
+
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', status_of_ec2_elements: "")}
+    let(:ec2_instance){ FactoryGirl.create(:ec2_instance , environment: environment)}
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+    it "should have stack status_of_ec2_elements to be running" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "running"}}})
+      environment.wait_till_started('test_id','test_key',1)
+      environment.status_of_ec2_elements.should == "running"
+    end
+
+
+    it "should return true when stack status_of_ec2_elements is running" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "running"}}})
+      environment.wait_till_started('test_id','test_key',1).should == true
+    end
+
+    it "should call get_ec2_details" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "running"}}})
+      environment.wait_till_started('test_id','test_key',1)
+    end
+
+    it "should return false when there are no stack ec2_elements in stack" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({})
+      environment.wait_till_started('test_id','test_key',1).should == false
+    end
+
+  end
+
+  describe "#wait_till_stopped" do
+
+    let(:environment) {FactoryGirl.create(:environment, aws_name: 'TestAwsLabel', status_of_ec2_elements: "")}
+    let(:ec2_instance){ FactoryGirl.create(:ec2_instance , aws_label: "testec2" ,environment: environment)}
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+
+    it "should have stack status_of_ec2_elements to be stopped" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "stopped"}}})
+      environment.wait_till_stopped('test_id','test_key',1)
+      environment.status_of_ec2_elements.should == "stopped"
+    end
+
+
+    it "should return true when stack status_of_ec2_elements is stopped" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "stopped"}}})
+      environment.wait_till_stopped('test_id','test_key',1).should == true
+    end
+
+    it "should call get_ec2_details" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIp" => "10.7.3.12","instanceId" => "1","instanceState" => {"name" => "stopped"}}})
+      environment.wait_till_stopped('test_id','test_key',1)
+    end
+
+    it "should return false when there are no stack ec2_elements in stack" do
+      cloud = Cloudster::Cloud.new(access_key_id: "test_id", secret_access_key: "test_key")
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: environment.aws_name}).and_return({})
+      environment.wait_till_stopped('test_id','test_key',1).should == false
+    end
+
   end
 
 
@@ -233,8 +333,8 @@ describe Environment do
         instance_type: ec2_instance.instance_type.api_name
       }
       @ec2 = Cloudster::Ec2.new(input)
-      validation_key = File.should_receive(:read).with(VisualCloudConfig[:validation_key_path]).and_return("testkey")
-      chef_client = Cloudster::ChefClient.new(validation_key: validation_key,
+      File.should_receive(:read).with(VisualCloudConfig[:validation_key_path]).and_return("testkey")
+      chef_client = Cloudster::ChefClient.new(validation_key: "testkey",
         server_url: "testurl",
         node_name: ec2_instance.id.to_s,
         interval: "20")
@@ -431,6 +531,84 @@ describe Environment do
     end
 
   end
+
+  describe "#update_ec2_instances_config_attributes" do
+
+    let(:environment) { FactoryGirl.create(:environment, aws_name: 'TestAwsLabel') }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, instance_status: '') }
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+    it "should call update_status_and_config_attributes" do
+      cloud = Cloudster::Cloud.new(access_key_id: 'test_id', secret_access_key: 'test_key')
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: ec2_instance.environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIpAddress" => "10.0.5.134", "ipAddress" => "12.1.2.200", "privateDnsName" => "abc@ec.com", "dnsName" => "abc@ec21.com"}})
+      environment.instances.should_receive(:where).with({aws_label: ec2_instance.aws_label}).and_return([ec2_instance])
+      ec2_instance.should_receive(:update_status_and_config_attributes)
+      environment.update_ec2_instances_config_attributes("start",'test_id','test_key')
+    end
+
+  end
+
+  describe "#stop_ec2_instances" do
+
+    let(:environment) { FactoryGirl.create(:environment, aws_name: 'TestAwsLabel') }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, instance_status: '') }
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+    it "should call stop_ec2_instance" do
+      cloud = Cloudster::Cloud.new(access_key_id: 'test_id', secret_access_key: 'test_key')
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: ec2_instance.environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIpAddress" => "", "ipAddress" => "", "privateDnsName" => "", "dnsName" => ""}})
+      environment.instances.should_receive(:where).with({aws_label: ec2_instance.aws_label}).and_return([ec2_instance])
+      ec2_instance.should_receive(:stop_ec2_instance)
+      environment.stop_ec2_instances('test_id','test_key')
+    end
+
+  end
+
+  describe "#check_all_ec2_instances_status" do
+    let(:environment) { FactoryGirl.create(:environment, aws_name: 'TestAwsLabel') }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, instance_status: '') }
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+
+    it "should return true if running" do
+      input = {ec2_instance.aws_label => "running"}
+      environment.check_all_ec2_instances_status(input,'running').should == true
+    end
+
+    it "should return false if not running" do
+      input = {ec2_instance.aws_label => "stopped"}
+      environment.check_all_ec2_instances_status(input,'running').should == false
+    end
+
+  end
+
+  describe "#start_ec2_instances" do
+
+    let(:environment) { FactoryGirl.create(:environment, aws_name: 'TestAwsLabel') }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, instance_status: '') }
+
+    before :each do
+      environment.instances = [ec2_instance]
+    end
+    it "should call start_ec2_instance" do
+      cloud = Cloudster::Cloud.new(access_key_id: 'test_id', secret_access_key: 'test_key')
+      Cloudster::Cloud.should_receive(:new).with({:access_key_id => 'test_id', :secret_access_key => 'test_key'}).and_return(cloud)
+      cloud.should_receive(:get_ec2_details).with({stack_name: ec2_instance.environment.aws_name}).and_return({ec2_instance.aws_label => {"privateIpAddress" => "10.0.5.134", "ipAddress" => "12.1.2.200", "privateDnsName" => "abc@ec.com", "dnsName" => "abc@ec21.com"}})
+      environment.instances.should_receive(:where).with({aws_label: ec2_instance.aws_label}).and_return([ec2_instance])
+      ec2_instance.should_receive(:start_ec2_instance)
+      environment.start_ec2_instances('test_id','test_key')
+    end
+
+  end
+
 
   describe "#update_instance_outputs" do
     let(:resource_type_ec2) { FactoryGirl.create(:resource_type,resource_class: "EC2") }

@@ -21,6 +21,10 @@ VisualCloud::Application.routes.draw do
     end
 
     post 'provision' => 'environments#provision'
+    get 'start_ec2_instances' => 'environments#start_ec2_instances'
+    get 'stop_ec2_instances' => 'environments#stop_ec2_instances'
+    get 'start_ec2_instance' => 'instances#start_ec2_instance'
+    get 'stop_ec2_instance' => 'instances#stop_ec2_instance'
   end
   root :to => "home#index"
   devise_for :users

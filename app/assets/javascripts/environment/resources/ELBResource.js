@@ -19,6 +19,10 @@ ELBResource.prototype.saveConfigAttributes = function(configAttributes){
   this.baseResource.instanceOptions.configAttributes = configAttributes;
 }
 
+ELBResource.prototype.saveStatus = function(status){
+  //this.baseResource.instanceOptions.status = status;
+}
+
 ELBResource.prototype.setLabelURL = function(configAttributes){
   if(configAttributes.dns_name != undefined){
     var url = "http://" + configAttributes.dns_name ;

@@ -23,7 +23,7 @@ gem 'sinatra', require: false
 gem 'slim'
 gem 'colorize'
 
-gem 'cloudster', "~> 2.19.6"
+gem 'cloudster', "~> 2.19.6" , :git => "https://github.com/emilsoman/cloudster.git"
 
 group :development, :test do
   gem "awesome_print"
@@ -44,5 +44,6 @@ group :test do
   gem 'shoulda'
   gem "mock_redis"
   gem 'shoulda-matchers'
+  gem "rspec-sidekiq"
   gem 'coveralls', require: false
 end

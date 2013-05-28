@@ -7,5 +7,8 @@
       <%= resource_type.name %>
     </span>
     <div class="connection-source" title="Drag for new connection" rel="tooltip" data-placement="right"><i class='icon-fullscreen'></i></div>
+    <% if resource_type.resource_class == "EC2" %>
+      <div class="instance-status"></div>
+    <% end %>
   </div>
 <% end %>

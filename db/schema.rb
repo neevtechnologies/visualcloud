@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130305064131) do
+ActiveRecord::Schema.define(:version => 20130419053302) do
 
   create_table "amis", :force => true do |t|
     t.string   "image_id"
@@ -25,14 +25,15 @@ ActiveRecord::Schema.define(:version => 20130305064131) do
   create_table "environments", :force => true do |t|
     t.string   "name"
     t.integer  "project_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.boolean  "provisioned"
     t.string   "key_pair_name"
     t.string   "security_group"
     t.string   "provision_status"
     t.string   "aws_name"
     t.integer  "region_id"
+    t.string   "status_of_ec2_elements"
   end
 
   create_table "instance_relationships", :force => true do |t|
@@ -64,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20130305064131) do
     t.datetime "updated_at",                  :null => false
     t.string   "aws_label"
     t.text     "encrypted_config_attributes"
+    t.string   "instance_status"
   end
 
   create_table "projects", :force => true do |t|

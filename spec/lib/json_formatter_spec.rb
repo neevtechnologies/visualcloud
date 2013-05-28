@@ -15,4 +15,18 @@ describe JsonFormatter do
       }
     end
   end
+
+  describe "projects_json" do
+    include JsonFormatter
+    it "should return the proper json" do
+      project = FactoryGirl.create(:project, name: "test_project")
+      env = FactoryGirl.create(:environment, name: "test_env", project: project)
+      JSON.parse(projects_json(project)).should == {
+        "id" => project.id.to_s,
+        "name" => project.name.to_s,
+        "environments" => {env.id.to_s => {"environment" => env.name}}
+      }
+    end
+  end
+
 end

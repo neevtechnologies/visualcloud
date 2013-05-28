@@ -138,9 +138,13 @@ function startStatusPoll(environmentId){
           changeCursorAndTooltipTitleForProvisionIcon(stackStatus);
 
           //Set the output values for each instance
+          //Set the status icon for each instance on UI
+          //Set the status value for each instance
           for(var key in data.instanceAttributes){
             var configAttributes = data.instanceAttributes[key];
+            setInstanceStatusIcon(data.instanceStatus[key],key);
             $('#instance-'+key).instance('setConfigAttributes', configAttributes);
+            $('#instance-'+key).instance('setStatus', data.instanceStatus[key]);
           }
         });
       }, <%= VisualCloudConfig[:status_check_interval] * 2000 %>);
@@ -150,17 +154,47 @@ function startStatusPoll(environmentId){
 
 function getStatusOfEnvironmentsByProject(projectId){
   $(document).ready(function(){
-      $.ajax({
-          url: '/project_status?id=' + projectId,
-          type: 'GET'
-        }).done(function(data){
-          for(var key in data){
-            if(data[key] == undefined)
-              data[key] = "DEFAULT";
-            $('#'+key+'_status-icon-'+data[key]).removeClass('hide');
-          }
-        });
+    $.ajax({
+      url: '/project_status?id=' + projectId,
+      type: 'GET'
+    }).done(function(data){
+         for(var key in data){
+           if(data[key] == undefined)
+             data[key] = "DEFAULT";
+             $('#'+key+'_status-icon-'+data[key]).removeClass('hide');
+         }
+       });
   });
+}
+
+//Setting status image for an instance
+function setInstanceStatusIcon(instanceStatus,key){
+  var img = $('<img>');
+  img.attr('height', "10px");
+  img.attr('width', "10px");
+  img.attr('class',"instance-status");
+  image_details = get_status_image_of_instance(instanceStatus);
+  img.attr('src', image_details.image_src);
+  img.attr('title', image_details.image_title);
+  img.attr('rel', 'tooltip');
+  img.data('placement', 'right');
+  if($('#instance-status-'+ key+':has(img)').length > 0){
+    $('img.instance-status').remove();
+    $('.tooltip').remove();
+  }
+  img.appendTo('#instance-status-'+ key);
+}
+
+//Getting status image and description of an instance
+function get_status_image_of_instance(status){
+  var image_details = {}
+  switch(status){
+    case "running" : image_details = { image_src: "/assets/green.png", image_title: "Instance Started Successfully"}; break;
+    case "pending" : image_details = { image_src: "/assets/yellow.png", image_title: "Instance is about to Start"}; break;
+    case "stopping" : image_details = { image_src: "/assets/yellow.png", image_title: "Instance is about to Stop"}; break;
+    case "stopped" : image_details = { image_src: "/assets/red.png", image_title: "Instance Stopped Successfully"}; break;
+  }
+  return image_details;
 }
 
 function setStatusIcon(stackStatus){
@@ -258,7 +292,49 @@ function shortenLongStrings(string, maxLength){
 
 //Getter for config attributes which returns Not Available if attr doesn't exist
 function getConfigAttribute(configAttributes, attr){
-  return ((configAttributes[attr] == undefined) ? "Not Available" : configAttributes[attr] );
+  return ((configAttributes[attr] == undefined || configAttributes[attr] == "" ) ? "Not Available" : configAttributes[attr] );
+}
+
+//To start all ec2 instances of an environment
+function start_all_ec2_instances_of_environment(graphId){
+  $.ajax({
+    url: '/start_ec2_instances?id='+graphId,
+    type: 'GET',
+    dataType: "script",
+    contentType: 'application/json'
+  });
+}
+
+//To stop all ec2 instances of an environment
+function stop_all_ec2_instances_of_environment(graphId){
+  $.ajax({
+    url: '/stop_ec2_instances?id='+graphId,
+    type: 'GET',
+    dataType: "script",
+    contentType: 'application/json'
+  });
+}
+
+//To start an ec2 instance
+function start_ec2_instance(resource_type){
+  var instance_id = $('#'+resource_type+'-configuration').data('editElement').split('-')[1];
+  $.ajax({
+    url: '/start_ec2_instance?id='+instance_id,
+    type: 'GET',
+    dataType: "script",
+    contentType: 'application/json'
+  });
+}
+
+//To stop an ec2 instance
+function stop_ec2_instance(resource_type){
+  var instance_id = $('#'+resource_type+'-configuration').data('editElement').split('-')[1];
+  $.ajax({
+    url: '/stop_ec2_instance?id='+instance_id,
+    type: 'GET',
+    dataType: "script",
+    contentType: 'application/json'
+  });
 }
 
 //Enable Bootstrap Tooltips for dialog box
